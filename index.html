@@ -50,7 +50,7 @@ header.top h1{font-size:18px;margin:0;font-weight:650;flex:1;white-space:nowrap;
 .hero h2{margin:0;font-size:26px;letter-spacing:-.3px}
 .hero p{margin:4px 0 0;color:var(--muted)}
 .grid{display:grid;gap:14px}
-@media(min-width:700px){.grid.cols{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:700px){.grid.cols{grid-template-columns:repeat(2,1fr)}}
 .kcard{padding:18px;cursor:pointer;position:relative;overflow:hidden;transition:transform .15s}
 .kcard:active{transform:scale(.985)}
 .kcard .ico{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;
@@ -63,7 +63,21 @@ header.top h1{font-size:18px;margin:0;font-weight:650;flex:1;white-space:nowrap;
 .bar{height:6px;border-radius:99px;background:rgba(255,255,255,.1);overflow:hidden;margin-top:12px}
 .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--acc),var(--accb));border-radius:99px}
 .k1{--acc:var(--c1);--accb:var(--c1b)} .k2{--acc:var(--c2);--accb:var(--c2b)} .k3{--acc:var(--c3);--accb:var(--c3b)}
-.kt{--acc:#e879f9;--accb:#60a5fa}
+.kt{--acc:#e879f9;--accb:#60a5fa} .k0{--acc:#38bdf8;--accb:#a78bfa}
+.flash{min-height:220px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:26px 20px;cursor:pointer}
+.flash .front{font-size:22px;font-weight:650}
+.flash .back{margin-top:16px;color:#dfe3f7;border-top:1px solid var(--line);padding-top:14px;width:100%}
+.flash .hint2{color:var(--dim);font-size:13px;margin-top:14px}
+.boxes{display:flex;gap:6px;align-items:flex-end;height:46px}
+.boxes div{flex:1;border-radius:6px 6px 2px 2px;background:linear-gradient(180deg,var(--acc),var(--accb));min-height:3px;position:relative}
+.boxes span{position:absolute;top:-17px;left:0;right:0;text-align:center;font-size:11px;color:var(--muted)}
+.lexrow{padding:12px 16px}
+.lexrow summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px}
+.lexrow summary::-webkit-details-marker{display:none}
+.lexrow .def{margin-top:8px;color:#dfe3f7}
+.badge{font-size:11px;padding:2px 8px;border-radius:99px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.search{width:100%;background:rgba(0,0,0,.25);border:1px solid var(--line2);color:var(--txt);border-radius:14px;padding:12px 14px;font:inherit;outline:none}
+.search:focus{border-color:var(--acc)}
 .list{display:flex;flex-direction:column;gap:10px}
 .trow{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer}
 .trow:active{transform:scale(.99)}
@@ -145,6 +159,7 @@ select.sel{background:rgba(0,0,0,.25);color:var(--txt);border:1px solid var(--li
 .row{display:flex;gap:10px;align-items:center}
 .sp{flex:1}
 .empty{padding:30px;text-align:center;color:var(--muted)}
+.q .box{border-left:3px solid var(--acc);background:rgba(255,255,255,.05);padding:10px 12px;border-radius:0 12px 12px 0}
 </style>
 </head>
 <body>
@@ -335,7 +350,7 @@ function solve(f, a, b) { let fa = f(a); for (let i = 0; i < 200; i++) { const m
 const Store = {
   k: 'mathe-lernapp-v1',
   d: null,
-  load() { try { this.d = JSON.parse(localStorage.getItem(this.k)) || {}; } catch (e) { this.d = {}; } this.d.g = this.d.g || {}; this.d.tests = this.d.tests || []; return this.d; },
+  load() { try { this.d = JSON.parse(localStorage.getItem(this.k)) || {}; } catch (e) { this.d = {}; } this.d.g = this.d.g || {}; this.d.tests = this.d.tests || []; this.d.lex = this.d.lex || {}; return this.d; },
   save() { try { localStorage.setItem(this.k, JSON.stringify(this.d)); } catch (e) { } },
   rec(gid, ok) { const g = this.d.g[gid] = this.d.g[gid] || { n: 0, ok: 0, last: [] }; g.n++; if (ok) g.ok++; g.last = (g.last.concat([ok ? 1 : 0])).slice(-5); this.save(); }
 };
@@ -358,12 +373,14 @@ const ICONS = {
 };
 
 const CHAPTERS = [
+  { id: 0, cls: 'k0', icon: 'book', title: 'Grundlagen', short: 'Grundlagen', sub: 'Kapitel 0 · Lexikon der Begriffe & Formelzeichen' },
   { id: 1, cls: 'k1', icon: 'fn', title: 'Funktionen & Differentialrechnung', short: 'Funktionen', sub: 'Kapitel 1 · Kurvendiskussion, Ableitungen, Optimierung' },
   { id: 2, cls: 'k2', icon: 'money', title: 'Grundlagen der Finanzmathematik', short: 'Finanzmathematik', sub: 'Kapitel 2 · Zinsen, Barwert, Renten, Rendite' },
   { id: 3, cls: 'k3', icon: 'stat', title: 'Statistik & Wahrscheinlichkeit', short: 'Statistik', sub: 'Kapitel 3 · Kennzahlen, Portfolio, Normalverteilung' }
 ];
 
 const TOPICS = [
+{ id: 'g-lex', ch: 0, nr: '0.1', title: 'Lexikon', sheet: '' },
 /* ------------------------------------------------ Kapitel 1 */
 { id: 'f-elem', ch: 1, nr: '1.1–1.2', title: 'Funktionen & elementare Funktionen', sheet: T`
 <h3>Funktion</h3>
@@ -776,7 +793,7 @@ const FORMELN = [
 <tr><th>Zwei-Punkte-Form</th><td>\((x_1, y_1)\), \((x_2, y_2)\)</td><td>\(y = f(x) = \frac{y_2 - y_1}{x_2 - x_1}(x - x_1) + y_1\)</td></tr>
 <tr><th>Beispiel</th><td>\((2, 1)\), \((-1, 4)\)</td><td>\(f(x) = \frac{4 - 1}{-1 - 2}(x - 2) + 1 = -x + 3\)</td></tr></table></div>
 <h3>Regula Falsi</h3>
-<ul><li>Sei \(I\) ein Intervall, \(f: I \to \mathbb R\) stetig und \(a, b \in I\) mit \(f(a)\cdot f(b) < 0\).</li>
+<ul><li>Sei \(I\) ein Intervall, \(f: I \to \text{ℝ}\) stetig und \(a, b \in I\) mit \(f(a)\cdot f(b) < 0\).</li>
 <li>Dann gibt es nach dem Zwischenwertsatz eine Nullstelle von \(f\) zwischen \(a\) und \(b\).</li>
 <li>Schnittpunkt der Geraden durch \((a, f(a))\) und \((b, f(b))\) mit der \(x\)-Achse:
 \[x_1 = \frac{a\,f(b) - b\,f(a)}{f(b) - f(a)}\]</li>
@@ -784,9 +801,9 @@ const FORMELN = [
 <li>Schritte wiederholen, bis man sich der Nullstelle hinreichend genau angenähert hat.</li></ul>
 <h3>Ableitungen elementarer Funktionen</h3>
 <div class="scroll"><table class="tb"><tr><th>\(f(x)\)</th><th>\(f'(x)\)</th><th>\(f(x)\)</th><th>\(f'(x)\)</th></tr>
-<tr><td>\(c\) (konstant)</td><td>\(0\)</td><td>\(x^\alpha\) \((\alpha \in \mathbb R, x > 0)\)</td><td>\(\alpha x^{\alpha - 1}\)</td></tr>
+<tr><td>\(c\) (konstant)</td><td>\(0\)</td><td>\(x^\alpha\) \((\alpha \in \text{ℝ}, x > 0)\)</td><td>\(\alpha x^{\alpha - 1}\)</td></tr>
 <tr><td>\(ax + b\)</td><td>\(a\)</td><td>\(\ln|x|\) \((x \ne 0)\)</td><td>\(\frac1x\)</td></tr>
-<tr><td>\(x^n\) \((n \in \mathbb N)\)</td><td>\(n x^{n-1}\)</td><td>\(\log_a|x|\) \((x \ne 0)\)</td><td>\(\frac{1}{x\cdot\ln a}\)</td></tr>
+<tr><td>\(x^n\) \((n \in \text{ℕ})\)</td><td>\(n x^{n-1}\)</td><td>\(\log_a|x|\) \((x \ne 0)\)</td><td>\(\frac{1}{x\cdot\ln a}\)</td></tr>
 <tr><td>\(\frac{1}{x^n}\) \((x \ne 0)\)</td><td>\(-\frac{n}{x^{n+1}}\)</td><td>\(e^x\)</td><td>\(e^x\)</td></tr>
 <tr><td>\(\sqrt x\) \((x > 0)\)</td><td>\(\frac{1}{2\sqrt x}\)</td><td>\(a^x\) \((a > 0)\)</td><td>\(a^x\cdot\ln a\)</td></tr></table></div>
 <h3>Ableitungsregeln für zusammengesetzte Funktionen</h3>
@@ -822,7 +839,7 @@ oder \(f''(x_0) = 0\) und \(f'''(x_0) < 0\) (Übergang Links- auf Rechtskrümmun
 \[\rho_{xy} = \frac{\sigma_{xy}}{\sigma_x\cdot\sigma_y}\qquad \beta_{xy} = \frac{\sigma_{xy}}{\sigma_x^2} = \frac{\rho_{xy}\cdot\sigma_y}{\sigma_x}\]
 <p>Lineare Regressionsgerade \(y = \alpha + \beta x\) mit \(\beta = \beta_{xy}\), \(\alpha = \bar y - \beta\bar x\).</p>
 <h3>Gewichtete Zahlenreihen (z. B. Portfolio)</h3>
-<p>Für \(z_i = w x_i + (1 - w) y_i\), \(i = 1, \dots, n\), mit Gewicht \(w \in \mathbb R\):</p>
+<p>Für \(z_i = w x_i + (1 - w) y_i\), \(i = 1, \dots, n\), mit Gewicht \(w \in \text{ℝ}\):</p>
 \[\bar z = w\bar x + (1 - w)\bar y\]
 \[\sigma_z^2 = w^2\sigma_x^2 + (1 - w)^2\sigma_y^2 + 2w(1 - w)\sigma_{xy} = w^2\sigma_x^2 + (1 - w)^2\sigma_y^2 + 2w(1 - w)\rho_{xy}\sigma_x\sigma_y\qquad \sigma_z = \sqrt{\sigma_z^2}\]
 <h3>Verteilungskennzahlen von Zufallsvariablen</h3>
@@ -983,7 +1000,7 @@ MCQ('eigmc', 'f-eig', 'Verständnis: Eigenschaften', [
   [T`Wann ist \(f\) auf einem Intervall konvex?`, T`wenn dort \(f''(x) \ge 0\) gilt`, [T`wenn dort \(f'(x) \ge 0\) gilt`, T`wenn dort \(f(x) \ge 0\) gilt`, T`wenn dort \(f''(x) \le 0\) gilt`]],
   ['Welche Funktion ist an der Stelle 0 stetig, aber nicht differenzierbar?', T`\(f(x) = |x|\)`, [T`\(f(x) = x^2\)`, T`\(f(x) = \frac1x\)`, T`\(f(x) = e^x\)`]],
   ['Welche Voraussetzung braucht eine Funktion, damit eine Umkehrfunktion existiert?', 'Sie ist streng monoton (injektiv).', ['Sie ist stetig.', 'Sie ist beschränkt.', 'Sie ist konvex.']],
-  [T`Was sagt der Satz vom Maximum und Minimum?`, T`Eine stetige Funktion nimmt auf \([a,b]\) ein globales Maximum und Minimum an.`, [T`Jede Funktion hat auf \(\mathbb{R}\) ein globales Maximum.`, T`In einem Maximum gilt immer \(f''(x) > 0\).`, T`Eine stetige Funktion ist auf \([a,b]\) monoton.`]],
+  [T`Was sagt der Satz vom Maximum und Minimum?`, T`Eine stetige Funktion nimmt auf \([a,b]\) ein globales Maximum und Minimum an.`, [T`Jede Funktion hat auf \(\text{ℝ}\) ein globales Maximum.`, T`In einem Maximum gilt immer \(f''(x) > 0\).`, T`Eine stetige Funktion ist auf \([a,b]\) monoton.`]],
   [T`\(f(x) = \frac{1}{x - 2}\) hat bei \(x = 2\) …`, 'eine Polstelle (Unendlichkeitsstelle)', ['einen endlichen Sprung', 'ein lokales Maximum', 'eine Nullstelle']],
   [T`Gilt \(f'(x) > 0\) auf einem Intervall, so ist \(f\) dort …`, 'streng monoton wachsend', ['konvex', 'beschränkt', 'streng monoton fallend']]
 ]);
@@ -1661,7 +1678,7 @@ G('logrule', 'f-elem', 'Logarithmenregeln', () => {
 });
 GENS[GENS.length - 1].nv = 3;
 MCQ('elemmc', 'f-elem', 'Verständnis: Funktionen', [
-  [T`Was ist der größtmögliche Definitionsbereich von \(f(x) = \ln(x - 3)\)?`, T`\(x > 3\)`, [T`\(x \ge 3\)`, T`\(x > 0\)`, T`\(\mathbb R\)`]],
+  [T`Was ist der größtmögliche Definitionsbereich von \(f(x) = \ln(x - 3)\)?`, T`\(x > 3\)`, [T`\(x \ge 3\)`, T`\(x > 0\)`, T`\(\text{ℝ}\)`]],
   [T`Was ist der größtmögliche Definitionsbereich von \(f(x) = \sqrt{x + 2}\)?`, T`\(x \ge -2\)`, [T`\(x > -2\)`, T`\(x \ge 2\)`, T`\(x \ge 0\)`]],
   [T`Der Graph von \(g(x) = f(x - 2) + 1\) entsteht aus dem von \(f\) durch …`, '2 nach rechts und 1 nach oben verschieben', ['2 nach links und 1 nach oben verschieben', '2 nach rechts und 1 nach unten verschieben', 'Streckung um den Faktor 2']],
   [T`Der Graph von \(-f(x)\) entsteht aus dem von \(f\) durch …`, T`Spiegelung an der \(x\)-Achse`, [T`Spiegelung an der \(y\)-Achse`, 'Verschiebung nach unten', 'Spiegelung an der Winkelhalbierenden']],
@@ -2874,6 +2891,225 @@ MCADD('zgwsmc', [
   ['Welches Beispiel zeigt das Skript zum ZGWS?', 'Augensummen beim Werfen mehrerer Würfel', ['Kupons von Anleihen', 'Polynomdivision', 'Zinsstruktur']]
 ]);
 
+
+"use strict";
+/* ============ Kapitel 0 · Grundlagen: Lexikon ============
+   Eintrag: [Begriff, Erklärung, Formel/Beispiel (TeX, optional)] */
+const LEX_CATS = [
+  { id: 'math', name: 'Mathematische Grundbegriffe' },
+  { id: 'fkt', name: 'Funktionen' },
+  { id: 'diff', name: 'Differentialrechnung' },
+  { id: 'fin', name: 'Finanzmathematik' },
+  { id: 'stat', name: 'Beschreibende Statistik' },
+  { id: 'wahr', name: 'Wahrscheinlichkeit' },
+  { id: 'sym', name: 'Formelzeichen' }
+];
+const LEX_RAW = {
+math: [
+  ['Menge', 'Zusammenfassung unterscheidbarer Objekte (Elemente), geschrieben mit Mengenklammern.', T`\{1, 2, 3\}`],
+  ['Natürliche Zahlen', 'Die Zahlen 1, 2, 3, … (mit 0: ℕ₀).', T`\text{ℕ} = \{1, 2, 3, \dots\}`],
+  ['Reelle Zahlen', 'Alle Zahlen auf dem Zahlenstrahl, einschließlich der irrationalen Zahlen wie π oder √2.', T`\text{ℝ}`],
+  ['Abgeschlossenes Intervall', 'Intervall, das beide Randpunkte enthält.', T`[a, b] = \{x : a \le x \le b\}`],
+  ['Offenes Intervall', 'Intervall ohne die Randpunkte.', T`(a, b) = \{x : a < x < b\}`],
+  ['Betrag', 'Abstand einer Zahl von 0; immer nicht negativ.', T`|{-3}| = 3`],
+  ['Potenz', 'Kurzschreibweise für wiederholte Multiplikation: Basis hoch Exponent.', T`x^y\cdot x^z = x^{y+z}`],
+  ['Logarithmus', 'Exponent, mit dem man die Basis potenzieren muss, um eine Zahl zu erhalten.', T`c = \log_b a \Leftrightarrow b^c = a`],
+  ['Natürlicher Logarithmus', 'Logarithmus zur Basis e; Umkehrfunktion der e-Funktion.', T`y = \ln x \Leftrightarrow e^y = x`],
+  ['Eulersche Zahl', 'Mathematische Konstante, Basis der natürlichen Exponentialfunktion und der stetigen Verzinsung.', T`e = 2{,}718281\ldots`],
+  ['Summenzeichen', 'Kurzschreibweise für die Addition vieler indizierter Summanden.', T`\sum_{i=1}^n x_i = x_1 + \dots + x_n`],
+  ['Geometrische Summe', 'Summe aufeinanderfolgender Potenzen; Grundlage der Rentenformeln.', T`\sum_{i=0}^{n-1} q^i = \frac{q^n - 1}{q - 1}`],
+  ['Grenzwert', 'Wert, dem sich eine Folge oder Funktion beliebig nähert.', T`\lim_{m\to\infty}\left(1 + \frac rm\right)^{m} = e^r`],
+  ['Äquivalenz', 'Zwei Aussagen sind gleichwertig: Die eine gilt genau dann, wenn die andere gilt.', T`\Leftrightarrow`],
+  ['Implikation', 'Aus der linken Aussage folgt die rechte (nicht unbedingt umgekehrt).', T`\Rightarrow`],
+  ['Notwendige Bedingung', 'Muss erfüllt sein, damit etwas gilt – reicht allein aber nicht aus.', T`f'(x_0) = 0 \text{ für ein Extremum}`],
+  ['Hinreichende Bedingung', 'Reicht aus, damit etwas sicher gilt.', T`f'(x_0) = 0,\ f''(x_0) > 0 \Rightarrow \text{Minimum}`]
+],
+fkt: [
+  ['Funktion', 'Zuordnung, die jedem Element des Definitionsbereichs genau ein Element des Wertebereichs zuordnet.', T`f: D \to W,\ x \mapsto f(x)`],
+  ['Definitionsbereich', 'Menge aller x-Werte, die in die Funktion eingesetzt werden dürfen.', T`\ln x: D = (0, \infty)`],
+  ['Wertebereich / Bild', 'Menge aller Funktionswerte, die tatsächlich angenommen werden.', ''],
+  ['Graph', 'Menge aller Punkte (x, f(x)) im Koordinatensystem.', ''],
+  ['Lineare Funktion', 'Funktion der Form ax + b; ihr Graph ist eine Gerade mit Steigung a und y-Achsenabschnitt b.', T`f(x) = ax + b`],
+  ['Steigung', 'Änderung des Funktionswerts pro Einheit von x; bei Geraden konstant.', T`a = \frac{y_2 - y_1}{x_2 - x_1}`],
+  ['Quadratische Funktion', 'Polynom 2. Grades; ihr Graph ist eine Parabel.', T`f(x) = ax^2 + bx + c`],
+  ['Scheitelpunkt', 'Höchster bzw. tiefster Punkt einer Parabel.', T`x_S = -\frac{b}{2a}`],
+  ['Polynom', 'Summe von Potenzen von x mit Koeffizienten; der höchste Exponent ist der Grad.', T`a_nx^n + \dots + a_1x + a_0`],
+  ['Grad eines Polynoms', 'Höchster Exponent mit Koeffizient ungleich 0; begrenzt die Anzahl der Nullstellen.', ''],
+  ['Gebrochen rationale Funktion', 'Quotient zweier Polynome.', T`f(x) = \frac{p(x)}{q(x)}`],
+  ['Exponentialfunktion', 'Funktion mit der Variablen im Exponenten; immer positiv.', T`f(x) = a^x,\ e^x`],
+  ['Nullstelle', 'Stelle x, an der der Funktionswert 0 ist.', T`f(x_0) = 0`],
+  ['y-Achsenabschnitt', 'Funktionswert an der Stelle 0, Schnittpunkt mit der y-Achse.', T`f(0)`],
+  ['Linearfaktor', 'Faktor (x − x₁) zu einer Nullstelle x₁; lässt sich vom Polynom abspalten.', T`f(x) = (x - x_1)\,g(x)`],
+  ['Polynomdivision', 'Division eines Polynoms durch einen Linearfaktor, um den Grad zu senken.', ''],
+  ['p-q-Formel', 'Lösungsformel für quadratische Gleichungen in Normalform.', T`x_{1/2} = -\frac p2 \pm\sqrt{\left(\frac p2\right)^2 - q}`],
+  ['Polstelle', 'Stelle, an der eine rationale Funktion gegen ±∞ strebt (Nenner = 0).', ''],
+  ['Stetigkeit', 'Funktion ohne Sprünge: Der Grenzwert stimmt mit dem Funktionswert überein; Graph ohne Absetzen zeichenbar.', T`\lim_{x\to x_0} f(x) = f(x_0)`],
+  ['Zwischenwertsatz', 'Eine stetige Funktion nimmt auf [a, b] jeden Wert zwischen f(a) und f(b) an; bei Vorzeichenwechsel existiert eine Nullstelle.', T`f(a)f(b) < 0 \Rightarrow \exists\,x_0: f(x_0) = 0`],
+  ['Monotonie', 'Eine Funktion ist monoton wachsend (fallend), wenn größere x nie zu kleineren (größeren) Funktionswerten führen.', ''],
+  ['Beschränktheit', 'Alle Funktionswerte liegen unterhalb einer oberen und/oder oberhalb einer unteren Schranke.', ''],
+  ['Konvex', 'Linksgekrümmt: Die Verbindungsstrecke zweier Graphenpunkte liegt oberhalb des Graphen.', T`f''(x) \ge 0`],
+  ['Konkav', 'Rechtsgekrümmt: Die Verbindungsstrecke zweier Graphenpunkte liegt unterhalb des Graphen.', T`f''(x) \le 0`],
+  ['Umkehrfunktion', 'Funktion, die die Zuordnung umkehrt; existiert bei streng monotonen Funktionen.', T`f^{-1}(f(x)) = x`],
+  ['Globales Maximum', 'Größter Funktionswert auf dem gesamten Definitionsbereich.', ''],
+  ['Lokales Maximum', 'Größter Funktionswert in einer Umgebung der Stelle.', ''],
+  ['Regula falsi', 'Numerisches Verfahren zur Nullstellensuche mit Sekanten und Vorzeichentest.', T`x_1 = \frac{a f(b) - b f(a)}{f(b) - f(a)}`],
+  ['Preis-Absatz-Funktion', 'Gibt an, zu welchem Preis eine bestimmte Menge abgesetzt werden kann.', T`p(x) = a - bx`],
+  ['Erlösfunktion', 'Umsatz in Abhängigkeit von der Menge.', T`E(x) = p(x)\cdot x`],
+  ['Kostenfunktion', 'Gesamtkosten in Abhängigkeit von der Menge: Fixkosten plus variable Kosten.', T`K(x) = K_f + k_v\,x`],
+  ['Gewinnfunktion', 'Erlös minus Kosten.', T`G(x) = E(x) - K(x)`],
+  ['Gewinnschwelle', 'Menge, ab der erstmals Gewinn entsteht (Break-even); kleinste positive Nullstelle von G.', ''],
+  ['Gewinngrenze', 'Menge, ab der wieder Verlust entsteht; größere Nullstelle von G.', '']
+],
+diff: [
+  ['Differenzenquotient', 'Durchschnittliche Steigung zwischen zwei Punkten (Sekantensteigung).', T`\frac{f(x_0 + \Delta x) - f(x_0)}{\Delta x}`],
+  ['Ableitung', 'Grenzwert des Differenzenquotienten; Steigung der Tangente im Punkt.', T`f'(x_0) = \lim_{\Delta x\to 0}\frac{\Delta f}{\Delta x}`],
+  ['Tangente', 'Gerade, die den Graphen in einem Punkt berührt und dort dieselbe Steigung hat.', T`t(x) = f'(x_0)(x - x_0) + f(x_0)`],
+  ['Produktregel', 'Ableitungsregel für Produkte zweier Funktionen.', T`(fg)' = f'g + fg'`],
+  ['Quotientenregel', 'Ableitungsregel für Quotienten zweier Funktionen.', T`\left(\frac fg\right)' = \frac{f'g - fg'}{g^2}`],
+  ['Kettenregel', 'Ableitungsregel für verkettete Funktionen: äußere mal innere Ableitung.', T`[f(g(x))]' = f'(g(x))\,g'(x)`],
+  ['Zweite Ableitung', 'Ableitung der Ableitung; beschreibt die Krümmung.', T`f''(x)`],
+  ['Stationäre Stelle', 'Stelle mit waagerechter Tangente.', T`f'(x_0) = 0`],
+  ['Wendepunkt', 'Punkt, an dem sich die Krümmung ändert (konvex ↔ konkav).', T`f''(x_0) = 0,\ f'''(x_0) \ne 0`],
+  ['Sattelpunkt', 'Wendepunkt mit waagerechter Tangente.', T`f'(x_0) = f''(x_0) = 0`],
+  ['Satz von Rolle', 'Ist f(a) = f(b), so gibt es dazwischen eine Stelle mit waagerechter Tangente.', ''],
+  ['Mittelwertsatz', 'Es gibt eine Stelle, an der die Tangentensteigung gleich der Sekantensteigung ist.', T`f'(\xi) = \frac{f(b) - f(a)}{b - a}`],
+  ['Grenzkosten', 'Ableitung der Kostenfunktion; Kosten einer zusätzlichen Einheit (näherungsweise).', T`K'(x)`],
+  ['Grenzerlös', 'Ableitung der Erlösfunktion.', T`E'(x)`],
+  ['Stückkosten', 'Durchschnittliche Kosten pro Einheit.', T`k(x) = \frac{K(x)}{x}`],
+  ['Gewinnmaximum', 'Menge mit maximalem Gewinn: Grenzerlös gleich Grenzkosten.', T`E'(x) = K'(x)`]
+],
+fin: [
+  ['Zinssatz', 'Preis für die Überlassung von Kapital, meist in Prozent pro Jahr (p.a.).', T`r`],
+  ['Zinsfaktor', 'Faktor, mit dem das Anfangskapital multipliziert wird, um das Endkapital zu erhalten.', T`K_t = ZF\cdot K_0`],
+  ['Diskontfaktor', 'Kehrwert des Zinsfaktors; zinst zukünftige Beträge auf heute ab.', T`DF = \frac{1}{ZF}`],
+  ['Einfache Verzinsung', 'Zinsen werden nur auf das Anfangskapital berechnet; üblich bei Laufzeiten unter einem Jahr.', T`ZF = 1 + rt`],
+  ['Exponentielle Verzinsung', 'Zinsen werden jährlich dem Kapital zugeschlagen und mitverzinst (Zinseszins).', T`ZF = (1 + r)^t`],
+  ['Unterjährige Verzinsung', 'Mehrere Zinsgutschriften pro Jahr (m Perioden) mit Zinseszins.', T`ZF = \left(1 + \frac rm\right)^{mt}`],
+  ['Stetige Verzinsung', 'Grenzfall unendlich vieler Zinsperioden.', T`ZF = e^{rt}`],
+  ['Zinseszins', 'Verzinsung bereits gutgeschriebener Zinsen.', ''],
+  ['Tageszählkonvention', 'Regel zur Berechnung der Laufzeit t in Jahren, z. B. act/360 oder act/365.', T`t = \frac{\text{Tage}}{360}`],
+  ['Effektivzinssatz', 'Zinssatz bei jährlicher exponentieller Verzinsung, der denselben Ertrag liefert; macht Angebote vergleichbar.', T`r_{\text{exp}}`],
+  ['Barwert', 'Summe der auf heute abgezinsten zukünftigen Zahlungen.', T`B = \sum D_i Z_i`],
+  ['Nettobarwert', 'Barwert minus heutiger Aufwand (Kapitalwert); positiv ⇒ vorteilhaft.', T`B_{\text{net}} = B - A`],
+  ['Opportunitätszinssatz', 'Zinssatz der besten alternativen Anlage mit vergleichbarem Risiko.', ''],
+  ['Endwert', 'Wert einer Zahlungsreihe am Ende der Laufzeit.', T`E = EWF\cdot Z`],
+  ['Rente', 'Folge regelmäßiger, gleich hoher Zahlungen.', ''],
+  ['Nachschüssig', 'Zahlung jeweils am Ende einer Periode.', ''],
+  ['Vorschüssig', 'Zahlung jeweils am Anfang einer Periode.', ''],
+  ['Rentenbarwertfaktor', 'Faktor, mit dem man die Rate multipliziert, um den Barwert der Rente zu erhalten.', T`BWF = \frac{(1+r)^n - 1}{r(1+r)^n}`],
+  ['Rentenendwertfaktor', 'Faktor, mit dem man die Rate multipliziert, um den Endwert der Rente zu erhalten.', T`EWF = \frac{(1+r)^n - 1}{r}`],
+  ['Ewige Rente', 'Rente ohne Ende; hat einen endlichen Barwert, aber keinen Endwert.', T`B = \frac Zr`],
+  ['Annuität', 'Konstante Rate aus Zins und Tilgung bei einem Annuitätendarlehen.', T`Z = \frac{B}{BWF}`],
+  ['Tilgung', 'Teil der Rate, der die Restschuld verringert.', ''],
+  ['Kuponanleihe', 'Anleihe mit regelmäßigen Zinszahlungen (Kupons) und Rückzahlung des Nennwerts am Ende.', ''],
+  ['Nullkuponanleihe (Zerobond)', 'Anleihe ohne laufende Zinszahlungen; nur eine Zahlung am Laufzeitende.', ''],
+  ['Nennwert', 'Betrag, auf den sich Kupon und Rückzahlung einer Anleihe beziehen (meist 100).', ''],
+  ['Über pari', 'Kurs einer Anleihe über 100 (Kupon > Marktzins).', ''],
+  ['Clean Price', 'Anleihekurs ohne Stückzinsen (Nettokurs).', ''],
+  ['Dirty Price', 'Anleihekurs inklusive Stückzinsen.', T`\text{Dirty} = \text{Clean} + \text{Stückzinsen}`],
+  ['Stückzinsen', 'Seit dem letzten Kupontermin aufgelaufene Zinsen.', ''],
+  ['Rendite / interner Zinsfuß', 'Zinssatz, bei dem der Nettobarwert null ist.', T`A = \sum DF_i Z_i`],
+  ['Praktikerformel', 'Näherungsformel für die Anleiherendite.', T`r \approx \frac{\text{Kupon} + \frac{100 - P}{n}}{P}`],
+  ['Disagio', 'Abschlag bei der Kreditauszahlung; erhöht den Effektivzins.', ''],
+  ['Zinsstruktur', 'Zusammenhang zwischen Laufzeit und Zinssatz (Spot Rates als Funktion der Laufzeit).', ''],
+  ['Spot Rate (Zero Rate)', 'Zinssatz einer heutigen Einmalanlage bis zum Zeitpunkt t.', T`r_{0t}`],
+  ['Forward Rate', 'Heute vereinbarter Zinssatz für eine zukünftige Anlageperiode von t′ bis t.', T`r_{t't}`],
+  ['Par Rate', 'Anlagezinssatz (Kupon), bei dem eine Anleihe genau zu 100 notiert.', T`k_n`],
+  ['Bootstrapping', 'Schrittweise Berechnung der Zero Rates aus Par Rates.', ''],
+  ['Dynamische Investitionsrechnung', 'Bewertung von Investitionen unter Berücksichtigung des Zahlungszeitpunkts (Barwerte).', '']
+],
+stat: [
+  ['Beschreibende Statistik', 'Aufbereitung und Zusammenfassung vorliegender Daten durch Kennzahlen und Grafiken.', ''],
+  ['Arithmetisches Mittel', 'Summe aller Werte geteilt durch ihre Anzahl.', T`\bar x = \frac1n\sum x_i`],
+  ['Empirische Varianz', 'Mittlere quadratische Abweichung vom Mittelwert (im Skript mit 1/n).', T`\sigma_x^2 = \frac1n\sum(x_i - \bar x)^2`],
+  ['Standardabweichung', 'Wurzel aus der Varianz; Streuungsmaß in der Einheit der Daten.', T`\sigma_x = \sqrt{\sigma_x^2}`],
+  ['Volatilität', 'Standardabweichung von Renditen; Maß für das Risiko.', ''],
+  ['Rendite', 'Relative Wertveränderung einer Anlage in einer Periode.', T`\frac{K_1}{K_0} - 1`],
+  ['Kovarianz', 'Maß für das gemeinsame Schwanken zweier Größen um ihre Mittelwerte.', T`\sigma_{xy} = \overline{xy} - \bar x\bar y`],
+  ['Korrelationskoeffizient', 'Normierte Kovarianz zwischen −1 und 1; misst den linearen Zusammenhang.', T`\rho_{xy} = \frac{\sigma_{xy}}{\sigma_x\sigma_y}`],
+  ['Portfolio', 'Zusammenstellung mehrerer Anlagen mit Gewichten w.', T`z_i = wx_i + (1 - w)y_i`],
+  ['Diversifikation', 'Risikominderung durch Streuung auf nicht perfekt korrelierte Anlagen.', T`\sigma_z \le w\sigma_x + (1 - w)\sigma_y`],
+  ['Lineare Regression', 'Bestimmung der Geraden, die eine Punktwolke am besten beschreibt.', T`y = \alpha + \beta x`],
+  ['Methode der kleinsten Quadrate', 'Wahl von α und β so, dass die Summe der quadrierten Abweichungen minimal wird.', ''],
+  ['Beta', 'Steigung der Regressionsgeraden; Sensitivität einer Aktie gegenüber dem Markt.', T`\beta = \frac{\sigma_{xy}}{\sigma_x^2}`],
+  ['Systematisches Risiko', 'Marktrisiko, das sich nicht wegdiversifizieren lässt.', T`\beta^2\sigma_x^2`],
+  ['Unsystematisches Risiko', 'Titelspezifisches Risiko, das durch Diversifikation sinkt.', T`\sigma_\varepsilon^2`],
+  ['Median', 'Wert in der Mitte der geordneten Reihe; 50 %-Quantil.', T`\tilde x`],
+  ['Quantil', 'Wert, der die geordnete Reihe im Verhältnis p zu 1 − p teilt.', T`x_p`],
+  ['Value at Risk', 'Verlustgrenze, die nur mit Wahrscheinlichkeit höchstens p überschritten wird (Konfidenzniveau 1 − p).', T`\text{VaR}_{1-p} = -x_p`],
+  ['Konfidenzniveau', 'Wahrscheinlichkeit 1 − p, mit der der VaR nicht überschritten wird.', ''],
+  ['Ausreißer', 'Auffällig weit vom Rest entfernter Wert; beeinflusst Mittelwert und Varianz stark, den Median kaum.', '']
+],
+wahr: [
+  ['Zufallsvariable', 'Größe, deren Wert vom Zufall abhängt; Modell für unsichere Ergebnisse.', T`X`],
+  ['Diskrete Zufallsvariable', 'Kann nur einzelne (abzählbar viele) Werte annehmen, z. B. Augenzahl.', ''],
+  ['Stetige Zufallsvariable', 'Kann alle Werte eines Intervalls annehmen; P(X = a) = 0.', ''],
+  ['Wahrscheinlichkeitsverteilung', 'Angabe, mit welcher Wahrscheinlichkeit welche Werte auftreten.', ''],
+  ['Erwartungswert', 'Mit den Wahrscheinlichkeiten gewichtetes Mittel der Werte.', T`E(X) = \sum x_i P(X = x_i)`],
+  ['Varianz (Zufallsvariable)', 'Erwartete quadratische Abweichung vom Erwartungswert.', T`V(X) = E(X^2) - E(X)^2`],
+  ['Unabhängigkeit', 'Das Ergebnis einer Zufallsvariablen beeinflusst die Verteilung der anderen nicht; Kovarianz dann 0.', ''],
+  ['Dichtefunktion', 'Funktion, deren Fläche über einem Intervall die Wahrscheinlichkeit angibt.', ''],
+  ['Verteilungsfunktion', 'Wahrscheinlichkeit, dass X höchstens den Wert x annimmt.', T`F(x) = P(X \le x)`],
+  ['Normalverteilung', 'Stetige, glockenförmige, um μ symmetrische Verteilung.', T`N(\mu, \sigma^2)`],
+  ['Standardnormalverteilung', 'Normalverteilung mit μ = 0 und σ = 1; tabelliert als F_St.', T`Z \sim N(0, 1)`],
+  ['Standardisieren', 'Umrechnen einer normalverteilten Größe auf die Standardnormalverteilung.', T`z = \frac{x - \mu}{\sigma}`],
+  ['Schwankungsintervall', 'Symmetrisches Intervall μ ± aσ mit vorgegebener Wahrscheinlichkeit.', T`2F_{St}(a) - 1`],
+  ['Kurtosis (Wölbung)', 'Maß für die Dicke der Verteilungsenden; Renditen haben oft höhere Wölbung als die Normalverteilung.', ''],
+  ['Schiefe', 'Maß für die Asymmetrie einer Verteilung.', ''],
+  ['Zentraler Grenzwertsatz', 'Die Summe vieler unabhängiger, kleiner Zufallsbeiträge ist annähernd normalverteilt.', ''],
+  ['Binomialverteilung', 'Verteilung der Anzahl der Erfolge bei n unabhängigen Versuchen mit Erfolgswahrscheinlichkeit p.', T`E = np,\ V = np(1-p)`]
+],
+sym: [
+  [T`\(K_0\)`, 'Anfangskapital (Kapital zum Zeitpunkt 0).', ''],
+  [T`\(K_t\)`, 'Endkapital nach t Jahren.', ''],
+  [T`\(r\)`, 'Zinssatz pro Jahr (p.a.), als Dezimalzahl einsetzen.', ''],
+  [T`\(t\)`, 'Laufzeit bzw. Zinszeitraum in Jahren.', ''],
+  [T`\(m\)`, 'Anzahl der Zinsperioden bzw. Zahlungen pro Jahr.', ''],
+  [T`\(n\)`, 'Laufzeit in ganzen Jahren (Renten) bzw. Anzahl der Beobachtungen (Statistik).', ''],
+  [T`\(ZF\)`, 'Zinsfaktor.', ''],
+  [T`\(DF\)`, 'Diskontfaktor.', ''],
+  [T`\(Z\)`, 'Zahlung bzw. Rate einer Rente.', ''],
+  [T`\(B\)`, 'Barwert.', ''],
+  [T`\(E\) (Finanzmathematik)`, 'Endwert einer Rente.', ''],
+  [T`\(A\)`, 'Aufwand bzw. Kaufpreis heute.', ''],
+  [T`\(B_{\text{net}}\)`, 'Nettobarwert.', ''],
+  [T`\(BWF\)`, 'Rentenbarwertfaktor.', ''],
+  [T`\(EWF\)`, 'Rentenendwertfaktor.', ''],
+  [T`\(g\)`, 'Wachstumsrate der Zahlungen (ewige Rente mit Wachstum).', ''],
+  [T`\(r_{0t}\)`, 'Spot Rate (Zero Rate) für die Laufzeit t.', ''],
+  [T`\(r_{t't}\)`, 'Forward Rate von t′ bis t.', ''],
+  [T`\(k_n\)`, 'Par Rate (Anlagezinssatz) für n Jahre.', ''],
+  [T`\(\bar x\)`, 'Empirischer Mittelwert der Reihe x.', ''],
+  [T`\(\sigma_x^2\)`, 'Empirische Varianz der Reihe x.', ''],
+  [T`\(\sigma_{xy}\)`, 'Empirische Kovarianz von x und y.', ''],
+  [T`\(\rho_{xy}\)`, 'Empirischer Korrelationskoeffizient.', ''],
+  [T`\(\beta_{xy}\)`, 'Empirisches Beta von y bezüglich x.', ''],
+  [T`\(w\)`, 'Gewicht bzw. Anteil im Portfolio.', ''],
+  [T`\(x_p\)`, 'p-Quantil.', ''],
+  [T`\(\tilde x\)`, 'Median.', ''],
+  [T`\(E(X)\), \(\mu_X\)`, 'Erwartungswert der Zufallsvariablen X.', ''],
+  [T`\(V(X)\), \(\sigma_X^2\)`, 'Varianz der Zufallsvariablen X.', ''],
+  [T`\(\text{Cov}(X,Y)\)`, 'Kovarianz zweier Zufallsvariablen.', ''],
+  [T`\(F_{St}(z)\)`, 'Verteilungsfunktion der Standardnormalverteilung.', ''],
+  [T`\(\text{ℕ}_0\)`, 'Natürliche Zahlen einschließlich 0.', '']
+]};
+const LEX = [];
+LEX_CATS.forEach(c => LEX_RAW[c.id].forEach(([term, def, f], i) => LEX.push({ id: c.id + ':' + term.replace(/[^a-zA-Z0-9äöüÄÖÜß]+/g, ''), cat: c.id, term, def, f })));
+const lexCat = id => LEX_CATS.find(c => c.id === id);
+const lexPlain = s => s.replace(/\\\(|\\\)/g, '');
+
+/* Quiz-Generator (für Übungs- und Testmodus) */
+G('lexq', 'g-lex', 'Begriffe-Quiz', () => {
+  const e = LEX[pickFresh('lexq', LEX.length)], dir = Math.random() < 0.5;
+  let pool = LEX.filter(x => x.cat === e.cat && x.id !== e.id && x.def !== e.def);
+  if (pool.length < 3) pool = pool.concat(LEX.filter(x => x.cat !== e.cat));
+  const others = shuffle(pool).slice(0, 3);
+  if (dir) return { q: T`Was bedeutet <b>${e.term}</b>?`, fields: [mc('', e.def, others.map(o => o.def))], sol: e.f ? T`\[${e.f}\]` : '' };
+  return { q: T`Welcher Begriff passt?<div class="box" style="margin-top:8px">${e.def}</div>`, fields: [mc('', e.term, others.map(o => o.term))], sol: e.f ? T`<b>${e.term}</b>: \[${e.f}\]` : '' };
+});
+GENS[GENS.length - 1].nv = LEX.length * 2;
+GENS[GENS.length - 1].mcq = false;
+
 /* ==================================================== Zuordnung */
 const GEN_BY_ID = Object.fromEntries(GENS.map(g => [g.id, g]));
 const gensOf = tid => GENS.filter(g => g.topic === tid);
@@ -2888,6 +3124,7 @@ const topicOf = id => TOPICS.find(t => t.id === id);
 
 /* Fortschritt eines Themas: Anteil richtiger der letzten Versuche je Aufgabentyp */
 function topicProgress(tid) {
+  if (tid === 'g-lex') return sum(LEX.map(e => Math.min(Store.d.lex[e.id] || 0, 4))) / (4 * LEX.length);
   const gs = gensOf(tid); if (!gs.length) return 0;
   return sum(gs.map(g => { const s = Store.d.g[g.id]; if (!s || !s.last.length) return 0; return sum(s.last) / 5; })) / gs.length;
 }
@@ -2930,6 +3167,7 @@ function viewHome() {
 
 /* ------------------------------------------------ Kapitel */
 function viewChapter(cid) {
+  if (cid === 0) return viewLex();
   const c = chapterOf(cid);
   return `<div class="${c.cls}">` + header(c.short, '#/') + `
   <div class="hero"><h2>${c.title}</h2><p>${TOPICS.filter(t => t.ch === cid).length} Unterthemen · Lernzettel & Aufgaben</p></div>
@@ -2946,15 +3184,16 @@ function viewChapter(cid) {
 /* ------------------------------------------------ Unterthema */
 let cur = null;   // aktuelle Übungsaufgabe
 function viewTopic(tid, tab) {
+  if (tid === 'g-lex' && tab !== 'ueben') return viewLex();
   const t = topicOf(tid), c = chapterOf(t.ch);
-  const tabs = `<div class="glass tabs"><button class="${tab !== 'ueben' ? 'on' : ''}" data-go="#/t/${tid}">Lernzettel</button><button class="${tab === 'ueben' ? 'on' : ''}" data-go="#/t/${tid}/ueben">Aufgaben</button></div>`;
+  const tabs = `<div class="glass tabs"><button class="${tab !== 'ueben' ? 'on' : ''}" data-go="#/t/${tid}">${tid === 'g-lex' ? 'Lexikon' : 'Lernzettel'}</button><button class="${tab === 'ueben' ? 'on' : ''}" data-go="#/t/${tid}/ueben">${tid === 'g-lex' ? 'Quiz' : 'Aufgaben'}</button></div>`;
   let body;
   if (tab !== 'ueben') body = `<div class="glass sheet">${t.sheet}</div><div class="actions"><button class="btn pri grow" data-go="#/t/${tid}/ueben">Jetzt üben ${ICONS.next}</button></div>`;
   else {
     const gs = gensOf(tid);
     body = `<div class="row" style="margin-bottom:12px"><span class="muted small">Aufgabentyp</span><select class="sel" id="gsel"><option value="">Gemischt (Schwächen zuerst)</option>${gs.map(g => `<option value="${g.id}">${esc(g.title)}</option>`).join('')}</select></div><div id="taskbox"></div>`;
   }
-  return `<div class="${c.cls}">` + header(t.title, '#/k/' + t.ch) + `<div style="margin-top:4px" class="muted small">${t.nr} · ${c.short}</div>` + tabs + body + `</div>`;
+  return `<div class="${c.cls}">` + header(t.title, t.ch === 0 ? '#/k/0' : '#/k/' + t.ch) + `<div style="margin-top:4px" class="muted small">${t.nr} · ${c.short}</div>` + tabs + body + `</div>`;
 }
 /* gewichtete Auswahl: Aufgabentypen mit Fehlern / wenig Übung häufiger */
 const LASTG = [];
@@ -3152,6 +3391,75 @@ function viewTestResult() {
   <div class="actions"><button class="btn pri grow" data-go="#/test">Neuer Test</button><button class="btn" data-go="#/">Start</button></div></div>`;
 }
 
+/* ------------------------------------------------ Kapitel 0: Lexikon */
+const LexState = { q: '', cat: '', dir: 'term', cats: [], cur: null, shown: false, last: [] };
+const lexBox = id => Store.d.lex[id] || 0;
+function lexStats(list) { const b = [0, 0, 0, 0, 0, 0]; list.forEach(e => b[Math.min(lexBox(e.id), 5)]++); return b; }
+function boxesHTML(list) {
+  const b = lexStats(list), mx = Math.max(1, ...b);
+  const lab = ['neu', 'Fach 1', 'Fach 2', 'Fach 3', 'Fach 4', 'sicher'];
+  return `<div class="boxes">${b.map((v, i) => `<div style="height:${Math.max(6, v / mx * 100)}%;opacity:${0.35 + i * 0.13}" title="${lab[i]}"><span>${v}</span></div>`).join('')}</div>
+  <div class="row small muted" style="margin-top:4px">${lab.map(l => `<span class="sp" style="text-align:center">${l}</span>`).join('')}</div>`;
+}
+function viewLex() {
+  const learned = LEX.filter(e => lexBox(e.id) >= 4).length;
+  return `<div class="k0">` + header('Grundlagen', '#/') + `
+  <div class="hero"><h2>0.1 Lexikon</h2><p>${LEX.length} Begriffe & Formelzeichen · ${learned} sicher gelernt</p></div>
+  <div class="glass sect" style="margin-top:0">${boxesHTML(LEX)}</div>
+  <div class="actions" style="margin-top:14px"><button class="btn pri grow" data-go="#/lex/karten">${ICONS.book} Karteikarten</button><button class="btn grow" data-go="#/t/g-lex/ueben">${ICONS.check} Quiz</button></div>
+  <div style="margin-top:18px"><input class="search" id="lexq" placeholder="Begriff suchen …" value="${esc(LexState.q)}" autocomplete="off"></div>
+  <div class="chips" style="margin:12px 0">${[{ id: '', name: 'Alle' }].concat(LEX_CATS).map(c => `<button class="tog ${LexState.cat === c.id ? 'on' : ''}" data-lcat="${c.id}">${c.name}</button>`).join('')}</div>
+  <div class="list" id="lexlist">${lexListHTML()}</div></div>`;
+}
+function lexFiltered() {
+  const q = LexState.q.trim().toLowerCase();
+  return LEX.filter(e => (!LexState.cat || e.cat === LexState.cat) && (!q || lexPlain(e.term).toLowerCase().includes(q) || e.def.toLowerCase().includes(q)));
+}
+function lexListHTML() {
+  const l = lexFiltered(); if (!l.length) return '<div class="empty">Kein Begriff gefunden.</div>';
+  const fach = b => b === 0 ? 'neu' : b >= 5 ? 'sicher' : 'Fach ' + b;
+  return l.map(e => `<details class="glass lexrow"><summary><b class="sp">${e.term}</b><span class="badge">${fach(lexBox(e.id))}</span></summary>
+    <div class="def">${e.def}</div>${e.f ? `<div class="fm">\\[${e.f}\\]</div>` : ''}<div class="small muted">${lexCat(e.cat).name}</div></details>`).join('');
+}
+function mountLex() {
+  const inp = document.getElementById('lexq');
+  if (inp) inp.oninput = () => { LexState.q = inp.value; document.getElementById('lexlist').innerHTML = md(lexListHTML()); };
+  $app.querySelectorAll('[data-lcat]').forEach(b => b.onclick = () => { LexState.cat = b.dataset.lcat; render(); });
+}
+/* Karteikarten (Leitner-System): gewusst -> ein Fach weiter, nicht gewusst -> zurück in Fach 1 */
+function lexPool() { return LEX.filter(e => !LexState.cats.length || LexState.cats.includes(e.cat)); }
+function lexPick() {
+  let pool = lexPool(); const avoid = LexState.last.slice(-Math.min(6, pool.length - 1));
+  const cand = pool.filter(e => !avoid.includes(e.id)); if (cand.length) pool = cand;
+  const w = pool.map(e => { const b = lexBox(e.id); return b === 0 ? 3 : 1 / Math.pow(2, b - 1); });
+  let x = Math.random() * sum(w); for (let i = 0; i < pool.length; i++) { x -= w[i]; if (x <= 0) return pool[i]; } return pool[0];
+}
+function viewLexCards() {
+  if (!LexState.cur || !lexPool().includes(LexState.cur)) { LexState.cur = lexPick(); LexState.shown = false; }
+  const e = LexState.cur, termFirst = LexState.dir === 'term';
+  const front = termFirst ? `<div class="front">${e.term}</div>` : `<div style="font-size:17px">${e.def}</div>`;
+  const back = termFirst ? `<div>${e.def}</div>${e.f ? `<div class="fm">\\[${e.f}\\]</div>` : ''}` : `<div class="front">${e.term}</div>${e.f ? `<div class="fm">\\[${e.f}\\]</div>` : ''}`;
+  const b = lexBox(e.id);
+  return `<div class="k0">` + header('Karteikarten', '#/k/0') + `
+  <div class="glass sect" style="margin-top:14px">${boxesHTML(lexPool())}</div>
+  <div class="chips" style="margin:14px 0 6px"><button class="tog ${termFirst ? 'on' : ''}" data-ldir="term">Begriff → Erklärung</button><button class="tog ${!termFirst ? 'on' : ''}" data-ldir="def">Erklärung → Begriff</button></div>
+  <div class="chips" style="margin:8px 0 14px">${LEX_CATS.map(c => `<button class="tog ${LexState.cats.includes(c.id) ? 'on' : ''}" data-lcc="${c.id}">${c.name}</button>`).join('')}</div>
+  <div class="glass flash" id="flash"><div class="small muted" style="margin-bottom:10px">${lexCat(e.cat).name} · ${b === 0 ? 'neu' : b >= 5 ? 'sicher' : 'Fach ' + b}</div>${front}
+    ${LexState.shown ? `<div class="back">${back}</div>` : `<div class="hint2">Tippen zum Aufdecken</div>`}</div>
+  <div class="actions">${LexState.shown ? `<button class="btn grow" id="lno" style="border-color:var(--bad)">✗ Nicht gewusst</button><button class="btn pri grow" id="lyes">✓ Gewusst</button>` : `<button class="btn pri grow" id="lshow">Aufdecken</button>`}</div>
+  <p class="small muted" style="margin-top:14px">Gewusste Karten wandern ein Fach weiter und kommen seltener dran, nicht gewusste wieder zurück in Fach 1. Ab Fach 4 gilt ein Begriff als sicher gelernt.</p></div>`;
+}
+function mountLexCards() {
+  const show = () => { LexState.shown = true; render(); };
+  const f = document.getElementById('flash'); if (f && !LexState.shown) f.onclick = show;
+  const s = document.getElementById('lshow'); if (s) s.onclick = show;
+  const ans = ok => { const e = LexState.cur; Store.d.lex[e.id] = ok ? Math.min(lexBox(e.id) + 1, 5) : 1; Store.save(); LexState.last.push(e.id); LexState.cur = lexPick(); LexState.shown = false; render(); };
+  const y = document.getElementById('lyes'); if (y) y.onclick = () => ans(true);
+  const n = document.getElementById('lno'); if (n) n.onclick = () => ans(false);
+  $app.querySelectorAll('[data-ldir]').forEach(b => b.onclick = () => { LexState.dir = b.dataset.ldir; LexState.shown = false; render(); });
+  $app.querySelectorAll('[data-lcc]').forEach(b => b.onclick = () => { const id = b.dataset.lcc; LexState.cats = LexState.cats.includes(id) ? LexState.cats.filter(x => x !== id) : LexState.cats.concat(id); LexState.cur = null; render(); });
+}
+
 /* ------------------------------------------------ Formelsammlung */
 function viewFormeln(sec) {
   return `<div style="--acc:#fbbf24;--accb:#f97316">` + header('Formelsammlung', '#/') + `
@@ -3184,8 +3492,9 @@ function parseHash() {
 function render() {
   const { parts, q } = parseHash();
   let html, mount = null;
-  if (parts[0] === 'k' && chapterOf(+parts[1])) html = viewChapter(+parts[1]);
-  else if (parts[0] === 't' && topicOf(parts[1])) { html = viewTopic(parts[1], parts[2]); if (parts[2] === 'ueben') mount = () => mountPractice(parts[1]); }
+  if (parts[0] === 'k' && chapterOf(+parts[1])) { html = viewChapter(+parts[1]); if (+parts[1] === 0) mount = mountLex; }
+  else if (parts[0] === 'lex' && parts[1] === 'karten') { html = viewLexCards(); mount = mountLexCards; }
+  else if (parts[0] === 't' && topicOf(parts[1])) { html = viewTopic(parts[1], parts[2]); if (parts[2] === 'ueben') mount = () => mountPractice(parts[1]); else if (parts[1] === 'g-lex') mount = mountLex; }
   else if (parts[0] === 'formeln') { html = viewFormeln(); mount = mountFormeln; }
   else if (parts[0] === 'test' && parts[1] === 'run') { html = viewTestRun(); mount = mountTestRun; }
   else if (parts[0] === 'test' && parts[1] === 'result') html = viewTestResult();
