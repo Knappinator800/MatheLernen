@@ -8,7 +8,7 @@ Bezeichnungen wie in Skript und Formelsammlung.
 - Lösungsweg zu jeder Aufgabe
 - Tests über mehrere Themen und Bereiche hinweg
 - Tabelle der Standardnormalverteilung
-- läuft offline, alles in einer Datei (`index.html`), Fortschritt lokal im Browser
+- läuft offline, alles in einer Datei (`index.html`), Fortschritt lokal im Browser.
 
 ## Aufbau
 - `index.html` – fertige App (wird aus `src/` gebaut)
