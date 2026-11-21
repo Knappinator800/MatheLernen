@@ -353,6 +353,7 @@ const ICONS = {
   home: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 11l8-7 8 7v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/></svg>',
   table: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 4v16"/></svg>',
   next: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg>',
+  book: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5M8 7h7M8 11h5"/></svg>',
   check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12l5 5 9-10"/></svg>'
 };
 
@@ -715,6 +716,136 @@ function fstTableHTML() {
 }
 
 "use strict";
+/* ============ Formelsammlung (wie Klausur-Formelsammlung, Stand 14. Januar 2025) ============ */
+const FORMELN = [
+{ id: 'elem', title: 'Elementare Rechenregeln', html: T`
+<h3>Rechenregeln für Potenzen, Wurzeln und Logarithmen</h3>
+<p>Für reelle Zahlen \(x\), \(y\) und \(z\), für die die jeweiligen Ausdrücke gebildet werden dürfen, gilt:</p>
+\[x^{-y} = \frac{1}{x^y}\qquad x^y\cdot x^z = x^{y+z}\qquad \log(x\cdot y) = \log x + \log y\]
+\[x^{\frac1y} = \sqrt[y]{x}\qquad x^z\cdot y^z = (xy)^z\qquad \log\left(\frac xy\right) = \log x - \log y\]
+\[(x^y)^z = x^{y\cdot z}\qquad \log(x^y) = y\cdot\log x\]
+<h3>Lösung quadratischer Gleichungen</h3>
+<p><b>p-q-Formel:</b> Die Lösungen \(x_1, x_2\) der quadratischen Gleichung \(x^2 + p\cdot x + q = 0\) sind</p>
+\[x_{1/2} = -\frac p2 \pm \sqrt{\left(\frac p2\right)^2 - q}\]
+<p>Reelle Lösungen ergeben sich für \(\left(\frac p2\right)^2 - q \ge 0\).</p>
+<p><b>a-b-c-Formel:</b> Liegt die Gleichung in der Form \(a\cdot x^2 + b\cdot x + c = 0\) mit \(a \ne 0\) vor, kann sie durch Division durch \(a\) auf die p-q-Form gebracht werden, oder direkt:</p>
+\[x_{1/2} = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}\]
+<p>Reelle Lösungen ergeben sich für \(b^2 - 4ac \ge 0\).</p>`},
+{ id: 'fin', title: 'Finanzmathematik', html: T`
+<h3>Zinsfaktoren</h3>
+<p>Ein Kapitalbetrag \(K_0\) wird einmalig über einen Zinszeitraum von \(t\) Jahren zu einem festen Zinssatz \(r\) (p.a.) angelegt. Mit dem Zinsfaktor \(ZF\) ergibt sich das Endkapital</p>
+\[K_t = ZF\cdot K_0\]
+<div class="scroll"><table class="tb"><tr><th>Zinsberechnungsmethode</th><td>einfach</td><td>exponentiell</td><td>unterjährig exp.</td><td>stetig</td></tr>
+<tr><th>Zinsfaktor \(ZF\)</th><td>\(1 + rt\)</td><td>\((1+r)^t\)</td><td>\(\left(1 + \frac rm\right)^{mt}\)</td><td>\(e^{rt}\)</td></tr></table></div>
+<p>\(m\) bezeichnet die Anzahl der Zinsperioden p.a. Der Kehrwert \(1/ZF\) heißt Diskontfaktor \(DF\): \(K_0 = DF\cdot K_t\).</p>
+<div class="box ex"><b>Beispiel:</b> \(K_0 = 4000\,€\), \(r = 3\,\%\), \(t = 5\), exponentiell: \(K_5 = (1 + 0{,}03)^5\cdot 4000\,€ = 4637{,}10\,€\)</div>
+<h3>Effektivzinssatz</h3>
+<p>Transformation verschiedener Zinssätze in den Effektivzinssatz \(r_{\text{exp}}\):</p>
+\[r_{\text{exp}} = e^{r_{\text{stet}}} - 1\qquad r_{\text{exp}} = \left(1 + \frac{r_{\text{unt exp}}}{m}\right)^m - 1\qquad r_{\text{exp}} = (1 + r_{\text{einf}}\,t)^{\frac1t} - 1\]
+<div class="box ex"><b>Beispiel:</b> Tagesgeld \(4\,\%\) p.a., monatliche Gutschrift (\(m = 12\)): \(r_{\text{exp}} = \left(1 + \frac{4\%}{12}\right)^{12} - 1 \approx 4{,}07\,\%\)</div>
+<h3>Renditerechnung</h3>
+<p>Die Rendite eines Zahlungsstroms \(Z_1, \dots, Z_n\) ist derjenige konstante Zinssatz \(r\), für den der Barwert gerade den tatsächlichen Wert \(A\) (z. B. Kaufpreis) annimmt:</p>
+\[A = \sum_{i=1}^n DF_i\cdot Z_i\]
+<div class="box ex"><b>Beispiel:</b> zweijährige Anleihe, Kupon \(6\,\%\), Ausgabe zu \(99\,\%\): \(99 = \frac{6}{1+r} + \frac{106}{(1+r)^2}\ \Rightarrow\ r \approx 6{,}55\,\%\)</div>
+<p><b>Praktikerformel</b> (ganzjährige Restlaufzeit und Kupontermine):</p>
+\[r \approx \frac{\text{Kupon} + \frac{\text{Rückzahlung} - \text{Preis}}{\text{Restlaufzeit}}}{\text{Preis}}\qquad\text{Beispiel: } r \approx \frac{6 + \frac{100 - 99}{2}}{99} \approx 6{,}57\,\%\]
+<h3>Rentenbarwert- und Rentenendwertfaktoren</h3>
+<p>Über \(n\) Jahre werden periodisch Zahlungen der Höhe \(Z\) geleistet:</p>
+\[B = BWF\cdot Z\qquad E = EWF\cdot Z\]
+<div class="scroll"><table class="tb"><tr><th></th><th>Barwertfaktor \(BWF\)</th><th>Endwertfaktor \(EWF\)</th></tr>
+<tr><th>nachschüssig, jährlich</th><td>\(\frac{(1+r)^n - 1}{r(1+r)^n}\)</td><td>\(\frac{(1+r)^n - 1}{r}\)</td></tr>
+<tr><th>nachschüssig, \(m\) Zahlungen p.a.</th><td>\(\frac{\left(1+\frac rm\right)^{m\cdot n} - 1}{\frac rm\left(1+\frac rm\right)^{m\cdot n}}\)</td><td>\(\frac{\left(1+\frac rm\right)^{m\cdot n} - 1}{\frac rm}\)</td></tr>
+<tr><th>vorschüssig, jährlich</th><td>\(\frac{(1+r)^n - 1}{r(1+r)^{n-1}}\)</td><td>\((1+r)\frac{(1+r)^n - 1}{r}\)</td></tr>
+<tr><th>vorschüssig, \(m\) Zahlungen p.a.</th><td>\(\frac{\left(1+\frac rm\right)^{m\cdot n} - 1}{\frac rm\left(1+\frac rm\right)^{m\cdot n - 1}}\)</td><td>\(\left(1+\frac rm\right)\frac{\left(1+\frac rm\right)^{m\cdot n} - 1}{\frac rm}\)</td></tr></table></div>
+<p>\(n\): Laufzeit in Jahren (ganzzahlig); \(r\): Zinssatz p.a. der exponentiellen (Zeilen 1 und 3) bzw. der unterjährig exponentiellen Verzinsung (Zeilen 2 und 4).</p>
+<div class="box ex"><b>Beispiel:</b> \(n = 10\), \(Z = 1000\,€\) jährlich vorschüssig, \(r = 4\,\%\): \(E = 1{,}04\cdot\frac{1{,}04^{10} - 1}{0{,}04}\cdot 1000\,€ = 12.486{,}35\,€\)</div>
+<p><b>Barwert einer ewigen Rente</b> mit jährlichen nachschüssigen Zahlungen:</p>
+\[B = \begin{cases}\dfrac Zr & \text{bei konstanten Zahlungen } Z\\[2mm] \dfrac{Z}{r - g} & \text{bei anfänglicher Zahlung } Z \text{ mit Wachstumsrate } g\ (g < r)\end{cases}\]
+<h3>Forward Rates, Zero/Spot Rates und Par Rates</h3>
+<p><b>Forward Rate</b> \(r_{t't}\):</p>
+\[(1 + r_{0t})^t = (1 + r_{0t'})^{t'}\cdot(1 + r_{t't})^{t - t'}\ \Rightarrow\ r_{t't} = \left[\frac{(1 + r_{0t})^t}{(1 + r_{0t'})^{t'}}\right]^{\frac{1}{t - t'}} - 1\]
+<p><b>Zero Rates</b> \(r_{0n}\) rekursiv aus den Anlagezinssätzen (Par Rates) \(k_n\):</p>
+\[r_{01} = k_1,\qquad r_{0n} = \sqrt[n]{\frac{1 + k_n}{1 - k_n\sum_{i=1}^{n-1}(1 + r_{0i})^{-i}}} - 1\]
+<p><b>Par Rates</b> \(k_n\) aus den Zero Rates:</p>
+\[k_n = \frac{1 - (1 + r_{0n})^{-n}}{\sum_{i=1}^n (1 + r_{0i})^{-i}}\]`},
+{ id: 'fkt', title: 'Funktionen und Differentialrechnung', html: T`
+<h3>Lineare Funktionen</h3>
+<div class="scroll"><table class="tb"><tr><th></th><th>gegeben</th><th>Funktionsterm</th></tr>
+<tr><th>Punkt-Steigungs-Form</th><td>Punkt \((x_1, y_1)\), Steigung \(a\)</td><td>\(y = f(x) = a\cdot(x - x_1) + y_1\)</td></tr>
+<tr><th>Beispiel</th><td>\((2, 5)\), Steigung \(2\)</td><td>\(f(x) = 2(x - 2) + 5 = 2x + 1\)</td></tr>
+<tr><th>Zwei-Punkte-Form</th><td>\((x_1, y_1)\), \((x_2, y_2)\)</td><td>\(y = f(x) = \frac{y_2 - y_1}{x_2 - x_1}(x - x_1) + y_1\)</td></tr>
+<tr><th>Beispiel</th><td>\((2, 1)\), \((-1, 4)\)</td><td>\(f(x) = \frac{4 - 1}{-1 - 2}(x - 2) + 1 = -x + 3\)</td></tr></table></div>
+<h3>Regula Falsi</h3>
+<ul><li>Sei \(I\) ein Intervall, \(f: I \to \mathbb R\) stetig und \(a, b \in I\) mit \(f(a)\cdot f(b) < 0\).</li>
+<li>Dann gibt es nach dem Zwischenwertsatz eine Nullstelle von \(f\) zwischen \(a\) und \(b\).</li>
+<li>Schnittpunkt der Geraden durch \((a, f(a))\) und \((b, f(b))\) mit der \(x\)-Achse:
+\[x_1 = \frac{a\,f(b) - b\,f(a)}{f(b) - f(a)}\]</li>
+<li>Dann \(f(x_1)\) berechnen. Ist der Wert noch nicht nahe genug bei 0, den Punkt durch \((x_1, f(x_1))\) ersetzen, der auf derselben Seite der Nullstelle liegt (Vorzeichentest).</li>
+<li>Schritte wiederholen, bis man sich der Nullstelle hinreichend genau angenähert hat.</li></ul>
+<h3>Ableitungen elementarer Funktionen</h3>
+<div class="scroll"><table class="tb"><tr><th>\(f(x)\)</th><th>\(f'(x)\)</th><th>\(f(x)\)</th><th>\(f'(x)\)</th></tr>
+<tr><td>\(c\) (konstant)</td><td>\(0\)</td><td>\(x^\alpha\) \((\alpha \in \mathbb R, x > 0)\)</td><td>\(\alpha x^{\alpha - 1}\)</td></tr>
+<tr><td>\(ax + b\)</td><td>\(a\)</td><td>\(\ln|x|\) \((x \ne 0)\)</td><td>\(\frac1x\)</td></tr>
+<tr><td>\(x^n\) \((n \in \mathbb N)\)</td><td>\(n x^{n-1}\)</td><td>\(\log_a|x|\) \((x \ne 0)\)</td><td>\(\frac{1}{x\cdot\ln a}\)</td></tr>
+<tr><td>\(\frac{1}{x^n}\) \((x \ne 0)\)</td><td>\(-\frac{n}{x^{n+1}}\)</td><td>\(e^x\)</td><td>\(e^x\)</td></tr>
+<tr><td>\(\sqrt x\) \((x > 0)\)</td><td>\(\frac{1}{2\sqrt x}\)</td><td>\(a^x\) \((a > 0)\)</td><td>\(a^x\cdot\ln a\)</td></tr></table></div>
+<h3>Ableitungsregeln für zusammengesetzte Funktionen</h3>
+<div class="scroll"><table class="tb">
+<tr><th>Linearität</th><td>\([f(x) + g(x)]' = f'(x) + g'(x)\), \([c\cdot f(x)]' = c\cdot f'(x)\)</td></tr>
+<tr><th>Produktregel</th><td>\([f(x)\cdot g(x)]' = f'(x)g(x) + f(x)g'(x)\)</td></tr>
+<tr><th>Quotientenregel</th><td>\(\left[\frac{f(x)}{g(x)}\right]' = \frac{f'(x)g(x) - f(x)g'(x)}{g(x)^2}\), \(\left[\frac{1}{g(x)}\right]' = -\frac{g'(x)}{g(x)^2}\)</td></tr>
+<tr><th>Kettenregel</th><td>\([f(g(x))]' = f'(g(x))\cdot g'(x)\)</td></tr>
+<tr><th>Umkehrfunktion</th><td>\(\left(f^{-1}\right)'(x) = \frac{1}{f'\left(f^{-1}(x)\right)}\)</td></tr></table></div>
+<h3>Vorzeichen der zweiten Ableitung vs. Konvexität/Konkavität</h3>
+<p>Ist \(f\) auf \([a,b]\) stetig und auf \((a,b)\) zweimal differenzierbar, so gilt:</p>
+<ul><li>\(f''(x) \ge 0\) auf \((a,b)\) \(\Leftrightarrow\) \(f\) ist auf \([a,b]\) konvex</li>
+<li>\(f''(x) \le 0\) auf \((a,b)\) \(\Leftrightarrow\) \(f\) ist auf \([a,b]\) konkav</li>
+<li>\(f''(x) = 0\) auf \((a,b)\) \(\Leftrightarrow\) \(f\) ist auf \([a,b]\) linear</li>
+<li>\(f''(x) > 0\) auf \((a,b)\) \(\Rightarrow\) \(f\) ist auf \([a,b]\) streng konvex</li>
+<li>\(f''(x) < 0\) auf \((a,b)\) \(\Rightarrow\) \(f\) ist auf \([a,b]\) streng konkav</li></ul>
+<h3>Notwendige und hinreichende Bedingungen für lokale Extrema</h3>
+<p>\(x_0\) innerer Punkt, \(f\) zweimal differenzierbar:</p>
+<div class="box"><b>notwendig:</b> \(f'(x_0) = 0\) (horizontale Tangente), \(x_0\) heißt dann stationäre Stelle.<br>
+<b>hinreichend:</b> \(f'(x_0) = 0\) und \(f''(x_0) > 0\) (Konvexität) \(\Rightarrow\) lokales Minimum<br>
+oder \(f'(x_0) = 0\) und \(f''(x_0) < 0\) (Konkavität) \(\Rightarrow\) lokales Maximum</div>
+<h3>Notwendige und hinreichende Bedingungen für Wendepunkte</h3>
+<p>\(x_0\) innerer Punkt, \(f\) dreimal differenzierbar:</p>
+<div class="box"><b>notwendig:</b> \(f''(x_0) = 0\) (keine Krümmung), \(x_0\) ist dann Stelle eines Flachpunkts.<br>
+<b>hinreichend:</b> \(f''(x_0) = 0\) und \(f'''(x_0) > 0\) (Übergang Rechts- auf Linkskrümmung) \(\Rightarrow\) Wendestelle (konkav/konvex)<br>
+oder \(f''(x_0) = 0\) und \(f'''(x_0) < 0\) (Übergang Links- auf Rechtskrümmung) \(\Rightarrow\) Wendestelle (konvex/konkav)</div>`},
+{ id: 'stat', title: 'Statistik', html: T`
+<h3>Maßzahlen der beschreibenden Statistik</h3>
+<p>Zu einer Zahlenreihe \(x_1, \dots, x_n\):</p>
+\[\bar x = \frac1n\sum_{i=1}^n x_i\qquad \sigma_x^2 = \frac1n\sum_{i=1}^n (x_i - \bar x)^2 = \frac1n\sum_{i=1}^n x_i^2 - \bar x^2 = \overline{x^2} - \bar x^2\qquad \sigma_x = \sqrt{\sigma_x^2}\]
+<p>Zu einer zweidimensionalen Zahlenreihe \((x_1, y_1), \dots, (x_n, y_n)\):</p>
+\[\sigma_{xy} = \frac1n\sum_{i=1}^n (x_i - \bar x)(y_i - \bar y) = \frac1n\sum_{i=1}^n x_iy_i - \bar x\bar y = \overline{xy} - \bar x\bar y\]
+\[\rho_{xy} = \frac{\sigma_{xy}}{\sigma_x\cdot\sigma_y}\qquad \beta_{xy} = \frac{\sigma_{xy}}{\sigma_x^2} = \frac{\rho_{xy}\cdot\sigma_y}{\sigma_x}\]
+<p>Lineare Regressionsgerade \(y = \alpha + \beta x\) mit \(\beta = \beta_{xy}\), \(\alpha = \bar y - \beta\bar x\).</p>
+<h3>Gewichtete Zahlenreihen (z. B. Portfolio)</h3>
+<p>Für \(z_i = w x_i + (1 - w) y_i\), \(i = 1, \dots, n\), mit Gewicht \(w \in \mathbb R\):</p>
+\[\bar z = w\bar x + (1 - w)\bar y\]
+\[\sigma_z^2 = w^2\sigma_x^2 + (1 - w)^2\sigma_y^2 + 2w(1 - w)\sigma_{xy} = w^2\sigma_x^2 + (1 - w)^2\sigma_y^2 + 2w(1 - w)\rho_{xy}\sigma_x\sigma_y\qquad \sigma_z = \sqrt{\sigma_z^2}\]
+<h3>Verteilungskennzahlen von Zufallsvariablen</h3>
+<p>Diskret verteilte Zufallsvariable \(X\) mit Werten \(x_1, \dots, x_n\) und Wahrscheinlichkeiten \(P(X = x_i)\):</p>
+\[E(X) = \mu_X = \sum_{i=1}^n x_i\cdot P(X = x_i)\qquad E(X^2) = \sum_{i=1}^n x_i^2\cdot P(X = x_i)\]
+\[V(X) = \sigma_X^2 = \sum_{i=1}^n (x_i - E(X))^2\cdot P(X = x_i) = E(X^2) - E(X)^2\qquad \sigma_X = \sqrt{V(X)}\]
+<p>Zwei diskrete Zufallsvariablen \(X, Y\) mit Zuständen \((x_i, y_i)\) und Wahrscheinlichkeiten \(p_i\):</p>
+\[\text{Cov}(X,Y) = \sigma_{XY} = \sum_{i=1}^n [x_i - E(X)]\cdot[y_i - E(Y)]\cdot p_i = \sum_{i=1}^n x_iy_ip_i - E(X)E(Y) = E(XY) - E(X)E(Y)\]
+\[\rho(X,Y) = \frac{\text{Cov}(X,Y)}{\sqrt{V(X)\cdot V(Y)}}\qquad \beta(X,Y) = \frac{\text{Cov}(X,Y)}{V(X)}\]
+<h3>Rechenregeln für Erwartungswerte, Varianzen und Kovarianzen</h3>
+\[E(aX + b) = aE(X) + b\qquad V(aX + b) = a^2V(X)\]
+\[E(aX + bY) = aE(X) + bE(Y)\]
+\[V(aX + bY) = a^2V(X) + b^2V(Y) + 2ab\,\text{Cov}(X,Y) = a^2V(X) + b^2V(Y) + 2ab\,\rho(X,Y)\sqrt{V(X)V(Y)}\]
+\[\text{Cov}(aX, bY) = ab\,\text{Cov}(X,Y)\quad \text{Cov}(X,Y) = \text{Cov}(Y,X)\quad \text{Cov}(X,X) = V(X)\quad \text{Cov}(X + Y, Z) = \text{Cov}(X,Z) + \text{Cov}(Y,Z)\]
+<p>Gewichtete Summe \(\sum_{i=1}^n w_iX_i\):</p>
+\[E\left(\sum_{i=1}^n w_iX_i\right) = \sum_{i=1}^n w_iE(X_i)\]
+\[V\left(\sum_{i=1}^n w_iX_i\right) = \sum_{i=1}^n\sum_{j=1}^n w_iw_j\,\text{Cov}(X_i, X_j) = \sum_{i=1}^n w_i^2V(X_i) + 2\sum_{i=1}^n\sum_{j=i+1}^n w_iw_j\,\text{Cov}(X_i, X_j)\]`},
+{ id: 'tab', title: 'Tabelle der Standardnormalverteilung', html: T`
+<p>\(Z \sim N(0,1)\), \(F_{St}(z) = P(Z \le z) = \int_{-\infty}^z f_{St}(t)\,dt\). Für negative \(z\): \(F_{St}(-z) = 1 - F_{St}(z)\).</p>
+<div id="fsttab"></div>`}
+];
+
+"use strict";
 /* ============ Aufgaben-Generatoren ============
    Feld-Typen:
    num : {label, ans, dec, unit}   unit '%' => Eingabe in Prozent
@@ -727,7 +858,15 @@ const num = (label, ans, dec = 2, unit = '') => ({ type: 'num', label, ans, dec,
 const ex = (label, fn, texAns, v = 'x') => ({ type: 'expr', label, fn, tex: texAns, v });
 const mc = (label, right, wrong) => { const opts = shuffle([right, ...wrong]); return { type: 'mc', label, opts, ans: opts.indexOf(right) }; };
 /* Verständnisfragen-Bank: [Frage, richtig, [falsch...]] */
-const MCQ = (id, topic, title, bank) => G(id, topic, title, () => { const [q, r, w] = pick(bank); return { q, fields: [mc('', r, w)], sol: '' }; });
+/* Verständnisfragen: Bank pro Thema, bereits gestellte Fragen kommen erst später wieder */
+const MCBANK = {};
+const RECENT = {};
+function pickFresh(key, n) {
+  const r = RECENT[key] || [], all = [...Array(n).keys()], cand = all.filter(i => !r.includes(i));
+  const i = pick(cand.length ? cand : all); RECENT[key] = r.concat(i).slice(-Math.max(1, Math.floor(n * 0.75))); return i;
+}
+const MCQ = (id, topic, title, bank) => { MCBANK[id] = bank; const g = { id, topic, title, mcq: true, f: () => { const b = MCBANK[id]; const [q, r, w] = b[pickFresh(id, b.length)]; return { q, fields: [mc('', r, w)], sol: '' }; } }; GENS.push(g); };
+const MCADD = (id, items) => MCBANK[id].push(...items);
 
 /* ==================================================== Kapitel 1 */
 G('lin2p', 'f-elem', 'Gerade durch zwei Punkte', () => {
@@ -1449,8 +1588,1296 @@ MCQ('zgwsmc', 's-zgws', 'Verständnis: ZGWS', [
   [T`Binomialverteilung mit kleinem \(p\): Für eine gute Normalapproximation braucht man …`, T`ein größeres \(n\)`, [T`ein kleineres \(n\)`, T`\(p = 0{,}5\) exakt`, 'gar keine Bedingung']]
 ]);
 
+
+"use strict";
+/* ============ Zusätzliche Aufgaben (Erweiterung auf ~20 Varianten pro Unterthema) ============ */
+const GV = (id, topic, title, nv, f) => { G(id, topic, title, f); GENS[GENS.length - 1].nv = nv; };
+/* interne Varianten bestehender Generatoren */
+Object.entries({ drules: 6, kt: 4, k0: 3, solvet: 4, solver: 3, trans: 6, rente: 8, ewig: 2, nvp: 3, nvq: 2, zvlin: 2, bwstream: 2 })
+  .forEach(([id, n]) => { const g = GENS.find(x => x.id === id); if (g) g.nv = n; });
+const sgn = v => v < 0 ? '-' : '+';
+const fx = (x, d = 4) => nt(x, d);
+
+/* ==================================================== 1.1–1.2 Funktionen */
+G('nullgerade', 'f-elem', 'Achsenschnittpunkte einer Geraden', () => {
+  const a = pick([-4, -3, -2, -0.5, 0.5, 2, 3, 5]), x0 = R(-6, 8), b = -a * x0;
+  return {
+    q: T`Bestimme Nullstelle und \(y\)-Achsenabschnitt von \(f(x) = ${polyTeX([b, a])}\).`,
+    fields: [num(T`Nullstelle \(x_0 =\)`, x0, 2), num(T`\(f(0) =\)`, b, 2)],
+    sol: T`\(f(0) = ${ntc(b)}\). Nullstelle: \(${polyTeX([b, a])} = 0 \Leftrightarrow x = \frac{${ntc(-b)}}{${ntc(a)}} = ${ntc(x0)}\).`
+  };
+});
+G('schnitt', 'f-elem', 'Schnittpunkt zweier Geraden', () => {
+  let a1, a2; do { a1 = R(-4, 4); a2 = R(-4, 4); } while (a1 === a2);
+  const xs = R(-5, 6), ys = R(-8, 10), b1 = ys - a1 * xs, b2 = ys - a2 * xs;
+  return {
+    q: T`In welchem Punkt schneiden sich \(f(x) = ${polyTeX([b1, a1])}\) und \(g(x) = ${polyTeX([b2, a2])}\)?`,
+    fields: [num(T`\(x_S =\)`, xs, 2), num(T`\(y_S =\)`, ys, 2)],
+    sol: T`\(f(x) = g(x)\): \(${polyTeX([b1, a1])} = ${polyTeX([b2, a2])} \Leftrightarrow ${ntc(a1 - a2)}x = ${ntc(b2 - b1)} \Leftrightarrow x = ${ntc(xs)}\). Einsetzen: \(y = f(${ntc(xs)}) = ${ntc(ys)}\).`
+  };
+});
+G('kostenlin', 'f-elem', 'Lineare Kostenfunktion aufstellen', () => {
+  const kv = R(2, 30), Kf = R(5, 80) * 50, x1 = R(1, 10) * 10, x2 = x1 + R(2, 10) * 10;
+  return {
+    q: T`Bei einer Produktion von \(${x1}\) Stück entstehen Kosten von \(${eur(Kf + kv * x1, 0)}\), bei \(${x2}\) Stück \(${eur(Kf + kv * x2, 0)}\). Bestimme die lineare Kostenfunktion \(K(x) = K_f + k_v\cdot x\).`,
+    fields: [num(T`variable Stückkosten \(k_v =\)`, kv, 2, '€'), num(T`Fixkosten \(K_f =\)`, Kf, 2, '€')],
+    sol: T`Steigung (Zwei-Punkte-Form): \(k_v = \frac{${nt(Kf + kv * x2, 0)} - ${nt(Kf + kv * x1, 0)}}{${x2} - ${x1}} = ${kv}\). Fixkosten: \(K_f = ${nt(Kf + kv * x1, 0)} - ${kv}\cdot ${x1} = ${nt(Kf, 0)}\).`
+  };
+});
+G('pabs', 'f-elem', 'Preis-Absatz-Funktion aufstellen', () => {
+  const b = pick([0.5, 1, 2, 4, 5]), a = R(10, 60) * 5, x1 = R(1, 8) * 2, x2 = x1 + R(2, 8) * 2;
+  return {
+    q: T`Bei einem Preis von \(${ntc(a - b * x1)}\,€\) werden \(${x1}\) Stück abgesetzt, bei \(${ntc(a - b * x2)}\,€\) sind es \(${x2}\) Stück. Bestimme die lineare Preis-Absatz-Funktion \(p(x) = a - b\,x\).`,
+    fields: [num(T`\(a =\)`, a, 2), num(T`\(b =\)`, b, 2)],
+    sol: T`Steigung: \(\frac{${ntc(a - b * x2)} - ${ntc(a - b * x1)}}{${x2} - ${x1}} = ${ntc(-b)} \Rightarrow b = ${ntc(b)}\). Achsenabschnitt: \(a = ${ntc(a - b * x1)} + ${ntc(b)}\cdot ${x1} = ${ntc(a)}\) (Höchstpreis).`
+  };
+});
+G('expgl', 'f-elem', 'Exponentialgleichung lösen', () => {
+  const v = pick(['e', 'a']);
+  if (v === 'e') {
+    const c = R(2, 9), k = pick([0.5, 2, 3, -1]), d = R(10, 90);
+    const x = Math.log(d / c) / k;
+    return { q: T`Löse \(${c}\cdot e^{${ntc(k)}x} = ${d}\) nach \(x\) auf.`, fields: [num(T`\(x =\)`, x, 4)],
+      sol: T`\[e^{${ntc(k)}x} = \frac{${d}}{${c}}\ \Rightarrow\ ${ntc(k)}x = \ln\frac{${d}}{${c}}\ \Rightarrow\ x = \frac{\ln(${ntc(d / c, 6)})}{${ntc(k)}} = ${fx(x)}\]` };
+  }
+  const a = pick([1.02, 1.05, 1.1, 2, 3]), c = R(2, 30);
+  const x = Math.log(c) / Math.log(a);
+  return { q: T`Löse \(${ntc(a)}^x = ${c}\) nach \(x\) auf.`, fields: [num(T`\(x =\)`, x, 4)],
+    sol: T`Logarithmieren: \(x\cdot\ln(${ntc(a)}) = \ln(${c})\Rightarrow x = \frac{\ln ${c}}{\ln ${ntc(a)}} = ${fx(x)}\)` };
+});
+G('loggl', 'f-elem', 'Logarithmusgleichung lösen', () => {
+  const a = R(2, 5), b = R(-5, 5), c = R(1, 12), x = Math.exp((c - b) / a);
+  return { q: T`Löse \(${a}\ln x ${plusTerm(b)} = ${c}\) nach \(x\) auf.`, fields: [num(T`\(x =\)`, x, 4)],
+    sol: T`\(\ln x = \frac{${c} - ${par(b)}}{${a}} = ${ntc((c - b) / a, 4)}\Rightarrow x = e^{${ntc((c - b) / a, 4)}} = ${fx(x)}\)` };
+});
+G('logrule', 'f-elem', 'Logarithmenregeln', () => {
+  const v = R(0, 2), a = R(2, 6), b = R(2, 5);
+  if (v === 0) return { q: T`Vereinfache \(\ln\left(e^{${a}}\cdot e^{${b}}\right) - \ln\left(e^{${b}}\right)^{2}\).`, fields: [num('Ergebnis', a + b - 2 * b, 0)],
+    sol: T`\(\ln(e^{${a}}e^{${b}}) = ${a} + ${b}\), \(\ln(e^{${b}})^2 = 2\cdot ${b}\). Ergebnis: \(${a + b} - ${2 * b} = ${a - b}\).` };
+  if (v === 1) return { q: T`Berechne \(\log_{2}(${2 ** a}) + \log_{10}(${10 ** (b - 1)})\).`, fields: [num('Ergebnis', a + b - 1, 0)],
+    sol: T`\(2^{${a}} = ${2 ** a}\Rightarrow\log_2 = ${a}\); \(10^{${b - 1}} = ${10 ** (b - 1)}\Rightarrow\log_{10} = ${b - 1}\). Summe: \(${a + b - 1}\).` };
+  return { q: T`Schreibe \(\ln(x^{${a}}) + \ln(x^{${b}}) - \ln(x)\) als \(k\cdot\ln x\). Bestimme \(k\).`, fields: [num(T`\(k =\)`, a + b - 1, 0)],
+    sol: T`\(\log(x^y) = y\log x\): \(${a}\ln x + ${b}\ln x - \ln x = ${a + b - 1}\ln x\).` };
+});
+GENS[GENS.length - 1].nv = 3;
+MCQ('elemmc', 'f-elem', 'Verständnis: Funktionen', [
+  [T`Was ist der größtmögliche Definitionsbereich von \(f(x) = \ln(x - 3)\)?`, T`\(x > 3\)`, [T`\(x \ge 3\)`, T`\(x > 0\)`, T`\(\mathbb R\)`]],
+  [T`Was ist der größtmögliche Definitionsbereich von \(f(x) = \sqrt{x + 2}\)?`, T`\(x \ge -2\)`, [T`\(x > -2\)`, T`\(x \ge 2\)`, T`\(x \ge 0\)`]],
+  [T`Der Graph von \(g(x) = f(x - 2) + 1\) entsteht aus dem von \(f\) durch …`, '2 nach rechts und 1 nach oben verschieben', ['2 nach links und 1 nach oben verschieben', '2 nach rechts und 1 nach unten verschieben', 'Streckung um den Faktor 2']],
+  [T`Der Graph von \(-f(x)\) entsteht aus dem von \(f\) durch …`, T`Spiegelung an der \(x\)-Achse`, [T`Spiegelung an der \(y\)-Achse`, 'Verschiebung nach unten', 'Spiegelung an der Winkelhalbierenden']],
+  ['Was unterscheidet eine Funktion von einer beliebigen Zuordnung?', 'Jedem x aus dem Definitionsbereich wird genau ein Funktionswert zugeordnet.', ['Jedem y wird genau ein x zugeordnet.', 'Der Graph ist eine Gerade.', 'Sie ist stetig.']],
+  [T`Welchen Grad hat \(f(x) = 3x^2 - x^5 + 7\)?`, '5', ['2', '3', '7']],
+  [T`\(f(x) = 100 - 2x\) ist eine Preis-Absatz-Funktion. Was bedeutet die 100?`, 'den Höchstpreis (Absatz 0)', ['die Sättigungsmenge', 'die Fixkosten', 'den Erlös']],
+  [T`Welche Funktion ist eine Exponentialfunktion?`, T`\(f(x) = 2^x\)`, [T`\(f(x) = x^2\)`, T`\(f(x) = \sqrt[x]{2}\)`, T`\(f(x) = 2x\)`]],
+  [T`\(\ln(e) =\) …`, '1', ['0', 'e', '10']],
+  [T`Was gilt für \(f(x) = e^x\)?`, 'Sie ist immer positiv und streng monoton wachsend.', ['Sie hat genau eine Nullstelle.', 'Sie ist bei x = 0 gleich 0.', 'Sie ist konkav.']]
+]);
+
+/* ==================================================== 1.3 Nullstellen & Polynome */
+G('scheitel', 'f-null', 'Scheitelpunkt einer Parabel', () => {
+  const a = pick([-3, -2, -1, 1, 2, 3, 0.5]), xs = R(-6, 6), ys = R(-10, 12), b = -2 * a * xs, c = a * xs * xs + ys;
+  return {
+    q: T`Bestimme den Scheitelpunkt der Parabel \(f(x) = ${polyTeX([c, b, a])}\).`,
+    fields: [num(T`\(x_S =\)`, xs, 2), num(T`\(y_S =\)`, ys, 2)],
+    sol: T`\(f'(x) = ${polyTeX([b, 2 * a])} = 0 \Rightarrow x_S = -\frac{b}{2a} = ${ntc(xs)}\), \(y_S = f(${ntc(xs)}) = ${ntc(ys)}\). Die Parabel ist nach ${a > 0 ? 'oben' : 'unten'} geöffnet.`
+  };
+});
+G('diskr', 'f-null', 'Anzahl der Nullstellen (Diskriminante)', () => {
+  const k = R(0, 2); let p, q;
+  if (k === 2) { const r1 = R(-6, 2), r2 = r1 + R(1, 6); p = -(r1 + r2); q = r1 * r2; }
+  else if (k === 1) { const r = R(-6, 6); p = -2 * r; q = r * r; }
+  else { p = R(-6, 6) * 2; q = (p / 2) ** 2 + R(1, 9); }
+  const D = (p / 2) ** 2 - q;
+  return {
+    q: T`Wie viele reelle Nullstellen hat \(f(x) = ${polyTeX([q, p, 1])}\)?`,
+    fields: [mc('', ['keine', 'genau eine', 'zwei'][k], ['keine', 'genau eine', 'zwei', 'drei'].filter((_, i) => i !== k))],
+    sol: T`\(\left(\frac p2\right)^2 - q = ${ntc((p / 2) ** 2)} - ${par(q)} = ${ntc(D)}\) – ${D > 0 ? 'positiv: zwei Nullstellen' : D === 0 ? 'null: eine (doppelte) Nullstelle' : 'negativ: keine reelle Nullstelle'}.`
+  };
+});
+G('ausklammern', 'f-null', 'Nullstellen durch Ausklammern', () => {
+  let r1, r2; do { r1 = R(-7, 7); r2 = R(-7, 7); } while (r1 >= r2 || !r1 || !r2);
+  const a = pick([1, 2, -1]), c = [0, a * r1 * r2, -a * (r1 + r2), a];
+  const roots = [0, r1, r2].sort((x, y) => x - y);
+  return {
+    q: T`Bestimme alle Nullstellen von \(f(x) = ${polyTeX(c)}\) (aufsteigend).`,
+    fields: [num(T`\(x_1 =\)`, roots[0], 2), num(T`\(x_2 =\)`, roots[1], 2), num(T`\(x_3 =\)`, roots[2], 2)],
+    sol: T`\(x\) ausklammern: \(f(x) = x\cdot(${polyTeX([a * r1 * r2, -a * (r1 + r2), a])})\). Also \(x = 0\) und p-q-Formel für die Klammer: \(x = ${r1}\), \(x = ${r2}\).`
+  };
+});
+G('biquad', 'f-null', 'Biquadratische Gleichung (Substitution)', () => {
+  let u1, u2; do { u1 = pick([1, 4, 9, 16, 25]); u2 = pick([1, 4, 9, 16, 25, 36]); } while (u1 >= u2);
+  const p = -(u1 + u2), q = u1 * u2;
+  return {
+    q: T`Bestimme die positiven Nullstellen von \(f(x) = x^4 ${plusTerm(p)}x^2 ${plusTerm(q)}\) (kleinere zuerst).`,
+    fields: [num(T`\(x_1 =\)`, Math.sqrt(u1), 2), num(T`\(x_2 =\)`, Math.sqrt(u2), 2)],
+    sol: T`Substitution \(u = x^2\): \(u^2 ${plusTerm(p)}u ${plusTerm(q)} = 0 \Rightarrow u = ${u1}\) oder \(u = ${u2}\). Rücksubstitution: \(x = \pm${Math.sqrt(u1)}\), \(x = \pm${Math.sqrt(u2)}\). Insgesamt 4 Nullstellen.`
+  };
+});
+G('linbe', 'f-null', 'Break-even (linear)', () => {
+  const p = R(15, 90), kv = R(5, p - 5), xb = R(5, 80) * 10, Kf = (p - kv) * xb;
+  return {
+    q: T`Ein Produkt wird zu \(p = ${p}\,€\) verkauft, die variablen Stückkosten betragen \(k_v = ${kv}\,€\), die Fixkosten \(K_f = ${eur(Kf, 0)}\). Ab welcher Menge wird Gewinn erzielt?`,
+    fields: [num(T`Gewinnschwelle \(x =\)`, xb, 2)],
+    sol: T`\(G(x) = ${p}x - ${kv}x - ${nt(Kf, 0)} = 0 \Rightarrow x = \frac{K_f}{p - k_v} = \frac{${nt(Kf, 0)}}{${p - kv}} = ${xb}\)`
+  };
+});
+G('polywert', 'f-null', 'Polynom: Linearfaktoren & Funktionswert', () => {
+  const r = shuffle([-4, -3, -2, -1, 1, 2, 3, 4]).slice(0, 3), a = pick([1, 2, -1]);
+  const c = [-a * r[0] * r[1] * r[2], a * (r[0] * r[1] + r[0] * r[2] + r[1] * r[2]), -a * (r[0] + r[1] + r[2]), a], x0 = R(-3, 5);
+  return {
+    q: T`Ein Polynom 3. Grades mit Leitkoeffizient \(${a}\) hat die Nullstellen \(${r.join(',\\ ')}\). Bestimme das absolute Glied \(a_0\) und \(f(${x0})\).`,
+    fields: [num(T`\(a_0 =\)`, c[0], 2), num(T`\(f(${x0}) =\)`, polyEval(c, x0), 2)],
+    sol: T`\(f(x) = ${a === 1 ? '' : a === -1 ? '-' : a}(${minus('x', r[0])})(${minus('x', r[1])})(${minus('x', r[2])}) = ${polyTeX(c)}\). \(a_0 = f(0) = ${c[0]}\), \(f(${x0}) = ${polyEval(c, x0)}\).`
+  };
+});
+G('rationalnull', 'f-null', 'Gebrochen rationale Funktion', () => {
+  let r1, r2, pol; do { r1 = R(-6, 6); r2 = R(-6, 6); pol = R(-5, 5); } while (r1 === r2 || pol === r1 || pol === r2);
+  const lo = Math.min(r1, r2), hi = Math.max(r1, r2);
+  return {
+    q: T`Bestimme die Nullstellen (aufsteigend) und die Polstelle von \[f(x) = \frac{${polyTeX([r1 * r2, -(r1 + r2), 1])}}{${minus('x', pol)}}\]`,
+    fields: [num(T`\(x_1 =\)`, lo, 2), num(T`\(x_2 =\)`, hi, 2), num('Polstelle bei x =', pol, 2)],
+    sol: T`Nullstellen des Zählers: \(x = ${lo}\), \(x = ${hi}\) (Nenner dort \(\ne 0\)). Nullstelle des Nenners: \(x = ${pol}\) – dort liegt eine Polstelle.`
+  };
+});
+MCQ('nullmc', 'f-null', 'Verständnis: Nullstellen', [
+  ['Wie viele reelle Nullstellen kann ein Polynom 4. Grades höchstens haben?', '4', ['3', '5', 'unendlich viele']],
+  ['Ein Polynom 3. Grades hat immer …', 'mindestens eine reelle Nullstelle', ['genau drei reelle Nullstellen', 'keine Nullstelle', 'genau zwei Nullstellen']],
+  [T`Ist \(x_1\) Nullstelle von \(f\), dann gilt …`, T`\(f(x) = (x - x_1)\cdot g(x)\) mit einem Polynom \(g\) vom Grad \(n - 1\)`, [T`\(f(x) = (x + x_1)\cdot g(x)\)`, T`\(f'(x_1) = 0\)`, T`\(f(x_1) = 1\)`]],
+  [T`Satz von Vieta für \(x^2 + px + q = 0\):`, T`\(x_1 + x_2 = -p\), \(x_1\cdot x_2 = q\)`, [T`\(x_1 + x_2 = p\), \(x_1x_2 = -q\)`, T`\(x_1 + x_2 = q\), \(x_1x_2 = p\)`, T`\(x_1 - x_2 = p\)`]],
+  ['Wo findet man bei Polynomen mit ganzzahligen Koeffizienten (Leitkoeffizient 1) ganzzahlige Nullstellen?', T`unter den Teilern des absoluten Glieds \(a_0\)`, ['unter den Teilern des Leitkoeffizienten', 'nur bei 0 und 1', 'bei den Extremstellen']],
+  ['Die Gewinnschwelle ist …', 'die kleinste positive Nullstelle der Gewinnfunktion', ['das Maximum der Gewinnfunktion', 'die Nullstelle der Kostenfunktion', 'der Schnittpunkt mit der y-Achse']],
+  [T`Der \(y\)-Achsenabschnitt von \(f\) ist …`, T`\(f(0)\)`, [T`die Nullstelle`, T`\(f(1)\)`, T`\(f'(0)\)`]],
+  [T`Was ergibt \((x^3 - 1) : (x - 1)\)?`, T`\(x^2 + x + 1\)`, [T`\(x^2 - 1\)`, T`\(x^2 + 1\)`, T`\(x^2 - x + 1\)`]],
+  ['Bei einer Polstelle einer rationalen Funktion …', 'ist der Nenner 0 (und der Zähler nicht)', ['ist der Zähler 0', 'ist die Funktion stetig', 'hat die Funktion ein Maximum']]
+]);
+
+/* ==================================================== 1.4 Eigenschaften */
+G('invlin', 'f-eig', 'Umkehrfunktion einer Geraden', () => {
+  const a = pick([2, 3, 4, 5, -2, 0.5]), b = R(-9, 9);
+  return {
+    q: T`Bestimme die Umkehrfunktion von \(f(x) = ${polyTeX([b, a])}\).`,
+    fields: [ex(T`\(f^{-1}(x) =\)`, x => (x - b) / a, T`\frac{${minus('x', b)}}{${ntc(a)}}`)],
+    sol: T`\(y = ${polyTeX([b, a])} \Leftrightarrow x = \frac{${minus('y', b)}}{${ntc(a)}}\). Variablen tauschen: \(f^{-1}(x) = \frac{${minus('x', b)}}{${ntc(a)}}\).`
+  };
+});
+G('invpow', 'f-eig', 'Umkehrfunktion einer Potenzfunktion', () => {
+  const a = R(2, 8), n = pick([2, 3]);
+  return {
+    q: T`Bestimme die Umkehrfunktion von \(f(x) = ${a}x^{${n}}\) für \(x > 0\). Schreibweise z. B. (x/2)^(1/3).`,
+    fields: [ex(T`\(f^{-1}(x) =\)`, x => Math.pow(x / a, 1 / n), T`\left(\frac x{${a}}\right)^{\frac1{${n}}}`)],
+    sol: T`\(y = ${a}x^{${n}} \Leftrightarrow x^{${n}} = \frac{y}{${a}} \Leftrightarrow x = \sqrt[${n}]{\frac{y}{${a}}}\). Also \(f^{-1}(x) = \left(\frac{x}{${a}}\right)^{1/${n}}\).`
+  };
+});
+G('umkwert', 'f-eig', 'Wert der Umkehrfunktion', () => {
+  const x0 = R(1, 3), c = [R(-5, 5), R(1, 4), 0, 1], y0 = polyEval(c, x0);
+  return {
+    q: T`\(f(x) = ${polyTeX(c)}\) ist streng monoton wachsend. Bestimme \(f^{-1}(${y0})\).`,
+    fields: [num(T`\(f^{-1}(${y0}) =\)`, x0, 2)],
+    sol: T`Gesucht ist \(x\) mit \(f(x) = ${y0}\). Probieren: \(f(${x0}) = ${y0}\) \(\Rightarrow f^{-1}(${y0}) = ${x0}\).`
+  };
+});
+G('monoquad', 'f-eig', 'Monotoniebereiche einer Parabel', () => {
+  const a = pick([-2, -1, 1, 2, 3]), xs = R(-6, 8), c = [R(-9, 9), -2 * a * xs, a];
+  const r = a > 0 ? T`fallend für \(x \le ${xs}\), wachsend für \(x \ge ${xs}\)` : T`wachsend für \(x \le ${xs}\), fallend für \(x \ge ${xs}\)`;
+  const w = a > 0 ? T`wachsend für \(x \le ${xs}\), fallend für \(x \ge ${xs}\)` : T`fallend für \(x \le ${xs}\), wachsend für \(x \ge ${xs}\)`;
+  return {
+    q: T`Wie ist das Monotonieverhalten von \(f(x) = ${polyTeX(c)}\)?`,
+    fields: [mc('', r, [w, T`überall wachsend`, T`fallend für \(x \le ${xs + 2}\), wachsend für \(x \ge ${xs + 2}\)`])],
+    sol: T`\(f'(x) = ${polyTeX([c[1], 2 * a])}\), Nullstelle \(x = ${xs}\). Für \(x > ${xs}\) ist \(f'(x) ${a > 0 ? '>' : '<'} 0\).`
+  };
+});
+G('stetig', 'f-eig', 'Stetigkeit einer abschnittsweisen Funktion', () => {
+  const x0 = R(-2, 4), a = R(-4, 4) || 2, b = R(-6, 6), c = R(-3, 5) || 1, d = a * x0 + b - c * x0;
+  return {
+    q: T`Für welchen Wert von \(d\) ist \(f(x) = \begin{cases} ${polyTeX([b, a])} & x < ${x0}\\ ${c === 1 ? '' : c === -1 ? '-' : c}x + d & x \ge ${x0}\end{cases}\) stetig?`,
+    fields: [num(T`\(d =\)`, d, 2)],
+    sol: T`Beide Teile müssen bei \(x = ${x0}\) denselben Wert haben: \(${ntc(a * x0 + b)} = ${ntc(c * x0)} + d \Rightarrow d = ${ntc(d)}\).`
+  };
+});
+G('defber', 'f-eig', 'Definitionsbereich bestimmen', () => {
+  const v = pick(['ln', 'sqrt']), a = pick([2, 3, 4, 5]), b = R(-12, 12);
+  const g = -b / a;
+  return {
+    q: v === 'ln' ? T`\(f(x) = \ln(${polyTeX([b, a])})\) ist definiert für \(x > g\). Bestimme \(g\).` : T`\(f(x) = \sqrt{${polyTeX([b, a])}}\) ist definiert für \(x \ge g\). Bestimme \(g\).`,
+    fields: [num(T`\(g =\)`, g, 2)],
+    sol: T`${v === 'ln' ? 'Argument des Logarithmus muss positiv sein' : 'Radikand darf nicht negativ sein'}: \(${polyTeX([b, a])} ${v === 'ln' ? '>' : '\\ge'} 0 \Leftrightarrow x ${v === 'ln' ? '>' : '\\ge'} ${ntc(g, 4)}\).`
+  };
+});
+G('globquad', 'f-eig', 'Globales Extremum auf einem Intervall', () => {
+  const a = pick([-2, -1, 1, 2]), xs = R(-2, 4), c = [R(-5, 5), -2 * a * xs, a], lo = xs - R(1, 3), hi = xs + R(1, 4);
+  const vals = [polyEval(c, lo), polyEval(c, hi), polyEval(c, xs)];
+  const mx = Math.max(...vals), mn = Math.min(...vals);
+  return {
+    q: T`Bestimme globales Maximum und Minimum (Funktionswerte) von \(f(x) = ${polyTeX(c)}\) auf \([${lo},\ ${hi}]\).`,
+    fields: [num('globales Maximum', mx, 2), num('globales Minimum', mn, 2)],
+    sol: T`Stetig auf abgeschlossenem Intervall \(\Rightarrow\) Max./Min. existieren. Kandidaten: Ränder und stationäre Stelle \(x = ${xs}\):
+\(f(${lo}) = ${ntc(vals[0])}\), \(f(${hi}) = ${ntc(vals[1])}\), \(f(${xs}) = ${ntc(vals[2])}\).`
+  };
+});
+MCADD('eigmc', [
+  ['Welche Funktion ist auf ganz ℝ beschränkt?', T`\(f(x) = \frac{1}{1 + x^2}\)`, [T`\(f(x) = x^2\)`, T`\(f(x) = e^x\)`, T`\(f(x) = \ln x\)`]],
+  [T`Der Graph von \(f^{-1}\) entsteht aus dem von \(f\) durch …`, 'Spiegelung an der Winkelhalbierenden y = x', ['Spiegelung an der x-Achse', 'Spiegelung an der y-Achse', 'Verschiebung um 1']],
+  [T`Welche Funktion ist auf \((0, \infty)\) konkav?`, T`\(\ln x\)`, [T`\(e^x\)`, T`\(x^2\)`, T`\(\frac{1}{x}\)`]],
+  [T`Eine konvexe Funktion liegt …`, 'unterhalb jeder Verbindungsstrecke zweier Graphenpunkte', ['oberhalb jeder Verbindungsstrecke', 'immer über der x-Achse', 'auf einer Geraden']],
+  ['Ein endlicher Sprung ist …', 'eine Unstetigkeitsstelle', ['eine Nullstelle', 'eine Wendestelle', 'eine Polstelle']],
+  ['Was ist der Unterschied zwischen globalem und lokalem Maximum?', 'Das globale ist der größte Wert auf ganz D, das lokale nur in einer Umgebung.', ['Es gibt keinen Unterschied.', 'Ein lokales Maximum liegt immer am Rand.', 'Ein globales Maximum gibt es nur bei Polynomen.']],
+  [T`\(p(x)\) ist die Preis-Absatz-Funktion. Ihre Umkehrfunktion \(x(p)\) heißt …`, 'Nachfragefunktion', ['Kostenfunktion', 'Erlösfunktion', 'Angebotsfunktion']]
+]);
+
+/* ==================================================== 1.5 Regula falsi */
+G('rfexp', 'f-rf', 'Regula falsi bei Exponential-/Log-Funktion', () => {
+  const v = pick(['exp', 'ln']); let f, fT, a, b;
+  if (v === 'exp') { const c = R(3, 12); f = x => Math.exp(x) + x - c; fT = T`e^x + x - ${c}`; a = Math.floor(solve(f, -5, 5)); }
+  else { const c = R(2, 6); f = x => Math.log(x) + x - c; fT = T`\ln x + x - ${c}`; a = Math.max(1, Math.floor(solve(f, 0.01, 10))); }
+  b = a + 1; const x1 = (a * f(b) - b * f(a)) / (f(b) - f(a));
+  return {
+    q: T`Berechne für \(f(x) = ${fT}\) mit \(a = ${a}\), \(b = ${b}\) den ersten Schritt der Regula falsi (4 Nachkommastellen).`,
+    fields: [num(T`\(x_1 =\)`, x1, 4)],
+    sol: T`\(f(${a}) = ${fx(f(a))}\), \(f(${b}) = ${fx(f(b))}\)
+\[x_1 = \frac{${a}\cdot ${par(rnd(f(b), 5))} - ${b}\cdot ${par(rnd(f(a), 5))}}{${fx(f(b))} - ${par(rnd(f(a), 4))}} = ${fx(x1)}\]`
+  };
+});
+G('rfrendite', 'f-rf', 'Regula falsi für eine Rendite', () => {
+  const c = R(3, 8), n = 3, P = RS(92, 108, 0.5);
+  const B = r => sum(Array.from({ length: n }, (_, i) => (c + (i === n - 1 ? 100 : 0)) / (1 + r) ** (i + 1))) - P;
+  const ra = Math.floor(solve(B, -0.5, 1) * 100) / 100, rb = ra + 0.01;
+  const x1 = (ra * B(rb) - rb * B(ra)) / (B(rb) - B(ra));
+  return {
+    q: T`Eine dreijährige Anleihe (Kupon \(${c}\,\%\)) kostet \(${ntc(P)}\). Die Funktion \(B_{\text{net}}(r)\) hat bei \(r = ${ptc(ra)}\) den Wert \(${fx(B(ra))}\) und bei \(r = ${ptc(rb)}\) den Wert \(${fx(B(rb))}\). Schätze die Rendite mit einem Schritt der Regula falsi.`,
+    fields: [num(T`\(r \approx\)`, x1 * 100, 2, '%')],
+    sol: T`\[r_1 = \frac{${ntc(ra, 2)}\cdot ${par(rnd(B(rb), 4))} - ${ntc(rb, 2)}\cdot ${par(rnd(B(ra), 4))}}{${fx(B(rb))} - ${par(rnd(B(ra), 4))}} = ${pt(x1)}\]
+Exakter Wert: \(${pt(solve(B, -0.5, 1))}\).`
+  };
+});
+G('rf3', 'f-rf', 'Regula falsi – dritter Schritt', () => {
+  let p, q, f, a;
+  for (;;) { p = pick([-3, -2, 1, 2, 4]); q = R(-9, 9); f = x => x ** 3 + p * x + q; a = R(-3, 2); if (f(a) * f(a + 1) < 0 && Math.abs(f(a)) > 0.5 && Math.abs(f(a + 1)) > 0.5) break; }
+  let A = a, B = a + 1; const xs = [];
+  for (let k = 0; k < 3; k++) { const x = (A * f(B) - B * f(A)) / (f(B) - f(A)); xs.push(x); if (Math.sign(f(x)) === Math.sign(f(A))) A = x; else B = x; }
+  return {
+    q: T`\(f(x) = ${polyTeX([q, p, 0, 1])}\), \(a_0 = ${a}\), \(b_0 = ${a + 1}\). Führe drei Schritte der Regula falsi durch und gib \(x_3\) an.`,
+    fields: [num(T`\(x_3 =\)`, xs[2], 4)],
+    sol: T`\(x_1 = ${fx(xs[0])}\), \(x_2 = ${fx(xs[1])}\), \(x_3 = ${fx(xs[2])}\) (jeweils Vorzeichentest und Ersetzen des Punktes mit gleichem Vorzeichen).`
+  };
+});
+G('rfersetz', 'f-rf', 'Welcher Punkt wird ersetzt?', () => {
+  const fa = -R(2, 9), fb = R(2, 12), fx1 = (Math.random() < 0.5 ? -1 : 1) * R(1, 15) / 10;
+  const right = fx1 < 0 ? T`\(a\) wird durch \(x_1\) ersetzt, \(b\) bleibt` : T`\(b\) wird durch \(x_1\) ersetzt, \(a\) bleibt`;
+  return {
+    q: T`Bei der Regula falsi gilt \(f(a) = ${fa}\), \(f(b) = ${fb}\) und für die neue Näherung \(f(x_1) = ${ntc(fx1)}\). Wie geht es weiter?`,
+    fields: [mc('', right, [fx1 < 0 ? T`\(b\) wird durch \(x_1\) ersetzt, \(a\) bleibt` : T`\(a\) wird durch \(x_1\) ersetzt, \(b\) bleibt`, 'Beide Punkte werden ersetzt.', T`Das Verfahren endet, da \(f(x_1) \ne 0\).`])],
+    sol: T`\(f(x_1)\) hat dasselbe Vorzeichen wie \(f(${fx1 < 0 ? 'a' : 'b'})\). Dieser Punkt wird ersetzt, damit die Nullstelle eingeschlossen bleibt.`
+  };
+});
+G('rfsek', 'f-rf', 'Sekantenschnittpunkt', () => {
+  const a = R(-3, 2), b = a + R(1, 3), fa = -R(1, 12), fb = R(1, 15), x1 = (a * fb - b * fa) / (fb - fa);
+  return {
+    q: T`Die Gerade durch \((${a},\ ${fa})\) und \((${b},\ ${fb})\) schneidet die \(x\)-Achse wo?`,
+    fields: [num(T`\(x_1 =\)`, x1, 4)],
+    sol: T`\[x_1 = \frac{a\,f(b) - b\,f(a)}{f(b) - f(a)} = \frac{${par(a)}\cdot ${fb} - ${par(b)}\cdot ${par(fa)}}{${fb} - ${par(fa)}} = ${fx(x1)}\]`
+  };
+});
+G('zwsatz', 'f-rf', 'Zwischenwertsatz anwenden', () => {
+  const c = [R(-9, 9), R(-5, 5), R(-3, 3), pick([1, -1])], a = R(-3, 1), b = a + R(1, 3);
+  const has = polyEval(c, a) * polyEval(c, b) < 0;
+  return {
+    q: T`Garantiert der Zwischenwertsatz eine Nullstelle von \(f(x) = ${polyTeX(c)}\) im Intervall \((${a},\ ${b})\)?`,
+    fields: [mc('', has ? 'Ja, wegen Vorzeichenwechsel' : 'Nein – kein Vorzeichenwechsel, Nullstellen sind aber nicht ausgeschlossen', [has ? 'Nein – kein Vorzeichenwechsel, Nullstellen sind aber nicht ausgeschlossen' : 'Ja, wegen Vorzeichenwechsel', 'Nein, f ist nicht stetig', 'Ja, jedes Polynom hat dort eine Nullstelle'])],
+    sol: T`\(f(${a}) = ${polyEval(c, a)}\), \(f(${b}) = ${polyEval(c, b)}\). ${has ? 'Vorzeichenwechsel und f stetig ⇒ Nullstelle.' : 'Gleiches Vorzeichen: Der Satz liefert keine Aussage (es könnten z. B. zwei Nullstellen dazwischen liegen).'}`
+  };
+});
+MCQ('rfmc', 'f-rf', 'Verständnis: Regula falsi', [
+  ['Wozu dient die Regula falsi?', 'Zur näherungsweisen Bestimmung von Nullstellen.', ['Zur exakten Berechnung von Ableitungen.', 'Zur Berechnung von Integralen.', 'Zur Bestimmung von Extrema.']],
+  ['Welche Voraussetzung braucht man für die Startwerte a und b?', T`\(f(a)\cdot f(b) < 0\) und \(f\) stetig`, [T`\(f(a) = f(b)\)`, T`\(a < 0 < b\)`, T`\(f'(a) = 0\)`]],
+  ['Auf welchem Satz beruht das Verfahren?', 'Zwischenwertsatz', ['Satz von Rolle', 'Satz von Vieta', 'Zentraler Grenzwertsatz']],
+  [T`Was ist \(x_1\) geometrisch?`, 'der Schnittpunkt der Sekante durch (a, f(a)) und (b, f(b)) mit der x-Achse', ['der Schnittpunkt der Tangente mit der x-Achse', 'die Mitte des Intervalls', 'das Minimum von f']],
+  ['Wann bricht man das Verfahren ab?', T`wenn \(f(x_n)\) hinreichend nahe bei 0 liegt`, ['nach genau zwei Schritten', 'wenn a = b', 'wenn f(x) negativ wird']],
+  ['Wofür wird die Regula falsi in der Finanzmathematik eingesetzt?', 'zur Berechnung von Renditen (Effektivzinsen)', ['zur Berechnung von Barwerten', 'zur Umrechnung von Zinssätzen', 'zur Berechnung von Forward Rates']],
+  ['Was unterscheidet die Regula falsi von der Intervallhalbierung?', 'Sie teilt das Intervall am Sekantenschnittpunkt statt in der Mitte.', ['Sie braucht die Ableitung.', 'Sie funktioniert ohne Startintervall.', 'Es gibt keinen Unterschied.']],
+  [T`Gilt \(f(x_1) = 0\), dann …`, T`ist \(x_1\) bereits die exakte Nullstelle`, ['muss man neu starten', 'ist f nicht stetig', 'hat f keine Nullstelle']]
+]);
+
+/* ==================================================== 1.6 Ableitungen */
+G('dexpr', 'f-abl', 'Ableitung als Term angeben', () => {
+  const t = pick(['chain', 'ln', 'exp', 'prod', 'quot', 'pow']);
+  let fT, fn, dT, rule;
+  if (t === 'chain') { const a = R(2, 4), b = R(-5, 5), n = R(2, 5); fT = T`(${polyTeX([b, a])})^{${n}}`; fn = x => n * a * (a * x + b) ** (n - 1); dT = T`${n * a}(${polyTeX([b, a])})^{${n - 1}}`; rule = 'Kettenregel'; }
+  else if (t === 'ln') { const a = R(2, 6), b = R(1, 9); fT = T`\ln(${polyTeX([b, a])})`; fn = x => a / (a * x + b); dT = T`\frac{${a}}{${polyTeX([b, a])}}`; rule = 'Kettenregel mit (ln u)′ = u′/u'; }
+  else if (t === 'exp') { const k = pick([2, 3, -1, -2, 0.5]), c = R(1, 5); fT = T`${c === 1 ? '' : c}e^{${ntc(k)}x}`; fn = x => c * k * Math.exp(k * x); dT = T`${ntc(c * k)}e^{${ntc(k)}x}`; rule = 'Kettenregel'; }
+  else if (t === 'prod') { const n = R(1, 3); fT = T`x^{${n}}\ln x`; fn = x => n * x ** (n - 1) * Math.log(x) + x ** (n - 1); dT = T`${n === 1 ? '' : n}x^{${n - 1}}\ln x + x^{${n - 1}}`; rule = 'Produktregel'; }
+  else if (t === 'quot') { const a = R(1, 5); fT = T`\frac{x}{x + ${a}}`; fn = x => a / (x + a) ** 2; dT = T`\frac{${a}}{(x + ${a})^2}`; rule = 'Quotientenregel'; }
+  else { const a = R(2, 9), n = R(2, 4); fT = T`\frac{${a}}{x^{${n}}}`; fn = x => -a * n / x ** (n + 1); dT = T`-\frac{${a * n}}{x^{${n + 1}}}`; rule = T`Regel für \(\frac1{x^n}\)`; }
+  return {
+    q: T`Bestimme \(f'(x)\) für \[f(x) = ${fT}\]`,
+    fields: [ex(T`\(f'(x) =\)`, fn, dT)],
+    sol: T`${rule}: \[f'(x) = ${dT}\]`
+  };
+});
+GENS[GENS.length - 1].nv = 6;
+G('tangente', 'f-abl', 'Tangentengleichung', () => {
+  const c = [R(-5, 5), R(-4, 4), R(-3, 3), pick([0, 1, -1])], x0 = R(-2, 3), m = polyEval(polyDer(c), x0), y0 = polyEval(c, x0), b = y0 - m * x0;
+  return {
+    q: T`Bestimme die Tangente an \(f(x) = ${polyTeX(c)}\) im Punkt \(x_0 = ${x0}\) in der Form \(t(x) = m\,x + b\).`,
+    fields: [num(T`\(m =\)`, m, 2), num(T`\(b =\)`, b, 2)],
+    sol: T`\(m = f'(${x0}) = ${ntc(m)}\), \(f(${x0}) = ${ntc(y0)}\). Punkt-Steigungs-Form: \(t(x) = ${ntc(m)}(${minus('x', x0)}) ${plusTerm(y0)} = ${polyTeX([b, m])}\).`
+  };
+});
+G('grenzk', 'f-abl', 'Grenzkosten', () => {
+  const a = R(1, 5) / 100, b = R(1, 8) / 10, c = R(10, 50), d = R(100, 900), x0 = R(5, 40);
+  const K = [d, c, -b, a], Kd = polyDer(K);
+  return {
+    q: T`Kostenfunktion \(K(x) = ${polyTeX(K)}\). Berechne die Grenzkosten bei \(x = ${x0}\) und die Stückkosten \(k(x) = K(x)/x\) an dieser Stelle.`,
+    fields: [num(T`\(K'(${x0}) =\)`, polyEval(Kd, x0), 2), num(T`\(k(${x0}) =\)`, polyEval(K, x0) / x0, 2)],
+    sol: T`\(K'(x) = ${polyTeX(Kd)}\Rightarrow K'(${x0}) = ${nt(polyEval(Kd, x0))}\). \(K(${x0}) = ${nt(polyEval(K, x0))}\Rightarrow k(${x0}) = ${nt(polyEval(K, x0) / x0)}\).`
+  };
+});
+G('diffq', 'f-abl', 'Differenzenquotient', () => {
+  const c = [R(-5, 5), R(-4, 4), pick([1, 2, -1, 3])], x0 = R(-2, 3), dx = pick([1, 0.5, 0.1, 2]);
+  const q = (polyEval(c, x0 + dx) - polyEval(c, x0)) / dx;
+  return {
+    q: T`Berechne für \(f(x) = ${polyTeX(c)}\) den Differenzenquotienten \(\frac{\Delta f}{\Delta x}\) zwischen \(x_0 = ${x0}\) und \(x_0 + \Delta x\) mit \(\Delta x = ${ntc(dx)}\). Vergleiche mit \(f'(x_0)\).`,
+    fields: [num(T`\(\frac{\Delta f}{\Delta x} =\)`, q, 4), num(T`\(f'(${x0}) =\)`, polyEval(polyDer(c), x0), 2)],
+    sol: T`\[\frac{f(${ntc(x0 + dx)}) - f(${x0})}{${ntc(dx)}} = \frac{${ntc(polyEval(c, x0 + dx))} - ${par(polyEval(c, x0))}}{${ntc(dx)}} = ${fx(q)}\]
+\(f'(x) = ${polyTeX(polyDer(c))}\Rightarrow f'(${x0}) = ${ntc(polyEval(polyDer(c), x0))}\). Für \(\Delta x\to 0\) nähert sich der Differenzenquotient diesem Wert.`
+  };
+});
+G('hoeher', 'f-abl', 'Höhere Ableitungen', () => {
+  const c = [R(-5, 5), R(-6, 6), R(-6, 6), R(-4, 4) || 1, R(-3, 3) || 2], x0 = R(-2, 2);
+  const d1 = polyDer(c), d2 = polyDer(d1), d3 = polyDer(d2);
+  return {
+    q: T`Berechne für \(f(x) = ${polyTeX(c)}\) die Werte \(f''(${x0})\) und \(f'''(${x0})\).`,
+    fields: [num(T`\(f''(${x0}) =\)`, polyEval(d2, x0), 2), num(T`\(f'''(${x0}) =\)`, polyEval(d3, x0), 2)],
+    sol: T`\(f'(x) = ${polyTeX(d1)}\), \(f''(x) = ${polyTeX(d2)}\), \(f'''(x) = ${polyTeX(d3)}\).`
+  };
+});
+G('umkabl', 'f-abl', 'Ableitung der Umkehrfunktion', () => {
+  const a = R(1, 4), x0 = R(1, 3), c = [R(-3, 3), a, 0, 1], y0 = polyEval(c, x0), d = 3 * x0 * x0 + a;
+  return {
+    q: T`\(f(x) = ${polyTeX(c)}\) ist umkehrbar. Berechne \(\left(f^{-1}\right)'(${y0})\) (Hinweis: \(f(${x0}) = ${y0}\)).`,
+    fields: [num(T`\(\left(f^{-1}\right)'(${y0}) =\)`, 1 / d, 4)],
+    sol: T`\(\left(f^{-1}\right)'(y) = \frac{1}{f'(f^{-1}(y))}\), \(f'(x) = 3x^2 + ${a}\Rightarrow f'(${x0}) = ${d}\). Ergebnis: \(\frac{1}{${d}} = ${fx(1 / d)}\).`
+  };
+});
+G('gerade_anw', 'f-abl', 'Grenzerlös & Grenzgewinn', () => {
+  const a = R(20, 60) * 2, b = pick([0.5, 1, 2]), k = R(5, 30), x0 = R(2, 20);
+  return {
+    q: T`\(p(x) = ${a} - ${ntc(b)}x\), \(K(x) = 500 + ${k}x\). Berechne Grenzerlös \(E'(${x0})\) und Grenzgewinn \(G'(${x0})\).`,
+    fields: [num(T`\(E'(${x0}) =\)`, a - 2 * b * x0, 2), num(T`\(G'(${x0}) =\)`, a - 2 * b * x0 - k, 2)],
+    sol: T`\(E(x) = ${a}x - ${ntc(b)}x^2\Rightarrow E'(x) = ${a} - ${ntc(2 * b)}x\), \(E'(${x0}) = ${ntc(a - 2 * b * x0)}\). \(G'(x) = E'(x) - K'(x) = E'(x) - ${k}\Rightarrow G'(${x0}) = ${ntc(a - 2 * b * x0 - k)}\).`
+  };
+});
+MCADD('dmc', [
+  [T`\(f(x) = |x|\) ist bei \(x = 0\) …`, 'stetig, aber nicht differenzierbar', ['differenzierbar', 'unstetig', 'nicht definiert']],
+  [T`\(\left(\sqrt x\right)' =\) …`, T`\(\frac{1}{2\sqrt x}\)`, [T`\(\frac{1}{\sqrt x}\)`, T`\(2\sqrt x\)`, T`\(\frac{\sqrt x}{2}\)`]],
+  [T`\((\ln|x|)' =\) …`, T`\(\frac1x\)`, [T`\(\ln x\)`, T`\(\frac{1}{|x|}\)`, T`\(e^x\)`]],
+  [T`Die Ableitung von \(f(x)\cdot g(x)\) ist …`, T`\(f'g + fg'\)`, [T`\(f'g'\)`, T`\(f'g - fg'\)`, T`\(\frac{f'}{g'}\)`]],
+  [T`Was beschreibt die zweite Ableitung?`, 'die Krümmung bzw. die Änderung der Steigung', ['den Funktionswert', 'die Nullstellen', 'die Fläche']],
+  [T`Ist \(f\) differenzierbar in \(x_0\), dann ist \(f\) in \(x_0\) …`, 'auch stetig', ['nicht stetig', 'konvex', 'maximal']],
+  ['Der Mittelwertsatz besagt …', 'es gibt eine Stelle, an der die Tangente parallel zur Sekante ist', ['jede Funktion hat ein Maximum', 'jede Funktion hat eine Nullstelle', 'die Ableitung ist konstant']]
+]);
+
+/* ==================================================== 1.6 Extrema & Optimierung */
+G('extquad', 'f-ext', 'Extremum einer quadratischen Funktion', () => {
+  const a = pick([-3, -2, -1, 1, 2, 0.5]), xs = R(-6, 10), ys = R(-20, 30), c = [a * xs * xs + ys, -2 * a * xs, a];
+  return {
+    q: T`Bestimme Lage und Art des Extremums von \(f(x) = ${polyTeX(c)}\).`,
+    fields: [num(T`\(x =\)`, xs, 2), num(T`\(f(x) =\)`, ys, 2), mc('Art', a > 0 ? 'Minimum' : 'Maximum', [a > 0 ? 'Maximum' : 'Minimum', 'Wendepunkt'])],
+    sol: T`\(f'(x) = ${polyTeX([c[1], 2 * a])} = 0\Rightarrow x = ${xs}\). \(f''(x) = ${ntc(2 * a)} ${a > 0 ? '> 0 \\Rightarrow' : '< 0 \\Rightarrow'}\) ${a > 0 ? 'Minimum' : 'Maximum'}, \(f(${xs}) = ${ys}\).`
+  };
+});
+G('stueckmin', 'f-ext', 'Minimum der Stückkosten', () => {
+  const a = pick([0.5, 1, 2, 4, 5]), xs = R(2, 30) * 2, c = a * xs * xs, b = R(5, 40);
+  return {
+    q: T`Kostenfunktion \(K(x) = ${ntc(a)}x^2 + ${b}x + ${ntc(c)}\). Bei welcher Menge sind die Stückkosten \(k(x) = \frac{K(x)}{x}\) minimal, und wie hoch sind sie dort?`,
+    fields: [num(T`\(x^* =\)`, xs, 2), num(T`\(k(x^*) =\)`, a * xs + b + c / xs, 2)],
+    sol: T`\(k(x) = ${ntc(a)}x + ${b} + \frac{${ntc(c)}}{x}\), \(k'(x) = ${ntc(a)} - \frac{${ntc(c)}}{x^2} = 0 \Rightarrow x^2 = ${ntc(c / a)}\Rightarrow x^* = ${xs}\). \(k''(x) = \frac{${ntc(2 * c)}}{x^3} > 0\) ⇒ Minimum. \(k(${xs}) = ${nt(a * xs + b + c / xs)}\).`
+  };
+});
+G('erloesmax', 'f-ext', 'Erlösmaximum', () => {
+  const b = pick([0.5, 1, 2, 4]), xs = R(5, 50), a = 2 * b * xs;
+  return {
+    q: T`Preis-Absatz-Funktion \(p(x) = ${ntc(a)} - ${ntc(b)}x\). Bei welcher Menge ist der Erlös maximal? Wie hoch ist der maximale Erlös?`,
+    fields: [num(T`\(x^* =\)`, xs, 2), num(T`\(E(x^*) =\)`, a * xs - b * xs * xs, 2)],
+    sol: T`\(E(x) = ${ntc(a)}x - ${ntc(b)}x^2\), \(E'(x) = ${ntc(a)} - ${ntc(2 * b)}x = 0\Rightarrow x^* = ${xs}\). \(E(${xs}) = ${ntc(a * xs - b * xs * xs)}\) (Preis dort: \(${ntc(a - b * xs)}\)).`
+  };
+});
+G('wendepkt', 'f-ext', 'Wendepunkt (Koordinaten)', () => {
+  let a, w; do { a = pick([1, -1, 2, -2]); w = R(-4, 4); } while (false);
+  const b = -3 * a * w, c = [R(-6, 6), R(-9, 9), b, a], y = polyEval(c, w);
+  return {
+    q: T`Bestimme den Wendepunkt von \(f(x) = ${polyTeX(c)}\).`,
+    fields: [num(T`\(x_W =\)`, w, 2), num(T`\(f(x_W) =\)`, y, 2)],
+    sol: T`\(f''(x) = ${polyTeX([2 * b, 6 * a])} = 0\Rightarrow x_W = ${w}\), \(f'''(x) = ${6 * a}\ne 0\) ✓. \(f(${w}) = ${ntc(y)}\).`
+  };
+});
+G('globcubic', 'f-ext', 'Globales Maximum auf einem Intervall', () => {
+  let a, s1, s2, b, c; do { a = pick([1, -1]); s1 = R(-3, 1); s2 = s1 + 2; b = -3 * a * (s1 + s2) / 2; c = 3 * a * s1 * s2; } while (b % 1);
+  const coef = [R(-5, 5), c, b, a], lo = s1 - R(1, 2), hi = s2 + R(1, 2);
+  const cand = [lo, s1, s2, hi].map(x => [x, polyEval(coef, x)]), best = cand.reduce((m, p) => p[1] > m[1] ? p : m);
+  return {
+    q: T`Bestimme das globale Maximum von \(f(x) = ${polyTeX(coef)}\) auf dem Intervall \([${lo},\ ${hi}]\) (Stelle und Wert).`,
+    fields: [num(T`\(x =\)`, best[0], 2), num(T`\(f(x) =\)`, best[1], 2)],
+    sol: T`Stationäre Stellen: \(f'(x) = ${polyTeX(polyDer(coef))} = 0\Rightarrow x = ${s1},\ ${s2}\). Vergleich mit den Rändern: ${cand.map(p => T`\(f(${p[0]}) = ${ntc(p[1])}\)`).join(', ')}. Größter Wert: \(f(${best[0]}) = ${ntc(best[1])}\).`
+  };
+});
+G('monobereich', 'f-ext', 'Monotoniebereiche (kubisch)', () => {
+  let a, s1, s2, b, c; do { a = pick([1, -1, 2]); s1 = R(-4, 2); s2 = s1 + pick([2, 4]); b = -3 * a * (s1 + s2) / 2; c = 3 * a * s1 * s2; } while (b % 1);
+  const coef = [R(-5, 5), c, b, a];
+  const r = a > 0 ? T`streng fallend auf \([${s1},\ ${s2}]\), sonst wachsend` : T`streng wachsend auf \([${s1},\ ${s2}]\), sonst fallend`;
+  const w = a > 0 ? T`streng wachsend auf \([${s1},\ ${s2}]\), sonst fallend` : T`streng fallend auf \([${s1},\ ${s2}]\), sonst wachsend`;
+  return {
+    q: T`Wie verhält sich \(f(x) = ${polyTeX(coef)}\) bezüglich Monotonie?`,
+    fields: [mc('', r, [w, 'überall streng wachsend', T`streng fallend für \(x < 0\), wachsend für \(x > 0\)`])],
+    sol: T`\(f'(x) = ${ntc(3 * a)}(${minus('x', s1)})(${minus('x', s2)})\). Zwischen den Nullstellen ist \(f' ${a > 0 ? '< 0' : '> 0'}\).`
+  };
+});
+G('gewinnkubisch', 'f-ext', 'Gewinnmaximum mit kubischen Kosten', () => {
+  const p = R(40, 120), a = R(1, 4) / 10, b = R(2, 9), c = R(10, 40), Kf = R(100, 600);
+  const G = x => p * x - (a * x ** 3 - b * x ** 2 + c * x + Kf);
+  const A = 3 * a, B = -2 * b, C = c - p, xs = (-B + Math.sqrt(B * B - 4 * A * C)) / (2 * A);
+  return {
+    q: T`Ein Unternehmen verkauft zum festen Preis \(p = ${p}\). Kosten: \(K(x) = ${polyTeX([Kf, c, -b, a])}\). Bestimme die gewinnmaximale Menge (2 Nachkommastellen) und den Gewinn.`,
+    fields: [num(T`\(x^* =\)`, xs, 2), num(T`\(G(x^*) =\)`, G(xs), 2)],
+    sol: T`\(G'(x) = ${p} - K'(x) = ${polyTeX([p - c, 2 * b, -3 * a])} = 0\). a-b-c-Formel (positive Lösung mit \(G'' < 0\)): \(x^* = ${nt(xs)}\), \(G(x^*) = ${nt(G(xs))}\).`
+  };
+});
+MCADD('extmc', [
+  ['Wie findet man globale Extrema auf einem abgeschlossenen Intervall?', 'Lokale Extrema mit den Funktionswerten an den Rändern vergleichen.', ['Nur f′(x) = 0 lösen.', 'Nur die Ränder betrachten.', 'f″(x) = 0 lösen.']],
+  ['Eine stationäre Stelle ist …', T`eine Stelle mit \(f'(x_0) = 0\)`, [T`eine Stelle mit \(f(x_0) = 0\)`, T`eine Stelle mit \(f''(x_0) = 0\)`, 'immer ein Extremum']],
+  [T`Bei \(f(x) = x^3\) ist \(x = 0\) …`, 'ein Sattelpunkt (Wendepunkt mit waagerechter Tangente)', ['ein Minimum', 'ein Maximum', 'keine stationäre Stelle']],
+  ['Das Erlösmaximum liegt bei linearer Preis-Absatz-Funktion p(x) = a − bx bei …', T`\(x = \frac{a}{2b}\)`, [T`\(x = \frac ab\)`, T`\(x = 2ab\)`, T`\(x = \frac{b}{2a}\)`]],
+  ['Wo liegt das Minimum der Stückkosten?', 'wo Grenzkosten = Stückkosten', ['wo Grenzkosten = 0', 'wo der Erlös maximal ist', 'bei x = 0']]
+]);
+
+/* ==================================================== 2.1 Zinsberechnung */
+G('zinsentage', 'z-meth', 'Zinsen bei einfacher Verzinsung (Tage)', () => {
+  const K0 = R(5, 100) * 1000, r = R(5, 50) / 1000, d = R(20, 300), basis = pick([360, 365]);
+  const t = d / basis, Z = K0 * r * t;
+  return {
+    q: T`\(${eur(K0, 0)}\) werden für \(${d}\) Tage zu \(${ptc(r)}\) p.a. einfach verzinst (act/${basis}). Wie hoch sind die Zinsen?`,
+    fields: [num('Zinsen', Z, 2, '€')],
+    sol: T`\(t = \frac{${d}}{${basis}}\). Zinsen \(= r\cdot t\cdot K_0 = ${ntc(r, 4)}\cdot\frac{${d}}{${basis}}\cdot ${nt(K0, 0)} = ${eur(Z)}\)`
+  };
+});
+G('wechselzins', 'z-meth', 'Wechselnde Zinssätze', () => {
+  const K0 = R(4, 40) * 500, r1 = R(10, 40) / 1000, r2 = R(10, 60) / 1000, n1 = R(1, 4), n2 = R(1, 5);
+  const Kt = K0 * (1 + r1) ** n1 * (1 + r2) ** n2, rm = (Kt / K0) ** (1 / (n1 + n2)) - 1;
+  return {
+    q: T`\(K_0 = ${eur(K0, 0)}\) wird ${n1} Jahre zu \(${ptc(r1)}\) und anschließend ${n2} Jahre zu \(${ptc(r2)}\) exponentiell verzinst. Bestimme \(K_t\) und den durchschnittlichen Zinssatz p.a.`,
+    fields: [num(T`\(K_t =\)`, Kt, 2, '€'), num(T`\(\bar r =\)`, rm * 100, 2, '%')],
+    sol: T`\(K_t = ${nt(K0, 0)}\cdot ${ntc(1 + r1, 4)}^{${n1}}\cdot ${ntc(1 + r2, 4)}^{${n2}} = ${eur(Kt)}\). Durchschnitt (geometrisch): \(\bar r = \sqrt[${n1 + n2}]{\frac{K_t}{K_0}} - 1 = ${pt(rm)}\).`
+  };
+});
+G('methvergl', 'z-meth', 'Methoden vergleichen', () => {
+  const K0 = R(4, 40) * 500, r = R(20, 80) / 1000, t = R(2, 10);
+  const e = K0 * (1 + r) ** t, s = K0 * Math.exp(r * t), ei = K0 * (1 + r * t);
+  return {
+    q: T`\(K_0 = ${eur(K0, 0)}\), \(r = ${ptc(r)}\), \(t = ${t}\) Jahre. Berechne \(K_t\) bei einfacher, exponentieller und stetiger Verzinsung.`,
+    fields: [num('einfach', ei, 2, '€'), num('exponentiell', e, 2, '€'), num('stetig', s, 2, '€')],
+    sol: T`\((1 + ${ntc(r, 4)}\cdot ${t})\cdot K_0 = ${eur(ei)}\), \(${ntc(1 + r, 4)}^{${t}}\cdot K_0 = ${eur(e)}\), \(e^{${ntc(r * t, 4)}}\cdot K_0 = ${eur(s)}\). Bei \(t > 1\): einfach < exponentiell < stetig.`
+  };
+});
+G('unterk0', 'z-meth', 'Unterjährige Verzinsung: Anfangskapital', () => {
+  const Kt = R(10, 80) * 500, r = R(10, 60) / 1000, m = pick([2, 4, 12]), t = R(2, 8);
+  const ZF = (1 + r / m) ** (m * t);
+  return {
+    q: T`Welcher Betrag muss heute angelegt werden, um nach \(${t}\) Jahren bei \(${ptc(r)}\) p.a. und \(m = ${m}\) Zinsperioden \(${eur(Kt, 0)}\) zu haben?`,
+    fields: [num(T`\(K_0 =\)`, Kt / ZF, 2, '€')],
+    sol: T`\[K_0 = \frac{K_t}{\left(1 + \frac rm\right)^{mt}} = \frac{${nt(Kt, 0)}}{\left(1 + \frac{${ntc(r, 4)}}{${m}}\right)^{${m * t}}} = ${eur(Kt / ZF)}\]`
+  };
+});
+G('einfachr', 'z-meth', 'Rentabilität kurzfristiger Anlage', () => {
+  const A = R(10, 100) * 100, d = R(30, 270), r0 = R(10, 60) / 1000, Kt = rnd(A * (1 + r0 * d / 360), 2), r = (Kt / A - 1) * 360 / d;
+  return {
+    q: T`Eine Geldmarktanlage über \(${eur(A, 0)}\) zahlt nach \(${d}\) Tagen \(${eur(Kt)}\) zurück. Welcher einfache Zinssatz (act/360) liegt vor?`,
+    fields: [num(T`\(r =\)`, r * 100, 2, '%')],
+    sol: T`\(r = \frac1t\left(\frac{K_t}{K_0} - 1\right) = \frac{360}{${d}}\left(\frac{${nt(Kt)}}{${nt(A, 0)}} - 1\right) = ${pt(r)}\)`
+  };
+});
+G('zfaktor', 'z-meth', 'Zins- und Diskontfaktor', () => {
+  const r = R(10, 80) / 1000, t = R(2, 15), m = pick(['exp', 'stet']);
+  const ZF = m === 'exp' ? (1 + r) ** t : Math.exp(r * t);
+  return {
+    q: T`Berechne Zinsfaktor \(ZF\) und Diskontfaktor \(DF\) bei ${m === 'exp' ? 'exponentieller' : 'stetiger'} Verzinsung mit \(r = ${ptc(r)}\) über \(t = ${t}\) Jahre (6 Nachkommastellen).`,
+    fields: [num(T`\(ZF =\)`, ZF, 6), num(T`\(DF =\)`, 1 / ZF, 6)],
+    sol: T`\(ZF = ${m === 'exp' ? T`${ntc(1 + r, 4)}^{${t}}` : T`e^{${ntc(r, 4)}\cdot ${t}}`} = ${nt(ZF, 6)}\), \(DF = \frac{1}{ZF} = ${nt(1 / ZF, 6)}\).`
+  };
+});
+MCQ('methmc', 'z-meth', 'Verständnis: Zinsmethoden', [
+  ['Bei welcher Methode werden Zinsen nicht mitverzinst?', 'einfache Verzinsung', ['exponentielle Verzinsung', 'stetige Verzinsung', 'unterjährige Verzinsung']],
+  ['Für Laufzeiten unter einem Jahr liefert die einfache Verzinsung …', 'mehr Zinsen als die exponentielle', ['weniger Zinsen als die exponentielle', 'genau so viel wie die stetige', 'keine Zinsen']],
+  ['Was ist der Diskontfaktor?', T`der Kehrwert des Zinsfaktors, \(DF = 1/ZF\)`, ['der Zinssatz in Prozent', 'die Differenz ZF − 1', 'der Zinsfaktor im Quadrat']],
+  [T`Was bedeutet die Konvention act/360?`, 'tatsächliche Tage geteilt durch 360', ['30 Tage pro Monat, 360 pro Jahr', 'tatsächliche Tage geteilt durch 365', '360 Zinsperioden pro Jahr']],
+  ['Was passiert bei negativem Zinssatz?', T`\(ZF < 1\): das Kapital schrumpft`, ['Das Kapital wächst trotzdem.', 'ZF ist immer 1.', 'Die Formel ist nicht anwendbar.']],
+  [T`Zinsfaktor bei unterjähriger Verzinsung mit \(m = 4\)?`, T`\(\left(1 + \frac r4\right)^{4t}\)`, [T`\((1 + 4r)^t\)`, T`\(\left(1 + \frac r4\right)^t\)`, T`\(1 + \frac{rt}4\)`]],
+  ['Welche Methode ist der Grenzfall der unterjährigen Verzinsung für m → ∞?', 'stetige Verzinsung', ['einfache Verzinsung', 'exponentielle Verzinsung', 'keine']]
+]);
+
+/* ==================================================== 2.1 Transformation */
+G('angebote', 'z-trans', 'Angebote vergleichen', () => {
+  const rA = R(30, 50) / 1000, mA = pick([4, 12]), rB = rnd(((1 + rA / mA) ** mA - 1) + R(-3, 3) / 1000, 4);
+  const eA = (1 + rA / mA) ** mA - 1, better = eA > rB ? 'A' : 'B';
+  return {
+    q: T`Bank A: \(${ptc(rA)}\) p.a. mit ${mA === 12 ? 'monatlicher' : 'vierteljährlicher'} Zinsgutschrift. Bank B: \(${ptc(rB, 2)}\) p.a. jährlich. Welches Angebot ist besser? Gib auch den Effektivzins von A an.`,
+    fields: [num(T`\(r_{\text{exp}}\) von A`, eA * 100, 2, '%'), mc('Besser ist', 'Bank ' + better, ['Bank ' + (better === 'A' ? 'B' : 'A'), 'beide gleich'])],
+    sol: T`\(r_{\text{exp},A} = \left(1 + \frac{${ntc(rA, 4)}}{${mA}}\right)^{${mA}} - 1 = ${pt(eA, 3)}\) vs. \(${pt(rB, 2)}\) ⇒ Bank ${better}.`
+  };
+});
+G('stet2unt', 'z-trans', 'Stetig ↔ unterjährig', () => {
+  const r = R(10, 80) / 1000, m = pick([2, 4, 12]), v = Math.random() < 0.5;
+  const ans = v ? m * Math.exp(r / m) - m : m * Math.log(1 + r / m);
+  return {
+    q: v ? T`Welcher Zinssatz \(r_{\text{unt exp}}\) mit \(m = ${m}\) entspricht \(r_{\text{stet}} = ${ptc(r)}\)?` : T`Welcher stetige Zinssatz entspricht \(r_{\text{unt exp}} = ${ptc(r)}\) bei \(m = ${m}\)?`,
+    fields: [num(v ? T`\(r_{\text{unt exp}} =\)` : T`\(r_{\text{stet}} =\)`, ans * 100, 2, '%')],
+    sol: v ? T`\[r_{\text{unt exp}} = m\cdot e^{\frac{r_{\text{stet}}}{m}} - m = ${m}\cdot e^{\frac{${ntc(r, 4)}}{${m}}} - ${m} = ${pt(ans, 4)}\]` : T`\[r_{\text{stet}} = m\cdot\ln\left(1 + \frac{r_{\text{unt exp}}}{m}\right) = ${m}\ln\left(1 + \frac{${ntc(r, 4)}}{${m}}\right) = ${pt(ans, 4)}\]`
+  };
+});
+GENS[GENS.length - 1].nv = 2;
+G('unt2unt', 'z-trans', 'Unterjährig ↔ unterjährig', () => {
+  let m1, m2; do { m1 = pick([2, 4, 12]); m2 = pick([1, 2, 4, 12]); } while (m1 === m2);
+  const r = R(10, 80) / 1000, ans = m2 * ((1 + r / m1) ** (m1 / m2) - 1);
+  return {
+    q: T`Ein Zinssatz von \(${ptc(r)}\) mit \(m = ${m1}\) Zinsperioden soll in einen gleichwertigen Zinssatz mit \(m = ${m2}\) Perioden umgerechnet werden.`,
+    fields: [num('gleichwertiger Zinssatz', ans * 100, 2, '%')],
+    sol: T`Zinsfaktoren für ein Jahr gleichsetzen: \(\left(1 + \frac{r'}{${m2}}\right)^{${m2}} = \left(1 + \frac{${ntc(r, 4)}}{${m1}}\right)^{${m1}}\Rightarrow r' = ${m2}\left[\left(1 + \frac{${ntc(r, 4)}}{${m1}}\right)^{${m1 / m2 % 1 ? T`\frac{${m1}}{${m2}}` : m1 / m2}} - 1\right] = ${pt(ans, 4)}\)`
+  };
+});
+G('einf2stet', 'z-trans', 'Einfach ↔ stetig', () => {
+  const r = R(10, 60) / 1000, t = pick([0.25, 0.5, 0.75, 2, 3]), ans = Math.log(1 + r * t) / t;
+  return {
+    q: T`Eine Anlage über \(t = ${ntc(t)}\) Jahre wird einfach mit \(${ptc(r)}\) verzinst. Welcher stetige Zinssatz ist gleichwertig?`,
+    fields: [num(T`\(r_{\text{stet}} =\)`, ans * 100, 2, '%')],
+    sol: T`\(e^{r_{\text{stet}}t} = 1 + r_{\text{einf}}t\Rightarrow r_{\text{stet}} = \frac{\ln(1 + ${ntc(r, 4)}\cdot ${ntc(t)})}{${ntc(t)}} = ${pt(ans, 4)}\)`
+  };
+});
+MCADD('transmc', [
+  [T`Welcher Zinssatz entspricht \(r_{\text{exp}} = 5\,\%\) bei halbjährlicher Verzinsung?`, T`etwa \(4{,}94\,\%\)`, [T`\(5\,\%\)`, T`\(2{,}5\,\%\)`, T`etwa \(5{,}06\,\%\)`]],
+  ['Der Effektivzinssatz bei monatlicher Gutschrift von 4 % ist …', 'etwas größer als 4 %', ['kleiner als 4 %', 'genau 4 %', '48 %']],
+  [T`\(r_{\text{stet}} = \ln(1 + r_{\text{exp}})\) gilt, weil …`, T`\(e^{r_{\text{stet}}t} = (1 + r_{\text{exp}})^t\) sein soll`, ['die Zinsen gleich null sind', 'die einfache Verzinsung gilt', 'm = 1 ist']],
+  ['Hängt die Umrechnung einfach ↔ exponentiell von der Laufzeit t ab?', 'Ja', ['Nein', 'Nur bei t < 1', 'Nur bei stetiger Verzinsung']]
+]);
+
+/* ==================================================== 2.2 Barwert */
+G('bweinzel', 'z-bw', 'Barwert einer Einzelzahlung', () => {
+  const Z = R(5, 100) * 500, r = R(10, 70) / 1000, t = pick([0.5, 1.5, 2, 3, 4.5, 6, 10]), m = pick(['exp', 'stet', 'einf']);
+  const tt = m === 'einf' ? pick([0.25, 0.5, 0.75]) : t, B = Z / METH[m].ZF(r, tt);
+  return {
+    q: T`Welchen Barwert hat eine Zahlung von \(${eur(Z, 0)}\) in \(${ntc(tt)}\) Jahren bei ${METH[m].n}er Verzinsung mit \(r = ${ptc(r)}\)?`,
+    fields: [num(T`\(B =\)`, B, 2, '€')],
+    sol: T`\(B = DF\cdot Z = \frac{${nt(Z, 0)}}{${METH[m].tex(r, tt)}} = ${eur(B)}\)`
+  };
+});
+GENS[GENS.length - 1].nv = 3;
+G('sparvgl', 'z-bw', 'Sparplan vs. Opportunität', () => {
+  const A = R(5, 50) * 200, n = R(2, 6), Kt = Math.round(A * (1 + R(10, 50) / 1000) ** n), r = R(10, 50) / 1000;
+  const B = Kt / (1 + r) ** n, Bn = B - A;
+  return {
+    q: T`Ein Sparplan kostet heute \(${eur(A, 0)}\) und zahlt nach ${n} Jahren \(${eur(Kt, 0)}\). Alternativ kann zu \(${ptc(r)}\) angelegt werden. Berechne den Nettobarwert.`,
+    fields: [num(T`\(B_{\text{net}} =\)`, Bn, 2, '€'), mc('Entscheidung', Bn > 0 ? 'Sparplan lohnt sich' : 'Alternative ist besser', [Bn > 0 ? 'Alternative ist besser' : 'Sparplan lohnt sich'])],
+    sol: T`\(B = \frac{${nt(Kt, 0)}}{${ntc(1 + r, 4)}^{${n}}} = ${nt(B)}\), \(B_{\text{net}} = ${nt(B)} - ${nt(A, 0)} = ${nt(Bn)}\).`
+  };
+});
+G('projvgl', 'z-bw', 'Zwei Investitionen vergleichen', () => {
+  const r = R(30, 90) / 1000, A = R(80, 200) * 1;
+  const zA = [R(20, 60), R(20, 60), R(20, 80)], zB = [R(5, 30), R(30, 70), R(40, 100)];
+  const nA = sum(zA.map((z, i) => z / (1 + r) ** (i + 1))) - A, nB = sum(zB.map((z, i) => z / (1 + r) ** (i + 1))) - A;
+  const best = nA > nB ? 'Projekt A' : 'Projekt B';
+  return {
+    q: T`Zwei Projekte kosten je \(${A}\) TEUR. Rückflüsse (Jahre 1–3): A: \(${zA.join(',\\ ')}\); B: \(${zB.join(',\\ ')}\). Kalkulationszins \(${ptc(r)}\). Berechne beide Nettobarwerte.`,
+    fields: [num(T`\(B_{\text{net},A} =\)`, nA, 2, 'TEUR'), num(T`\(B_{\text{net},B} =\)`, nB, 2, 'TEUR'), mc('Vorzuziehen', best, [best === 'Projekt A' ? 'Projekt B' : 'Projekt A'])],
+    sol: T`A: \(${zA.map((z, i) => T`\frac{${z}}{${ntc(1 + r, 4)}^{${i + 1}}}`).join(' + ')} - ${A} = ${nt(nA)}\)<br>B: \(${zB.map((z, i) => T`\frac{${z}}{${ntc(1 + r, 4)}^{${i + 1}}}`).join(' + ')} - ${A} = ${nt(nB)}\)`
+  };
+});
+G('bwhalb', 'z-bw', 'Barwert unterjähriger Zahlungstermine', () => {
+  const r = R(20, 70) / 1000, Z = [R(2, 9) * 100, R(2, 9) * 100, R(5, 20) * 100], t = [0.5, 1.5, 2.5];
+  const B = sum(Z.map((z, i) => z / (1 + r) ** t[i]));
+  return {
+    q: T`Zahlungen von \(${Z.join(',\\ ')}\,€\) erfolgen in \(0{,}5\), \(1{,}5\) und \(2{,}5\) Jahren. Barwert bei exponentieller Diskontierung mit \(${ptc(r)}\)?`,
+    fields: [num(T`\(B =\)`, B, 2, '€')],
+    sol: T`\(B = ${Z.map((z, i) => T`\frac{${z}}{${ntc(1 + r, 4)}^{${ntc(t[i])}}}`).join(' + ')} = ${eur(B)}\)`
+  };
+});
+G('fairpreis', 'z-bw', 'Fairer Preis & Fehlbewertung', () => {
+  const c = R(2, 7), n = R(2, 5), r = R(10, 70) / 1000;
+  const B = sum(Array.from({ length: n }, (_, i) => (c + (i === n - 1 ? 100 : 0)) / (1 + r) ** (i + 1))), A = rnd(B + R(-30, 30) / 10, 1);
+  return {
+    q: T`Eine Anleihe (Kupon \(${c}\,\%\), Restlaufzeit ${n} Jahre) notiert bei \(${ntc(A)}\). Der Marktzins beträgt \(${ptc(r)}\). Berechne fairen Preis und Nettobarwert eines Kaufs.`,
+    fields: [num('fairer Preis B', B, 2), num(T`\(B_{\text{net}} =\)`, B - A, 2), mc('Die Anleihe ist', B > A ? 'unterbewertet (kaufen)' : 'überbewertet (nicht kaufen)', [B > A ? 'überbewertet (nicht kaufen)' : 'unterbewertet (kaufen)'])],
+    sol: T`\(B = ${nt(B)}\), \(B_{\text{net}} = B - A = ${nt(B - A)}\).`
+  };
+});
+G('stueckzins', 'z-bw', 'Stückzinsen & Dirty Price', () => {
+  const c = R(2, 8), d = R(20, 340), clean = RS(90, 110, 0.25), sz = c * d / 365;
+  return {
+    q: T`Eine Anleihe mit \(${c}\,\%\) Kupon notiert zum Clean Price \(${ntc(clean)}\). Seit dem letzten Kupontermin sind \(${d}\) Tage vergangen (act/365). Berechne Stückzinsen und Dirty Price (pro 100 Nennwert).`,
+    fields: [num('Stückzinsen', sz, 4), num('Dirty Price', clean + sz, 4)],
+    sol: T`Stückzinsen \(= ${c}\cdot\frac{${d}}{365} = ${fx(sz)}\). Dirty Price = Clean Price + Stückzinsen \(= ${fx(clean + sz)}\).`
+  };
+});
+MCADD('bwmc', [
+  ['Der Barwert ist …', 'die Summe der auf heute abgezinsten zukünftigen Zahlungen', ['die Summe aller Zahlungen', 'der Endwert einer Anlage', 'der Kaufpreis']],
+  ['Je später eine Zahlung erfolgt, desto …', 'kleiner ist ihr Barwert (bei positivem Zins)', ['größer ist ihr Barwert', 'gleich bleibt ihr Barwert', 'höher ist der Zinssatz']],
+  ['Was ist der Clean Price einer Anleihe?', 'der Kurs ohne Stückzinsen', ['der Kurs inklusive Stückzinsen', 'der Nennwert', 'der Barwert aller Kupons']],
+  ['Ein Preis über dem fairen Barwert bedeutet …', T`\(B_{\text{net}} < 0\): die Anleihe ist zu teuer`, [T`\(B_{\text{net}} > 0\)`, 'ein Kaufsignal', 'der Zins ist negativ']]
+]);
+
+/* ==================================================== 2.2 Renten */
+G('sparrate', 'z-rente', 'Nötige Sparrate', () => {
+  const E = R(10, 100) * 1000, n = R(5, 25), r = R(10, 60) / 1000, vor = Math.random() < 0.5, F = ewf(r, n, 1, vor);
+  return {
+    q: T`Wie viel muss jährlich ${vor ? 'vorschüssig' : 'nachschüssig'} gespart werden, um bei \(${ptc(r)}\) nach ${n} Jahren \(${eur(E, 0)}\) zu haben?`,
+    fields: [num(T`\(Z =\)`, E / F, 2, '€')],
+    sol: T`\(EWF = ${vor ? T`${ntc(1 + r, 4)}\cdot` : ''}\frac{${ntc(1 + r, 4)}^{${n}} - 1}{${ntc(r, 4)}} = ${nt(F, 6)}\), \(Z = \frac{E}{EWF} = ${eur(E / F)}\)`
+  };
+});
+GENS[GENS.length - 1].nv = 2;
+G('restschuld', 'z-rente', 'Restschuld eines Annuitätendarlehens', () => {
+  const B = R(10, 50) * 5000, n = R(8, 25), r = R(20, 60) / 1000, k = R(1, n - 2), Z = B / bwf(r, n);
+  const Rk = B * (1 + r) ** k - Z * ((1 + r) ** k - 1) / r;
+  return {
+    q: T`Darlehen \(${eur(B, 0)}\), \(r = ${ptc(r)}\), Laufzeit ${n} Jahre, jährliche nachschüssige Annuität. Wie hoch sind Annuität und Restschuld nach ${k} Jahren?`,
+    fields: [num(T`\(Z =\)`, Z, 2, '€'), num(T`Restschuld nach ${k} J.`, Rk, 2, '€')],
+    sol: T`\(Z = \frac{B}{BWF} = ${eur(Z)}\). Restschuld = Barwert der restlichen \(${n - k}\) Annuitäten: \(Z\cdot\frac{${ntc(1 + r, 4)}^{${n - k}} - 1}{${ntc(r, 4)}\cdot ${ntc(1 + r, 4)}^{${n - k}}} = ${eur(Rk)}\)`
+  };
+});
+G('rentelaufzeit', 'z-rente', 'Laufzeit einer Rente', () => {
+  const r = R(20, 60) / 1000, n0 = R(5, 30), Z = R(5, 40) * 100, B = rnd(Z * bwf(r, n0), 0);
+  const n = -Math.log(1 - r * B / Z) / Math.log(1 + r);
+  return {
+    q: T`Ein Kapital von \(${eur(B, 0)}\) soll bei \(${ptc(r)}\) jährlich nachschüssig \(${eur(Z, 0)}\) auszahlen. Wie viele Jahre reicht es?`,
+    fields: [num(T`\(n =\)`, n, 2, 'Jahre')],
+    sol: T`\(B = Z\cdot\frac{(1+r)^n - 1}{r(1+r)^n}\Rightarrow (1+r)^{-n} = 1 - \frac{rB}{Z}\Rightarrow n = -\frac{\ln(1 - ${ntc(r * B / Z, 6)})}{\ln ${ntc(1 + r, 4)}} = ${nt(n)}\)`
+  };
+});
+G('rente_bE', 'z-rente', 'Barwert und Endwert umrechnen', () => {
+  const B = R(10, 90) * 1000, r = R(10, 60) / 1000, n = R(3, 20);
+  return {
+    q: T`Eine Rente hat den Barwert \(${eur(B, 0)}\) (\(r = ${ptc(r)}\), \(n = ${n}\)). Wie hoch ist ihr Endwert?`,
+    fields: [num(T`\(E =\)`, B * (1 + r) ** n, 2, '€')],
+    sol: T`Endwert = aufgezinster Barwert: \(E = B\cdot(1 + r)^n = ${nt(B, 0)}\cdot ${ntc(1 + r, 4)}^{${n}} = ${eur(B * (1 + r) ** n)}\)`
+  };
+});
+G('ewigvor', 'z-rente', 'Ewige Rente vorschüssig', () => {
+  const Z = R(2, 50) * 500, r = R(20, 80) / 1000;
+  return {
+    q: T`Eine Stiftung soll ab heute (vorschüssig) dauerhaft jährlich \(${eur(Z, 0)}\) auszahlen. Kapitalbedarf bei \(${ptc(r)}\)?`,
+    fields: [num(T`\(B =\)`, Z + Z / r, 2, '€')],
+    sol: T`Erste Zahlung sofort, danach nachschüssige ewige Rente: \(B = Z + \frac Zr = ${nt(Z, 0)} + \frac{${nt(Z, 0)}}{${ntc(r, 4)}} = ${eur(Z + Z / r)}\)`
+  };
+});
+G('tilgung1', 'z-rente', 'Zins- und Tilgungsanteil', () => {
+  const B = R(10, 40) * 5000, n = R(5, 20), r = R(20, 60) / 1000, Z = B / bwf(r, n), z2 = (B - (Z - B * r)) * r;
+  return {
+    q: T`Annuitätendarlehen \(${eur(B, 0)}\), \(${ptc(r)}\), ${n} Jahre. Wie hoch ist die Tilgung im 1. Jahr und der Zinsanteil im 2. Jahr?`,
+    fields: [num('Tilgung Jahr 1', Z - B * r, 2, '€'), num('Zinsen Jahr 2', z2, 2, '€')],
+    sol: T`\(Z = ${eur(Z)}\). Zinsen J1 \(= ${nt(B * r)}\), Tilgung J1 \(= ${nt(Z - B * r)}\). Restschuld \(${nt(B - (Z - B * r))}\), Zinsen J2 \(= ${nt(z2)}\).`
+  };
+});
+G('ewigwachstum', 'z-rente', 'Unternehmenswert (Wachstum)', () => {
+  const Z = R(10, 80) / 10, g = R(5, 30) / 1000, r = g + R(20, 80) / 1000, B = Z / (r - g);
+  return {
+    q: T`Erwartete Dividende im nächsten Jahr \(${ntc(Z)}\,€\), danach Wachstum \(${ptc(g)}\) p.a., Kapitalkosten \(${ptc(r)}\). Fairer Aktienkurs?`,
+    fields: [num('Kurs', B, 2, '€')],
+    sol: T`\(B = \frac{Z}{r - g} = \frac{${ntc(Z)}}{${ntc(r, 4)} - ${ntc(g, 4)}} = ${eur(B)}\)`
+  };
+});
+MCQ('rentemc', 'z-rente', 'Verständnis: Renten', [
+  ['Vorschüssig bedeutet …', 'Zahlung jeweils am Periodenanfang', ['Zahlung am Periodenende', 'Zahlung nur einmal', 'Zahlung mit Wachstum']],
+  ['Wie hängen vorschüssiger und nachschüssiger Rentenbarwert zusammen?', T`\(B_{\text{vor}} = (1 + r)\cdot B_{\text{nach}}\)`, [T`\(B_{\text{vor}} = B_{\text{nach}}\)`, T`\(B_{\text{vor}} = B_{\text{nach}}/(1+r)\)`, T`\(B_{\text{vor}} = r\cdot B_{\text{nach}}\)`]],
+  ['Warum hat eine ewige Rente keinen Endwert?', 'Weil die Zahlungen nie enden – der Endwert wäre unendlich.', ['Weil r = 0 ist.', 'Weil der Barwert 0 ist.', 'Weil sie vorschüssig ist.']],
+  ['Bei einem Annuitätendarlehen ist über die Laufzeit konstant …', 'die Summe aus Zins und Tilgung', ['der Zinsanteil', 'der Tilgungsanteil', 'die Restschuld']],
+  ['Was ist bei der ewigen Rente mit Wachstum Voraussetzung?', T`\(g < r\)`, [T`\(g > r\)`, T`\(g = 0\)`, T`\(r < 0\)`]],
+  [T`Was gilt für \(EWF\) und \(BWF\) (jährlich nachschüssig)?`, T`\(EWF = BWF\cdot(1 + r)^n\)`, [T`\(EWF = BWF\)`, T`\(EWF = BWF/(1+r)^n\)`, T`\(EWF = BWF + n\)`]],
+  ['Steigt der Zinssatz, so sinkt bei gleicher Rente …', 'der Barwert', ['der Endwert', 'die Laufzeit', 'die Rate']]
+]);
+
+/* ==================================================== 2.3 Effektivverzinsung */
+G('irr2', 'z-eff', 'Interner Zinsfuß einer Investition', () => {
+  const A = R(80, 150) * 10, Z1 = R(30, 80) * 10, Z2 = R(40, 100) * 10;
+  if (Z1 + Z2 <= A) return GEN_BY_ID.irr2.f();
+  const q = (Z1 + Math.sqrt(Z1 * Z1 + 4 * A * Z2)) / (2 * A), r = q - 1;
+  return {
+    q: T`Eine Investition kostet \(${nt(A, 0)}\,€\) und bringt nach einem Jahr \(${nt(Z1, 0)}\,€\) und nach zwei Jahren \(${nt(Z2, 0)}\,€\). Bestimme den internen Zinsfuß.`,
+    fields: [num(T`\(r =\)`, r * 100, 2, '%')],
+    sol: T`\(0 = -${nt(A, 0)} + \frac{${nt(Z1, 0)}}{q} + \frac{${nt(Z2, 0)}}{q^2}\) mit \(q = 1 + r\) ⇒ \(${nt(A, 0)}q^2 - ${nt(Z1, 0)}q - ${nt(Z2, 0)} = 0\)
+\[q = \frac{${nt(Z1, 0)} + \sqrt{${nt(Z1, 0)}^2 + 4\cdot ${nt(A, 0)}\cdot ${nt(Z2, 0)}}}{2\cdot ${nt(A, 0)}} = ${nt(q, 6)}\Rightarrow r = ${pt(r)}\]`
+  };
+});
+G('disagio', 'z-eff', 'Effektivzins mit Disagio', () => {
+  const N = R(10, 100) * 1000, rn = R(20, 70) / 1000, aus = pick([0.95, 0.96, 0.97, 0.98, 0.99]);
+  const r = (N * (1 + rn)) / (N * aus) - 1;
+  return {
+    q: T`Ein Kredit über \(${eur(N, 0)}\) wird zu \(${ntc(aus * 100)}\,\%\) ausgezahlt und nach einem Jahr inkl. \(${ptc(rn)}\) Nominalzins zurückgezahlt. Effektivzins?`,
+    fields: [num(T`\(r =\)`, r * 100, 2, '%')],
+    sol: T`Auszahlung \(${nt(N * aus, 0)}\), Rückzahlung \(${nt(N * (1 + rn))}\). \(r = \frac{${nt(N * (1 + rn))}}{${nt(N * aus, 0)}} - 1 = ${pt(r)}\)`
+  };
+});
+G('nullkupon', 'z-eff', 'Rendite eines Zerobonds', () => {
+  const n = R(2, 10), P = RS(60, 98, 0.5), r = (100 / P) ** (1 / n) - 1;
+  return {
+    q: T`Ein Nullkuponanleihe (Zerobond) mit Laufzeit ${n} Jahre kostet \(${ntc(P)}\) und zahlt 100 zurück. Rendite?`,
+    fields: [num(T`\(r =\)`, r * 100, 2, '%')],
+    sol: T`\(${ntc(P)} = \frac{100}{(1+r)^{${n}}}\Rightarrow r = \sqrt[${n}]{\frac{100}{${ntc(P)}}} - 1 = ${pt(r)}\)`
+  };
+});
+G('yield1', 'z-eff', 'Rendite einer einjährigen Anleihe', () => {
+  const c = R(1, 8), P = RS(95, 106, 0.25), r = (100 + c) / P - 1;
+  return {
+    q: T`Eine Anleihe mit Restlaufzeit 1 Jahr und Kupon \(${c}\,\%\) notiert bei \(${ntc(P)}\). Rendite?`,
+    fields: [num(T`\(r =\)`, r * 100, 2, '%')],
+    sol: T`\(${ntc(P)} = \frac{${100 + c}}{1 + r}\Rightarrow r = \frac{${100 + c}}{${ntc(P)}} - 1 = ${pt(r)}\)`
+  };
+});
+G('bnetr', 'z-eff', 'Nettobarwert bei Testzinssatz', () => {
+  const c = R(3, 8), n = 3, P = RS(92, 108, 0.5), r = R(20, 80) / 1000;
+  const Bn = sum(Array.from({ length: n }, (_, i) => (c + (i === n - 1 ? 100 : 0)) / (1 + r) ** (i + 1))) - P;
+  return {
+    q: T`Anleihe: Kupon \(${c}\,\%\), 3 Jahre, Preis \(${ntc(P)}\). Berechne \(B_{\text{net}}\) bei \(r = ${ptc(r)}\). Liegt die Rendite über oder unter \(${ptc(r)}\)?`,
+    fields: [num(T`\(B_{\text{net}} =\)`, Bn, 2), mc('Rendite', Bn > 0 ? T`über \(${ptc(r)}\)` : T`unter \(${ptc(r)}\)`, [Bn > 0 ? T`unter \(${ptc(r)}\)` : T`über \(${ptc(r)}\)`])],
+    sol: T`\(B_{\text{net}} = \frac{${c}}{${ntc(1 + r, 4)}} + \frac{${c}}{${ntc(1 + r, 4)}^2} + \frac{${100 + c}}{${ntc(1 + r, 4)}^3} - ${ntc(P)} = ${nt(Bn)}\). Da \(B_{\text{net}}\) mit steigendem r fällt, liegt die Rendite ${Bn > 0 ? 'darüber' : 'darunter'}.`
+  };
+});
+G('praktvergl', 'z-eff', 'Praktikerformel vs. exakte Rendite', () => {
+  const c = R(2, 7), P = RS(94, 106, 0.5), n = 2, pr = (c + (100 - P) / n) / P, q = (c + Math.sqrt(c * c + 4 * P * (100 + c))) / (2 * P) - 1;
+  return {
+    q: T`Zweijährige Anleihe, Kupon \(${c}\,\%\), Preis \(${ntc(P)}\). Berechne Praktikerformel und exakte Rendite.`,
+    fields: [num('Praktikerformel', pr * 100, 2, '%'), num('exakt', q * 100, 2, '%')],
+    sol: T`Praktiker: \(\frac{${c} + \frac{100 - ${ntc(P)}}{2}}{${ntc(P)}} = ${pt(pr)}\). Exakt: \(${ntc(P)}q^2 - ${c}q - ${100 + c} = 0\Rightarrow r = ${pt(q)}\).`
+  };
+});
+MCADD('effmc', [
+  ['Eine Investition hat zwei interne Zinsfüße. Woran liegt das?', 'Der Zahlungsstrom wechselt mehrmals das Vorzeichen.', ['Der Zinssatz ist negativ.', 'Die Rechnung ist falsch.', 'Die Laufzeit ist zu lang.']],
+  ['Ein Disagio führt dazu, dass der Effektivzins …', 'über dem Nominalzins liegt', ['unter dem Nominalzins liegt', 'gleich dem Nominalzins ist', 'negativ wird']],
+  ['Was ist der Effektivzins einer Einmalanlage?', T`\(\sqrt[t]{K_t/A} - 1\)`, [T`\(K_t/A\)`, T`\((K_t - A)/t\)`, T`\(\ln(K_t/A)\)`]],
+  ['Warum lässt sich die Renditegleichung meist nicht direkt lösen?', 'Für n > 2 entsteht ein Polynom höheren Grades – man braucht Näherungsverfahren.', ['Weil es keine Lösung gibt.', 'Weil der Kupon unbekannt ist.', 'Weil der Barwert immer 100 ist.']]
+]);
+
+/* ==================================================== 2.4 Zinsstruktur */
+G('dfspot', 'z-struk', 'Diskontfaktoren aus Spot Rates', () => {
+  const r1 = R(10, 40) / 1000, r2 = r1 + R(0, 10) / 1000, r3 = r2 + R(0, 10) / 1000;
+  return {
+    q: T`Spot Rates \(r_{01} = ${ptc(r1)}\), \(r_{02} = ${ptc(r2)}\), \(r_{03} = ${ptc(r3)}\). Berechne die Diskontfaktoren \(DF_2\) und \(DF_3\) (6 Nachkommastellen).`,
+    fields: [num(T`\(DF_2 =\)`, (1 + r2) ** -2, 6), num(T`\(DF_3 =\)`, (1 + r3) ** -3, 6)],
+    sol: T`\(DF_t = (1 + r_{0t})^{-t}\): \(DF_2 = ${ntc(1 + r2, 4)}^{-2} = ${nt((1 + r2) ** -2, 6)}\), \(DF_3 = ${ntc(1 + r3, 4)}^{-3} = ${nt((1 + r3) ** -3, 6)}\)`
+  };
+});
+G('spotfwd', 'z-struk', 'Spot Rate aus Forward Rates', () => {
+  const r01 = R(10, 40) / 1000, f12 = R(10, 60) / 1000, f23 = R(10, 70) / 1000;
+  const r02 = Math.sqrt((1 + r01) * (1 + f12)) - 1, r03 = ((1 + r01) * (1 + f12) * (1 + f23)) ** (1 / 3) - 1;
+  return {
+    q: T`Gegeben \(r_{01} = ${ptc(r01)}\), Forward Rates \(r_{12} = ${ptc(f12)}\), \(r_{23} = ${ptc(f23)}\). Bestimme \(r_{02}\) und \(r_{03}\).`,
+    fields: [num(T`\(r_{02} =\)`, r02 * 100, 2, '%'), num(T`\(r_{03} =\)`, r03 * 100, 2, '%')],
+    sol: T`\((1 + r_{02})^2 = (1 + r_{01})(1 + r_{12})\Rightarrow r_{02} = ${pt(r02)}\); \((1 + r_{03})^3 = (1 + r_{01})(1 + r_{12})(1 + r_{23})\Rightarrow r_{03} = ${pt(r03)}\)`
+  };
+});
+G('arbitrage', 'z-struk', 'Anleihe mit Zinsstruktur bewerten', () => {
+  const r = [R(10, 30) / 1000]; r.push(r[0] + R(0, 10) / 1000); r.push(r[1] + R(0, 10) / 1000);
+  const c = R(2, 7), B = c / (1 + r[0]) + c / (1 + r[1]) ** 2 + (100 + c) / (1 + r[2]) ** 3, P = rnd(B + R(-20, 20) / 10, 2);
+  return {
+    q: T`Spot Rates \(${ptc(r[0])}\), \(${ptc(r[1])}\), \(${ptc(r[2])}\) (1–3 Jahre). Eine dreijährige \(${c}\,\%\)-Anleihe notiert bei \(${ntc(P)}\). Fairer Preis und Bewertung?`,
+    fields: [num('fairer Preis', B, 2), mc('Bewertung', B > P ? 'unterbewertet' : 'überbewertet', [B > P ? 'überbewertet' : 'unterbewertet', 'fair bewertet'])],
+    sol: T`\(B = \frac{${c}}{${ntc(1 + r[0], 4)}} + \frac{${c}}{${ntc(1 + r[1], 4)}^2} + \frac{${100 + c}}{${ntc(1 + r[2], 4)}^3} = ${nt(B)}\) vs. Kurs \(${ntc(P)}\).`
+  };
+});
+G('fwdanlage', 'z-struk', 'Endwert einer Forward-Anlage', () => {
+  const K = R(10, 100) * 1000, a = R(10, 40) / 1000, b = a + R(0, 15) / 1000, f = (1 + b) ** 3 / (1 + a) - 1;
+  const rf = Math.sqrt((1 + b) ** 3 / (1 + a)) - 1;
+  return {
+    q: T`\(r_{01} = ${ptc(a)}\), \(r_{03} = ${ptc(b)}\). Ein Investor legt in einem Jahr \(${eur(K, 0)}\) für 2 Jahre zur heute vereinbarten Forward Rate an. Welcher Betrag steht in 3 Jahren zur Verfügung?`,
+    fields: [num(T`\(r_{13} =\)`, rf * 100, 2, '%'), num('Endbetrag', K * (1 + rf) ** 2, 2, '€')],
+    sol: T`\(r_{13} = \sqrt{\frac{${ntc(1 + b, 4)}^3}{${ntc(1 + a, 4)}}} - 1 = ${pt(rf)}\). Endbetrag \(= ${nt(K, 0)}\cdot(1 + r_{13})^2 = ${eur(K * (1 + rf) ** 2)}\)`
+  };
+});
+G('zero1', 'z-struk', 'Zero Rate aus Anleihepreis', () => {
+  const r1 = R(10, 40) / 1000, c = R(2, 8), r2t = r1 + R(0, 12) / 1000;
+  const P = c / (1 + r1) + (100 + c) / (1 + r2t) ** 2, Pr = rnd(P, 2), r2 = Math.sqrt((100 + c) / (Pr - c / (1 + r1))) - 1;
+  return {
+    q: T`\(r_{01} = ${ptc(r1)}\). Eine zweijährige Anleihe mit \(${c}\,\%\) Kupon kostet \(${ntc(Pr)}\). Bestimme \(r_{02}\).`,
+    fields: [num(T`\(r_{02} =\)`, r2 * 100, 2, '%')],
+    sol: T`\(${ntc(Pr)} = \frac{${c}}{${ntc(1 + r1, 4)}} + \frac{${100 + c}}{(1 + r_{02})^2}\Rightarrow r_{02} = \sqrt{\frac{${100 + c}}{${ntc(Pr)} - ${nt(c / (1 + r1), 4)}}} - 1 = ${pt(r2)}\)`
+  };
+});
+MCQ('strukmc', 'z-struk', 'Verständnis: Zinsstruktur', [
+  ['Was ist eine Spot Rate (Zero Rate)?', 'Rendite einer heutigen Einmalanlage mit genau einer Zahlung am Laufzeitende', ['der Kupon einer Anleihe', 'der Zinssatz für eine künftige Periode', 'die Durchschnittsrendite aller Anleihen']],
+  ['Was ist eine Forward Rate?', 'ein heute vereinbarter Zinssatz für eine zukünftige Periode', ['der aktuelle Tagesgeldzins', 'die Rendite einer Nullkuponanleihe', 'der Leitzins']],
+  ['Steigt die Zinsstruktur (normale Zinskurve), dann liegen die Forward Rates …', 'über den Spot Rates', ['unter den Spot Rates', 'genau auf den Spot Rates', 'bei null']],
+  ['Was versteht man unter Bootstrapping?', 'die schrittweise Berechnung der Zero Rates aus Par Rates', ['die Berechnung von Forward Rates', 'die Praktikerformel', 'die Diskontierung mit einem einheitlichen Zins']],
+  ['Eine Par Rate ist …', 'der Kupon, bei dem eine Anleihe genau zu 100 notiert', ['die Spot Rate für 1 Jahr', 'die Forward Rate für 1 Jahr', 'der Durchschnitt aller Spot Rates']],
+  ['Die Rendite unterstellt im Gegensatz zur Zinsstruktur …', 'einen einheitlichen Zinssatz für alle Laufzeiten', ['verschiedene Zinssätze je Laufzeit', 'stetige Verzinsung', 'Kupons von null']],
+  ['Bei flacher Zinsstruktur gilt …', 'alle Spot und Forward Rates sind gleich', ['Forward Rates sind null', 'Spot Rates steigen', 'Par Rates sind negativ']],
+  [T`Gilt \(r_{01} = 4\,\%\), \(r_{12} = 6\,\%\), dann ist \(r_{02}\) …`, T`etwa \(5\,\%\)`, [T`\(10\,\%\)`, T`\(2\,\%\)`, T`\(6\,\%\)`]]
+]);
+
+/* ==================================================== 3.1 Beschreibende Statistik */
+G('rhofrom', 's-desk', 'Korrelation aus Kovarianz', () => {
+  const sx = R(10, 50) / 10, sy = R(10, 50) / 10, rho = R(-90, 95) / 100, c = rnd(rho * sx * sy, 3);
+  return {
+    q: T`\(\sigma_x = ${ntc(sx)}\), \(\sigma_y = ${ntc(sy)}\), \(\sigma_{xy} = ${ntc(c, 3)}\). Berechne \(\rho_{xy}\).`,
+    fields: [num(T`\(\rho_{xy} =\)`, c / (sx * sy), 4)],
+    sol: T`\(\rho_{xy} = \frac{\sigma_{xy}}{\sigma_x\sigma_y} = \frac{${ntc(c, 3)}}{${ntc(sx)}\cdot ${ntc(sy)}} = ${fx(c / (sx * sy))}\)`
+  };
+});
+G('lintrans', 's-desk', 'Lineare Transformation von Daten', () => {
+  const mx = R(-5, 20), sx = R(1, 9), a = pick([2, 3, -1, -2, 0.5, 1.5]), b = R(-10, 10);
+  return {
+    q: T`Eine Datenreihe hat \(\bar x = ${mx}\), \(\sigma_x = ${sx}\). Berechne für \(y_i = ${ntc(a)}x_i ${plusTerm(b)}\) Mittelwert und Standardabweichung.`,
+    fields: [num(T`\(\bar y =\)`, a * mx + b, 2), num(T`\(\sigma_y =\)`, Math.abs(a) * sx, 2)],
+    sol: T`\(\bar y = ${ntc(a)}\cdot ${par(mx)} ${plusTerm(b)} = ${ntc(a * mx + b)}\); \(\sigma_y = |${ntc(a)}|\cdot ${sx} = ${ntc(Math.abs(a) * sx)}\) (Verschiebung ändert die Streuung nicht).`
+  };
+});
+G('fehlwert', 's-desk', 'Fehlender Wert aus Mittelwert', () => {
+  const n = R(4, 7), x = Array.from({ length: n - 1 }, () => R(-5, 15)), miss = R(-5, 15), m = (sum(x) + miss) / n;
+  return {
+    q: T`Von ${n} Werten mit Mittelwert \(\bar x = ${ntc(m, 4)}\) kennt man ${x.map(ntc).join(', ')}. Wie lautet der fehlende Wert?`,
+    fields: [num(T`\(x_{${n}} =\)`, miss, 2)],
+    sol: T`\(\sum x_i = n\bar x = ${n}\cdot ${ntc(m, 4)} = ${ntc(m * n)}\). Fehlender Wert: \(${ntc(m * n)} - ${ntc(sum(x))} = ${miss}\).`
+  };
+});
+G('varsummen', 's-desk', 'Varianz aus Summen', () => {
+  const n = R(5, 20), x = Array.from({ length: n }, () => R(-5, 12)), S = sum(x), S2 = sum(x.map(v => v * v)), m = S / n, v = S2 / n - m * m;
+  return {
+    q: T`Für \(n = ${n}\) Beobachtungen gilt \(\sum x_i = ${S}\) und \(\sum x_i^2 = ${S2}\). Berechne \(\bar x\) und \(\sigma_x^2\).`,
+    fields: [num(T`\(\bar x =\)`, m, 4), num(T`\(\sigma_x^2 =\)`, v, 4)],
+    sol: T`\(\bar x = \frac{${S}}{${n}} = ${fx(m)}\), \(\sigma_x^2 = \frac{${S2}}{${n}} - ${fx(m)}^2 = ${fx(v)}\)`
+  };
+});
+G('wuerfeldaten', 's-desk', 'Würfelexperiment', () => {
+  const x = Array.from({ length: 10 }, () => R(1, 6)), m = meanA(x), v = varA(x);
+  return {
+    q: T`Ein Würfel wird zehnmal geworfen: ${x.join(', ')}. Bestimme \(\bar x\) und \(\sigma_x\).`,
+    fields: [num(T`\(\bar x =\)`, m, 2), num(T`\(\sigma_x =\)`, Math.sqrt(v), 4)],
+    sol: T`\(\bar x = \frac{${sum(x)}}{10} = ${nt(m)}\), \(\overline{x^2} = ${nt(meanA(x.map(a => a * a)))}\), \(\sigma_x^2 = ${fx(v)}\), \(\sigma_x = ${fx(Math.sqrt(v))}\)`
+  };
+});
+G('covsummen', 's-desk', 'Kovarianz aus Mittelwerten', () => {
+  const mx = R(-3, 8), my = R(-3, 8), mxy = mx * my + R(-20, 30) / 2;
+  return {
+    q: T`Gegeben \(\bar x = ${mx}\), \(\bar y = ${my}\), \(\overline{xy} = ${ntc(mxy)}\). Berechne \(\sigma_{xy}\).`,
+    fields: [num(T`\(\sigma_{xy} =\)`, mxy - mx * my, 2)],
+    sol: T`\(\sigma_{xy} = \overline{xy} - \bar x\bar y = ${ntc(mxy)} - ${par(mx)}\cdot ${par(my)} = ${ntc(mxy - mx * my)}\)`
+  };
+});
+G('renditen', 's-desk', 'Renditen aus Kursen', () => {
+  const k = [R(80, 120)]; for (let i = 0; i < 4; i++) k.push(Math.round(k[i] * (1 + R(-8, 10) / 100)));
+  const r = k.slice(1).map((v, i) => (v / k[i] - 1) * 100), m = meanA(r);
+  return {
+    q: T`Wochenschlusskurse einer Aktie: ${k.join(', ')}. Berechne die Wochenrenditen und deren Mittelwert (in %).`,
+    fields: [num(T`\(\bar x =\)`, m, 2, '%'), num(T`\(\sigma_x =\)`, Math.sqrt(varA(r)), 2, '%')],
+    sol: T`Renditen \(x_i = \frac{K_i}{K_{i-1}} - 1\): ${r.map(v => nt(v)).join('; ')} (%). \(\bar x = ${nt(m)}\,\%\), \(\sigma_x = ${nt(Math.sqrt(varA(r)))}\,\%\).`
+  };
+});
+MCQ('deskmc', 's-desk', 'Verständnis: Kennzahlen', [
+  ['Welche Einheit hat die Varianz von Renditen in %?', T`\(\%^2\)`, ['%', 'keine', '€']],
+  ['Was bedeutet ρ = 0?', 'kein linearer Zusammenhang', ['kein Zusammenhang überhaupt', 'perfekter Zusammenhang', 'beide Reihen sind konstant']],
+  ['Was passiert mit σ, wenn man zu allen Werten 10 addiert?', 'nichts', ['σ steigt um 10', 'σ verdoppelt sich', 'σ wird 0']],
+  ['Welche Werte kann ρ annehmen?', 'von −1 bis +1', ['von 0 bis 1', 'beliebige', 'von −∞ bis +∞']],
+  ['Die Standardabweichung von Renditen wird auch genannt …', 'Volatilität', ['Beta', 'Rendite', 'Kovarianz']],
+  ['Was misst die Kovarianz?', 'das gemeinsame Schwanken zweier Größen um ihre Mittelwerte', ['die Streuung einer Größe', 'den Mittelwert', 'die Steigung der Regression']],
+  [T`Im Skript wird die empirische Varianz mit … berechnet.`, T`\(\frac1n\)`, [T`\(\frac{1}{n-1}\)`, T`\(\frac{1}{n+1}\)`, T`\(n\)`]],
+  ['Ein Ausreißer beeinflusst am stärksten …', 'die Varianz', ['den Median', 'die Anzahl n', 'nichts']]
+]);
+
+/* ==================================================== 3.2 Portfolio */
+G('pfcov', 's-pf', 'Portfoliorisiko mit Kovarianz', () => {
+  const sx2 = R(4, 40), sy2 = R(4, 40), cm = Math.floor(0.9 * Math.sqrt(sx2 * sy2)), c = R(-Math.min(10, cm), Math.min(15, cm)), w = pick([0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8]);
+  const v = w * w * sx2 + (1 - w) ** 2 * sy2 + 2 * w * (1 - w) * c;
+  return {
+    q: T`\(\sigma_x^2 = ${sx2}\), \(\sigma_y^2 = ${sy2}\), \(\sigma_{xy} = ${c}\) (jeweils in \(\%^2\)), \(w = ${ntc(w)}\). Berechne \(\sigma_z\).`,
+    fields: [num(T`\(\sigma_z =\)`, Math.sqrt(v), 2, '%')],
+    sol: T`\(\sigma_z^2 = ${ntc(w)}^2\cdot ${sx2} + ${ntc(1 - w)}^2\cdot ${sy2} + 2\cdot ${ntc(w)}\cdot ${ntc(1 - w)}\cdot ${par(c)} = ${fx(v)}\), \(\sigma_z = ${nt(Math.sqrt(v))}\,\%\)`
+  };
+});
+G('pfziel', 's-pf', 'Gewicht für Zielrendite', () => {
+  let mx, my; do { mx = R(2, 15) / 10; my = R(1, 12) / 10; } while (mx === my);
+  const w = pick([0.2, 0.25, 0.4, 0.6, 0.75, 0.8]), zt = w * mx + (1 - w) * my;
+  return {
+    q: T`\(\bar x = ${ntc(mx)}\,\%\), \(\bar y = ${ntc(my)}\,\%\). Welcher Anteil \(w\) in X ergibt eine mittlere Portfoliorendite von \(${ntc(zt, 4)}\,\%\)?`,
+    fields: [num(T`\(w =\)`, w * 100, 2, '%')],
+    sol: T`\(w\bar x + (1-w)\bar y = \bar z\Rightarrow w = \frac{\bar z - \bar y}{\bar x - \bar y} = \frac{${ntc(zt, 4)} - ${ntc(my)}}{${ntc(mx)} - ${ntc(my)}} = ${pt(w)}\)`
+  };
+});
+G('pfminvar', 's-pf', 'Minimum-Varianz-Portfolio', () => {
+  const sx = R(15, 40) / 10, sy = R(10, 35) / 10, rho = R(-5, 5) / 10, c = rho * sx * sy;
+  const w = (sy * sy - c) / (sx * sx + sy * sy - 2 * c), v = w * w * sx * sx + (1 - w) ** 2 * sy * sy + 2 * w * (1 - w) * c;
+  return {
+    q: T`\(\sigma_x = ${ntc(sx)}\,\%\), \(\sigma_y = ${ntc(sy)}\,\%\), \(\rho_{xy} = ${ntc(rho)}\). Bestimme das Gewicht \(w\) mit minimalem Portfoliorisiko und \(\sigma_z\) dort.`,
+    fields: [num(T`\(w^* =\)`, w * 100, 2, '%'), num(T`\(\sigma_z =\)`, Math.sqrt(v), 2, '%')],
+    sol: T`\(\frac{d\sigma_z^2}{dw} = 0\Rightarrow w^* = \frac{\sigma_y^2 - \sigma_{xy}}{\sigma_x^2 + \sigma_y^2 - 2\sigma_{xy}}\) mit \(\sigma_{xy} = ${fx(c)}\): \(w^* = ${pt(w)}\), \(\sigma_z = ${nt(Math.sqrt(v))}\,\%\)`
+  };
+});
+G('pfrhovgl', 's-pf', 'Risiko bei verschiedenen Korrelationen', () => {
+  const sx = R(15, 40) / 10, sy = R(10, 35) / 10, w = 0.5;
+  const s = r => Math.sqrt(0.25 * sx * sx + 0.25 * sy * sy + 0.5 * r * sx * sy);
+  return {
+    q: T`Gleichgewichtetes Portfolio (\(w = 0{,}5\)) aus X (\(\sigma_x = ${ntc(sx)}\,\%\)) und Y (\(\sigma_y = ${ntc(sy)}\,\%\)). Berechne \(\sigma_z\) für \(\rho = 1\) und \(\rho = 0\).`,
+    fields: [num(T`\(\rho = 1\): \(\sigma_z =\)`, s(1), 2, '%'), num(T`\(\rho = 0\): \(\sigma_z =\)`, s(0), 2, '%')],
+    sol: T`\(\rho = 1\): \(\sigma_z = 0{,}5\cdot ${ntc(sx)} + 0{,}5\cdot ${ntc(sy)} = ${nt(s(1))}\). \(\rho = 0\): \(\sqrt{0{,}25\cdot ${ntc(sx * sx)} + 0{,}25\cdot ${ntc(sy * sy)}} = ${nt(s(0))}\). Diversifikationseffekt!`
+  };
+});
+G('pfreihe', 's-pf', 'Portfoliorenditen aus Datenreihen', () => {
+  const x = Array.from({ length: 4 }, () => R(-4, 8)), y = Array.from({ length: 4 }, () => R(-4, 8)), w = pick([0.25, 0.5, 0.75]);
+  const z = x.map((v, i) => w * v + (1 - w) * y[i]);
+  return {
+    q: T`Renditen (%) von X: ${x.join(', ')}; von Y: ${y.join(', ')}. Portfolio mit \(w = ${ntc(w)}\) in X. Berechne \(\bar z\) und \(\sigma_z\).`,
+    fields: [num(T`\(\bar z =\)`, meanA(z), 2, '%'), num(T`\(\sigma_z =\)`, Math.sqrt(varA(z)), 2, '%')],
+    sol: T`\(z_i = ${ntc(w)}x_i + ${ntc(1 - w)}y_i\): ${z.map(v => ntc(v)).join('; ')}. \(\bar z = ${nt(meanA(z))}\), \(\sigma_z = ${nt(Math.sqrt(varA(z)))}\).`
+  };
+});
+G('pfgrenze', 's-pf', 'Obergrenze für das Portfoliorisiko', () => {
+  const sx = R(15, 40) / 10, sy = R(10, 35) / 10, w = pick([0.3, 0.4, 0.5, 0.6, 0.7]);
+  return {
+    q: T`\(\sigma_x = ${ntc(sx)}\,\%\), \(\sigma_y = ${ntc(sy)}\,\%\), \(w = ${ntc(w)}\). Wie groß kann \(\sigma_z\) höchstens sein (egal welche Korrelation)?`,
+    fields: [num(T`\(\sigma_z \le\)`, w * sx + (1 - w) * sy, 2, '%')],
+    sol: T`Wegen \(\rho_{xy} \le 1\): \(\sigma_z \le w\sigma_x + (1-w)\sigma_y = ${nt(w * sx + (1 - w) * sy)}\,\%\)`
+  };
+});
+MCADD('pfmc', [
+  ['Durch Diversifikation sinkt …', 'das Risiko bei gleicher erwarteter Rendite', ['die erwartete Rendite', 'die Korrelation', 'der Kurs']],
+  ['Bei ρ = −1 lässt sich das Risiko …', 'vollständig eliminieren', ['nicht verringern', 'nur halbieren', 'nur erhöhen']],
+  ['Das Portfoliorisiko ist bei ρ < 1 …', 'kleiner als der gewichtete Durchschnitt der Einzelrisiken', ['größer als der Durchschnitt', 'gleich dem Durchschnitt', 'null']],
+  ['Was bedeutet w > 1 bei einem Zwei-Aktien-Portfolio?', 'Leerverkauf der anderen Aktie (1 − w < 0)', ['nicht möglich', 'Kredit ohne Aktien', 'Gewinn ohne Risiko']]
+]);
+
+/* ==================================================== 3.3 Regression */
+G('regpred', 's-reg', 'Prognose mit Regressionsgerade', () => {
+  const a = R(-20, 20) / 10, b = R(5, 20) / 10, x = R(-5, 8);
+  return {
+    q: T`Regressionsgerade \(y = ${ntc(a)} + ${ntc(b)}x\) (Renditen in %). Welche Aktienrendite wird bei einer Indexrendite von \(${x}\,\%\) erwartet?`,
+    fields: [num(T`\(y =\)`, a + b * x, 2, '%')],
+    sol: T`\(y = ${ntc(a)} + ${ntc(b)}\cdot ${par(x)} = ${ntc(a + b * x)}\,\%\)`
+  };
+});
+G('regstats', 's-reg', 'Regression aus Kennzahlen', () => {
+  const mx = R(-10, 20) / 10, my = R(-10, 20) / 10, sx2 = R(10, 90) / 10, sxy = R(5, 120) / 10;
+  const b = sxy / sx2, a = my - b * mx;
+  return {
+    q: T`\(\bar x = ${ntc(mx)}\), \(\bar y = ${ntc(my)}\), \(\sigma_x^2 = ${ntc(sx2)}\), \(\sigma_{xy} = ${ntc(sxy)}\). Bestimme \(\alpha\) und \(\beta\).`,
+    fields: [num(T`\(\beta =\)`, b, 4), num(T`\(\alpha =\)`, a, 4)],
+    sol: T`\(\beta = \frac{${ntc(sxy)}}{${ntc(sx2)}} = ${fx(b)}\), \(\alpha = ${ntc(my)} - ${fx(b)}\cdot ${par(mx)} = ${fx(a)}\)`
+  };
+});
+G('varzerl', 's-reg', 'Systematisches & unsystematisches Risiko', () => {
+  const b = R(5, 18) / 10, sx = R(10, 30) / 10, se = R(5, 30) / 10, sy2 = b * b * sx * sx + se * se;
+  return {
+    q: T`Aktie: \(\beta = ${ntc(b)}\), Index: \(\sigma_x = ${ntc(sx)}\,\%\), Gesamtrisiko der Aktie \(\sigma_y = ${nt(Math.sqrt(sy2), 4)}\,\%\). Berechne das systematische Risiko \(\beta\sigma_x\) und das unsystematische Risiko \(\sigma_\varepsilon\).`,
+    fields: [num('systematisch', b * sx, 2, '%'), num(T`\(\sigma_\varepsilon =\)`, se, 2, '%')],
+    sol: T`\(\sigma_y^2 = \beta^2\sigma_x^2 + \sigma_\varepsilon^2\): systematisch \(${ntc(b)}\cdot ${ntc(sx)} = ${nt(b * sx)}\), \(\sigma_\varepsilon = \sqrt{${nt(sy2, 4)} - ${nt(b * b * sx * sx, 4)}} = ${nt(se)}\)`
+  };
+});
+G('rho2', 's-reg', 'Bestimmtheitsmaß', () => {
+  const rho = R(20, 95) / 100;
+  return {
+    q: T`Die Korrelation einer Aktie mit dem Index beträgt \(\rho_{xy} = ${ntc(rho)}\). Welcher Anteil der Varianz der Aktie ist systematisch (durch den Index erklärt)?`,
+    fields: [num('Anteil', rho * rho * 100, 2, '%')],
+    sol: T`Anteil \(= \rho_{xy}^2 = ${ntc(rho)}^2 = ${pt(rho * rho)}\)`
+  };
+});
+G('betacov', 's-reg', 'Beta aus Kovarianz', () => {
+  const vx = R(4, 30), c = R(2, 50);
+  return {
+    q: T`Varianz der Marktrendite \(${vx}\,\%^2\), Kovarianz Aktie/Markt \(${c}\,\%^2\). Beta der Aktie?`,
+    fields: [num(T`\(\beta =\)`, c / vx, 4)],
+    sol: T`\(\beta = \frac{\text{Cov}}{V} = \frac{${c}}{${vx}} = ${fx(c / vx)}\)`
+  };
+});
+G('residuum', 's-reg', 'Residuum einer Beobachtung', () => {
+  const a = R(-10, 10) / 10, b = R(5, 20) / 10, x = R(-5, 8), y = rnd(a + b * x + R(-30, 30) / 10, 1);
+  return {
+    q: T`Regressionsgerade \(y = ${ntc(a)} + ${ntc(b)}x\). Beobachtung \((${x},\ ${ntc(y)})\). Wie groß ist das Residuum \(\varepsilon = y - (\alpha + \beta x)\)?`,
+    fields: [num(T`\(\varepsilon =\)`, y - a - b * x, 2)],
+    sol: T`\(\hat y = ${ntc(a)} + ${ntc(b)}\cdot ${par(x)} = ${ntc(a + b * x)}\), \(\varepsilon = ${ntc(y)} - ${ntc(a + b * x)} = ${ntc(y - a - b * x)}\)`
+  };
+});
+MCADD('regmc', [
+  ['Was minimiert die Methode der kleinsten Quadrate?', 'die Summe der quadrierten senkrechten Abweichungen von der Geraden', ['die Summe der Abweichungen', 'die Steigung', 'die Korrelation']],
+  ['Beta = 0 bedeutet …', 'die Aktie hängt linear nicht vom Markt ab', ['die Aktie hat kein Risiko', 'die Aktie fällt immer', 'die Aktie ist der Index']],
+  ['Welches Vorzeichen haben β und ρ?', 'immer dasselbe', ['immer entgegengesetzt', 'unabhängig voneinander', 'β ist immer positiv']],
+  ['Das Beta des Marktes selbst ist …', '1', ['0', '−1', 'unendlich']]
+]);
+
+/* ==================================================== 3.4 Quantile & VaR */
+G('varmittel', 's-quant', 'VaR aus Portfoliowerten', () => {
+  const n = 20, x = Array.from({ length: n }, () => R(90, 110) * 10).sort((a, b) => a - b), p = pick([0.05, 0.1]);
+  const Q = quantile(x, p), m = meanA(x);
+  return {
+    q: T`Simulierte Portfoliowerte (geordnet, \(n = 20\)): ${x.map(v => fmtc(v)).join(', ')}. Bestimme \(\text{VaR}_{${ntc((1 - p) * 100)}\%} = \bar x - x_p\).`,
+    fields: [num(T`\(\bar x =\)`, m, 1), num('VaR', m - Q.v, 1)],
+    sol: T`\(\bar x = ${nt(m, 1)}\). ${Q.txt} \(= ${ntc(Q.v)}\). VaR \(= ${nt(m, 1)} - ${ntc(Q.v)} = ${nt(m - Q.v, 1)}\)`
+  };
+});
+G('quantrang', 's-quant', 'Ordnungsnummer eines Quantils', () => {
+  const n = R(10, 60), p = pick([0.05, 0.1, 0.12, 0.2, 0.25, 0.3, 0.75, 0.9, 0.95]), np = rnd(n * p, 6), integ = Math.abs(np - Math.round(np)) < 1e-9;
+  const right = integ ? T`Mittel aus \(x_{(${np})}\) und \(x_{(${np + 1})}\)` : T`\(x_{(${Math.ceil(np)})}\)`;
+  const wrong = integ ? [T`\(x_{(${np})}\)`, T`\(x_{(${np + 1})}\)`, T`Mittel aus \(x_{(${np - 1})}\) und \(x_{(${np})}\)`] : [T`\(x_{(${Math.floor(np)})}\)`, T`Mittel aus \(x_{(${Math.floor(np)})}\) und \(x_{(${Math.ceil(np)})}\)`, T`\(x_{(${Math.ceil(np) + 1})}\)`];
+  return {
+    q: T`Eine geordnete Reihe hat \(n = ${n}\) Werte. Welcher Wert ist das \(${ntc(p * 100)}\,\%\)-Quantil?`,
+    fields: [mc('', right, wrong)],
+    sol: T`\(n\cdot p = ${ntc(np)}\) ${integ ? 'ist ganzzahlig ⇒ Mittelwert der beiden Nachbarn' : 'ist nicht ganzzahlig ⇒ aufrunden'}.`
+  };
+});
+G('medianungerade', 's-quant', 'Median unsortierter Daten', () => {
+  const n = pick([7, 8, 9, 11]), x = Array.from({ length: n }, () => R(-20, 40)), s = x.slice().sort((a, b) => a - b);
+  const med = n % 2 ? s[(n - 1) / 2] : (s[n / 2 - 1] + s[n / 2]) / 2;
+  return {
+    q: T`Bestimme den Median von: ${x.join(', ')}.`,
+    fields: [num(T`\(\tilde x =\)`, med, 1)],
+    sol: T`Geordnet: ${s.join(', ')}. ${n % 2 ? T`\(n = ${n}\) ungerade ⇒ \(x_{(${(n + 1) / 2})} = ${med}\)` : T`\(n = ${n}\) gerade ⇒ \(\tfrac12(${s[n / 2 - 1]} + ${s[n / 2]}) = ${ntc(med)}\)`}`
+  };
+});
+G('quantvar2', 's-quant', 'VaR für verschiedene Niveaus', () => {
+  const n = 40, x = Array.from({ length: n }, () => Math.round((Math.random() + Math.random() + Math.random() - 1.5) * 2000)).sort((a, b) => a - b);
+  const q5 = quantile(x, 0.05), q1 = quantile(x, 0.025);
+  return {
+    q: T`40 simulierte Wertveränderungen (geordnet): ${x.map(v => fmtc(v)).join(', ')}. Bestimme \(\text{VaR}_{95\%}\) und \(\text{VaR}_{97{,}5\%}\).`,
+    fields: [num(T`\(\text{VaR}_{95\%} =\)`, -q5.v, 1, '€'), num(T`\(\text{VaR}_{97{,}5\%} =\)`, -q1.v, 1, '€')],
+    sol: T`5 %: ${q5.txt} \(= ${ntc(q5.v)}\). 2,5 %: ${q1.txt} \(= ${ntc(q1.v)}\). Höheres Konfidenzniveau ⇒ höherer VaR.`
+  };
+});
+G('quantobere', 's-quant', 'Oberes Quantil', () => {
+  const n = R(10, 20), x = Array.from({ length: n }, () => R(100, 200)).sort((a, b) => a - b), p = pick([0.75, 0.8, 0.9, 0.95]), Q = quantile(x, p);
+  return {
+    q: T`Geordnete Reihe (\(n = ${n}\)): ${x.join(', ')}. Bestimme das \(${ntc(p * 100)}\,\%\)-Quantil.`,
+    fields: [num(T`\(x_{${ntc(p * 100)}\%} =\)`, Q.v, 1)],
+    sol: T`${Q.txt} \(= ${ntc(Q.v)}\)`
+  };
+});
+MCQ('quantmc', 's-quant', 'Verständnis: Quantile & VaR', [
+  ['Was gibt der VaR zum Konfidenzniveau 95 % an?', 'einen Verlust, der nur in höchstens 5 % der Fälle überschritten wird', ['den maximal möglichen Verlust', 'den mittleren Verlust', 'den Verlust in 95 % der Fälle']],
+  ['Der Median ist …', 'das 50 %-Quantil', ['der Mittelwert', 'das 5 %-Quantil', 'der häufigste Wert']],
+  ['Wie hängt der VaR mit dem Quantil zusammen (Wertveränderungen)?', T`\(\text{VaR}_{1-p} = -\Delta V_p\)`, [T`\(\text{VaR} = \Delta V_p\)`, T`\(\text{VaR} = \bar x\)`, T`\(\text{VaR} = \sigma\)`]],
+  ['Wird der Median von Ausreißern stark beeinflusst?', 'nein, er ist robust', ['ja, sehr stark', 'nur bei geraden n', 'nur nach oben']],
+  ['Ein höheres Konfidenzniveau führt zu …', 'einem höheren VaR', ['einem niedrigeren VaR', 'keinem Unterschied', 'einem negativen VaR']],
+  [T`\(n = 30\), \(p = 5\,\%\): Welcher Wert ist das Quantil?`, T`\(x_{(2)}\)`, [T`\(x_{(1)}\)`, T`Mittel aus \(x_{(1)}\) und \(x_{(2)}\)`, T`\(x_{(15)}\)`]],
+  ['Beschreibt die Datenreihe Portfoliowerte (nicht Veränderungen), gilt …', T`\(\text{VaR} = \bar x - x_p\)`, [T`\(\text{VaR} = -x_p\)`, T`\(\text{VaR} = x_p\)`, T`\(\text{VaR} = \bar x + x_p\)`]],
+  ['Sind Quantile in der Literatur einheitlich definiert?', 'nein – das Skript nutzt eine bestimmte Konvention (aufrunden bzw. mitteln)', ['ja, immer', 'nur für n gerade', 'nur der Median']]
+]);
+
+/* ==================================================== 3.5–3.6 Zufallsvariablen */
+G('spiel', 's-zv', 'Erwartungswert eines Spiels', () => {
+  const e = R(1, 5), g = [R(1, 6) * 5, R(1, 3) * 5, 0], p = [1 / 6, 2 / 6, 3 / 6], E = sum(g.map((v, i) => v * p[i])) - e;
+  return {
+    q: T`Einsatz \(${e}\,€\). Bei Augenzahl 6 gewinnt man \(${g[0]}\,€\), bei 4 oder 5 gewinnt man \(${g[1]}\,€\), sonst nichts (Auszahlungen ohne Einsatz). Erwarteter Gewinn pro Spiel?`,
+    fields: [num(T`\(E(G) =\)`, E, 4, '€')],
+    sol: T`\(E = ${g[0]}\cdot\frac16 + ${g[1]}\cdot\frac26 + 0\cdot\frac36 - ${e} = ${fx(E)}\,€\). ${E > 0 ? 'Günstig für den Spieler.' : 'Ungünstig für den Spieler.'}`
+  };
+});
+G('zvpf', 's-zv', 'Portfolio aus zwei Wertpapieren (Szenarien)', () => {
+  const p = probs(3), x = [R(-10, 0), R(0, 8), R(8, 20)], y = [R(-5, 5), R(-2, 8), R(-5, 12)], w = pick([0.3, 0.5, 0.7]);
+  const z = x.map((v, i) => w * v + (1 - w) * y[i]), E = sum(z.map((v, i) => v * p[i])), V = sum(z.map((v, i) => (v - E) ** 2 * p[i]));
+  return {
+    q: T`Szenarien mit \(p = ${p.map(v => ntc(v)).join(',\\ ')}\). Rendite X: \(${x.join(',\\ ')}\), Y: \(${y.join(',\\ ')}\) (%). Portfolio \(w = ${ntc(w)}\) in X. Erwartungswert und Standardabweichung?`,
+    fields: [num(T`\(\mu_P =\)`, E, 4, '%'), num(T`\(\sigma_P =\)`, Math.sqrt(V), 4, '%')],
+    sol: T`Portfoliorenditen je Szenario: ${z.map(v => ntc(v)).join('; ')}. \(\mu_P = ${fx(E)}\), \(V = ${fx(V)}\), \(\sigma_P = ${fx(Math.sqrt(V))}\).`
+  };
+});
+G('betazv', 's-zv', 'Beta einer Zufallsvariablen', () => {
+  const VX = R(4, 50), rho = R(10, 95) / 100, VY = R(4, 80), C = rho * Math.sqrt(VX * VY);
+  return {
+    q: T`\(V(X) = ${VX}\), \(V(Y) = ${VY}\), \(\rho(X,Y) = ${ntc(rho)}\). Berechne \(\text{Cov}(X,Y)\) und \(\beta(X,Y)\).`,
+    fields: [num(T`\(\text{Cov}(X,Y) =\)`, C, 4), num(T`\(\beta(X,Y) =\)`, C / VX, 4)],
+    sol: T`\(\text{Cov} = \rho\sqrt{V(X)V(Y)} = ${ntc(rho)}\cdot\sqrt{${VX}\cdot ${VY}} = ${fx(C)}\), \(\beta = \frac{\text{Cov}}{V(X)} = ${fx(C / VX)}\)`
+  };
+});
+G('ex2', 's-zv', 'Varianz aus E(X²)', () => {
+  const E = R(-5, 10), V = R(1, 40), E2 = V + E * E;
+  return {
+    q: T`Für \(X\) gilt \(E(X) = ${E}\) und \(E(X^2) = ${E2}\). Berechne \(V(X)\) und \(\sigma_X\).`,
+    fields: [num(T`\(V(X) =\)`, V, 2), num(T`\(\sigma_X =\)`, Math.sqrt(V), 4)],
+    sol: T`\(V(X) = E(X^2) - E(X)^2 = ${E2} - ${par(E)}^2 = ${V}\), \(\sigma_X = ${fx(Math.sqrt(V))}\)`
+  };
+});
+G('drei', 's-zv', 'Portfolio aus drei Titeln', () => {
+  const s = [R(10, 30) / 10, R(10, 30) / 10, R(10, 30) / 10], r = [R(-5, 8) / 10, R(-5, 8) / 10, R(-5, 8) / 10], w = 1 / 3;
+  const c12 = r[0] * s[0] * s[1], c13 = r[1] * s[0] * s[2], c23 = r[2] * s[1] * s[2];
+  const V = w * w * (s[0] ** 2 + s[1] ** 2 + s[2] ** 2) + 2 * w * w * (c12 + c13 + c23);
+  return {
+    q: T`Gleichgewichtetes Portfolio aus drei Aktien: \(\sigma_1 = ${ntc(s[0])}\), \(\sigma_2 = ${ntc(s[1])}\), \(\sigma_3 = ${ntc(s[2])}\) (%), \(\rho_{12} = ${ntc(r[0])}\), \(\rho_{13} = ${ntc(r[1])}\), \(\rho_{23} = ${ntc(r[2])}\). Berechne \(\sigma_P\).`,
+    fields: [num(T`\(\sigma_P =\)`, Math.sqrt(V), 4, '%')],
+    sol: T`\(V = \sum w_i^2\sigma_i^2 + 2\sum_{i<j}w_iw_j\rho_{ij}\sigma_i\sigma_j = \frac19(${ntc(s[0] ** 2)} + ${ntc(s[1] ** 2)} + ${ntc(s[2] ** 2)}) + \frac29(${ntc(c12, 4)} + ${ntc(c13, 4)} + ${ntc(c23, 4)}) = ${fx(V)}\), \(\sigma_P = ${fx(Math.sqrt(V))}\)`
+  };
+});
+G('covregeln', 's-zv', 'Rechenregeln für Kovarianzen', () => {
+  const C = R(-10, 15), a = pick([2, 3, -1, 0.5]), b = pick([2, -2, 4, 0.5]), CXZ = R(-8, 8), CYZ = R(-8, 8), v = R(0, 1);
+  if (v === 0) return { q: T`\(\text{Cov}(X,Y) = ${C}\). Berechne \(\text{Cov}(${ntc(a)}X,\ ${ntc(b)}Y)\).`, fields: [num('Ergebnis', a * b * C, 2)], sol: T`\(\text{Cov}(aX, bY) = ab\,\text{Cov}(X,Y) = ${ntc(a)}\cdot ${par(b)}\cdot ${par(C)} = ${ntc(a * b * C)}\)` };
+  return { q: T`\(\text{Cov}(X,Z) = ${CXZ}\), \(\text{Cov}(Y,Z) = ${CYZ}\). Berechne \(\text{Cov}(X + Y,\ Z)\).`, fields: [num('Ergebnis', CXZ + CYZ, 2)], sol: T`\(\text{Cov}(X+Y, Z) = \text{Cov}(X,Z) + \text{Cov}(Y,Z) = ${CXZ} + ${par(CYZ)} = ${CXZ + CYZ}\)` };
+});
+GENS[GENS.length - 1].nv = 2;
+MCQ('zvmc', 's-zv', 'Verständnis: Zufallsvariablen', [
+  ['Was ist eine Zufallsvariable?', 'eine Größe, deren Wert vom Zufall abhängt und der Wahrscheinlichkeiten zugeordnet sind', ['eine feste Zahl', 'eine Datenreihe', 'ein Mittelwert']],
+  ['Was gilt immer für V(X)?', T`\(V(X) \ge 0\)`, [T`\(V(X) \le 1\)`, T`\(V(X) = E(X)\)`, T`\(V(X) < 0\) möglich`]],
+  [T`\(V(X + 5) =\) …`, T`\(V(X)\)`, [T`\(V(X) + 5\)`, T`\(V(X) + 25\)`, T`\(5V(X)\)`]],
+  [T`\(V(-X) =\) …`, T`\(V(X)\)`, [T`\(-V(X)\)`, '0', T`\(2V(X)\)`]],
+  [T`Sind \(X\) und \(Y\) unabhängig, gilt …`, T`\(\text{Cov}(X,Y) = 0\)`, [T`\(\text{Cov}(X,Y) = 1\)`, T`\(V(X+Y) = 0\)`, T`\(E(X) = E(Y)\)`]],
+  [T`\(\text{Cov}(X,X) =\) …`, T`\(V(X)\)`, ['0', '1', T`\(E(X)^2\)`]],
+  ['Wie lautet die Summe aller Wahrscheinlichkeiten einer diskreten Verteilung?', '1', ['0', '100', 'beliebig']],
+  ['Der Erwartungswert ist bei vielen Wiederholungen …', 'ungefähr der Mittelwert der Ergebnisse', ['das häufigste Ergebnis', 'immer ein möglicher Wert', 'der größte Wert']]
+]);
+
+/* ==================================================== 3.7 Normalverteilung */
+G('nvkurs', 's-nv', 'Wahrscheinlichkeit für einen Kursrückgang', () => {
+  const mu = R(4, 14), s = R(6, 25), K0 = R(40, 150), K1 = Math.round(K0 * (1 + R(-35, -5) / 100)), a = (K1 / K0 - 1) * 100, z = rnd((a - mu) / s, 2);
+  return {
+    q: T`Jahresrendite \(R \sim N(${mu}\,\%,\ (${s}\,\%)^2)\). Der Kurs beträgt heute \(${K0}\). Wie wahrscheinlich liegt er in einem Jahr höchstens bei \(${K1}\)?`, table: true,
+    fields: [num(T`nötige Rendite \(a =\)`, a, 2, '%'), num(T`\(P =\)`, Fst(z), 4)],
+    sol: T`\(a = \frac{${K1}}{${K0}} - 1 = ${nt(a)}\,\%\). \(z = \frac{${nt(a)} - ${mu}}{${s}} = ${nt(z)}\). \(P = F_{St}(${nt(z)}) = 1 - F_{St}(${nt(-z)}) = ${nt(Fst(z), 4)}\)`
+  };
+});
+G('nvzwischen', 's-nv', 'Wahrscheinlichkeit zwischen zwei Werten', () => {
+  const mu = R(0, 12), s = R(5, 20), a = mu + R(-25, 5) / 10 * s, b = mu + R(0, 25) / 10 * s, lo = Math.round(Math.min(a, b)), hi = Math.round(Math.max(a, b)) + 1;
+  const za = rnd((lo - mu) / s, 2), zb = rnd((hi - mu) / s, 2), P = rnd(Fst(zb) - Fst(za), 4);
+  return {
+    q: T`\(X \sim N(${mu},\ ${s}^2)\). Berechne \(P(${lo} \le X \le ${hi})\).`, table: true,
+    fields: [num(T`\(P =\)`, P, 4)],
+    sol: T`\(z_a = \frac{${lo} - ${mu}}{${s}} = ${nt(za)}\), \(z_b = \frac{${hi} - ${mu}}{${s}} = ${nt(zb)}\). \(P = F_{St}(${nt(zb)}) - F_{St}(${nt(za)}) = ${nt(Fst(zb), 4)} - ${nt(Fst(za), 4)} = ${nt(P, 4)}\)`
+  };
+});
+G('nvquant', 's-nv', 'Quantil über die Tabelle (rückwärts)', () => {
+  const mu = R(0, 20), s = R(2, 15), zt = R(10, 250) / 100, p = Fst(zt), lower = Math.random() < 0.5;
+  const pp = lower ? rnd(1 - p, 4) : p, x = lower ? mu - zt * s : mu + zt * s;
+  return {
+    q: T`\(X \sim N(${mu},\ ${s}^2)\). Bestimme den Wert \(x\) mit \(P(X \le x) = ${nt(pp, 4)}\).`, table: true,
+    fields: [num(T`\(x =\)`, x, 2)],
+    sol: T`${lower ? T`\(1 - F_{St}(a) = ${nt(pp, 4)}\Rightarrow F_{St}(a) = ${nt(p, 4)}\Rightarrow a = ${nt(zt)}\); \(x = \mu - a\sigma\)` : T`\(F_{St}(a) = ${nt(pp, 4)}\Rightarrow a = ${nt(zt)}\); \(x = \mu + a\sigma\)`} \(= ${mu} ${lower ? '-' : '+'} ${nt(zt)}\cdot ${s} = ${nt(x)}\)`
+  };
+});
+G('nvsigma', 's-nv', 'Volatilität aus Wahrscheinlichkeit', () => {
+  const mu = R(4, 12), zt = pick([1.282, 1.645, 1.96, 2.326]), p = { 1.282: 0.10, 1.645: 0.05, 1.96: 0.025, 2.326: 0.01 }[zt], s = R(5, 25), a = rnd(mu - zt * s, 2);
+  return {
+    q: T`Die Rendite sei normalverteilt mit \(\mu = ${mu}\,\%\). Mit \(${ntc(p * 100)}\,\%\) Wahrscheinlichkeit liegt sie unter \(${ntc(a)}\,\%\). Wie groß ist \(\sigma\)?`, table: true,
+    fields: [num(T`\(\sigma =\)`, (mu - a) / zt, 2, '%')],
+    sol: T`\(x_p = \mu - a\sigma\) mit \(a = ${ntc(zt, 3)}\): \(\sigma = \frac{${mu} - ${par(a)}}{${ntc(zt, 3)}} = ${nt((mu - a) / zt)}\,\%\)`
+  };
+});
+G('nvzstd', 's-nv', 'Standardisieren', () => {
+  const mu = R(-10, 50), s = R(2, 30), x = mu + R(-30, 30) / 10 * s;
+  return {
+    q: T`\(X \sim N(${mu},\ ${s}^2)\). Welcher \(z\)-Wert gehört zu \(x = ${ntc(rnd(x, 1))}\)?`,
+    fields: [num(T`\(z =\)`, (rnd(x, 1) - mu) / s, 2)],
+    sol: T`\(z = \frac{x - \mu}{\sigma} = \frac{${ntc(rnd(x, 1))} - ${par(mu)}}{${s}} = ${nt((rnd(x, 1) - mu) / s)}\)`
+  };
+});
+G('nvintervall', 's-nv', 'Symmetrisches Intervall bestimmen', () => {
+  const mu = R(0, 15), s = R(3, 20), lv = pick([[0.95, 1.96], [0.99, 2.576], [0.9, 1.645]]);
+  return {
+    q: T`\(X \sim N(${mu},\ ${s}^2)\). In welchem symmetrischen Intervall um \(\mu\) liegt \(X\) mit \(${ntc(lv[0] * 100)}\,\%\) Wahrscheinlichkeit?`, table: true,
+    fields: [num('untere Grenze', mu - lv[1] * s, 2), num('obere Grenze', mu + lv[1] * s, 2)],
+    sol: T`\(2F_{St}(a) - 1 = ${ntc(lv[0])}\Rightarrow F_{St}(a) = ${ntc((1 + lv[0]) / 2, 4)}\Rightarrow a = ${ntc(lv[1], 3)}\). Grenzen \(\mu \pm a\sigma = ${mu} \pm ${nt(lv[1] * s)}\).`
+  };
+});
+MCADD('nvmc', [
+  ['Wo liegt bei der Normalverteilung der Median?', 'beim Erwartungswert μ', ['links von μ', 'bei μ + σ', 'bei 0']],
+  [T`\(F_{St}(0) =\) …`, T`\(0{,}5\)`, ['0', '1', T`\(0{,}3989\)`]],
+  ['Wie viel Prozent liegen innerhalb μ ± σ?', T`etwa \(68{,}26\,\%\)`, [T`\(50\,\%\)`, T`\(95{,}44\,\%\)`, T`\(99{,}74\,\%\)`]],
+  [T`Für \(X \sim N(\mu, \sigma^2)\) ist \(aX + b\) …`, 'wieder normalverteilt', ['gleichverteilt', 'nicht mehr normalverteilt', 'standardnormalverteilt']]
+]);
+
+/* ==================================================== 3.8 ZGWS */
+G('mittelwertzgws', 's-zgws', 'Verteilung des Mittelwerts', () => {
+  const n = pick([25, 36, 49, 64, 100]), mu = R(5, 50), s = R(4, 20), sm = s / Math.sqrt(n), x = rnd(mu + R(-20, 20) / 10 * sm, 1), z = rnd((x - mu) / sm, 2);
+  return {
+    q: T`\(n = ${n}\) unabhängige Messungen mit \(\mu = ${mu}\), \(\sigma = ${s}\). Wie groß ist näherungsweise \(P(\bar X \le ${ntc(x)})\)?`, table: true,
+    fields: [num(T`\(\sigma_{\bar X} =\)`, sm, 4), num(T`\(P \approx\)`, Fst(z), 4)],
+    sol: T`\(\bar X = S/n\): \(E = ${mu}\), \(\sigma_{\bar X} = \frac{\sigma}{\sqrt n} = \frac{${s}}{${Math.sqrt(n)}} = ${fx(sm)}\). \(z = ${nt(z)}\), \(P \approx F_{St}(${nt(z)}) = ${nt(Fst(z), 4)}\)`
+  };
+});
+G('binom', 's-zgws', 'Normalapproximation der Binomialverteilung', () => {
+  const n = pick([100, 200, 400, 500]), p = pick([0.1, 0.2, 0.3, 0.5]), E = n * p, s = Math.sqrt(n * p * (1 - p)), k = Math.round(E + R(-15, 20) / 10 * s), z = rnd((k - E) / s, 2);
+  return {
+    q: T`Von \(n = ${n}\) Krediten fällt jeder unabhängig mit \(p = ${ntc(p)}\) aus. Bestimme Erwartungswert, Standardabweichung und näherungsweise \(P(S \le ${k})\).`, table: true,
+    fields: [num(T`\(E(S) =\)`, E, 2), num(T`\(\sigma_S =\)`, s, 4), num(T`\(P \approx\)`, Fst(z), 4)],
+    sol: T`\(E = np = ${ntc(E)}\), \(\sigma = \sqrt{np(1-p)} = ${fx(s)}\). \(z = \frac{${k} - ${ntc(E)}}{${fx(s)}} = ${nt(z)}\), \(P \approx ${nt(Fst(z), 4)}\)`
+  };
+});
+G('jahresrendite', 's-zgws', 'Tagesrenditen zur Jahresrendite', () => {
+  const mud = R(1, 8) / 100, sd = R(5, 25) / 10, n = 250, mu = n * mud, s = Math.sqrt(n) * sd;
+  return {
+    q: T`Tägliche Renditen sind unabhängig mit \(\mu = ${ntc(mud)}\,\%\) und \(\sigma = ${ntc(sd)}\,\%\). Bestimme Erwartungswert und Standardabweichung der Summe über 250 Handelstage.`,
+    fields: [num(T`\(\mu_{250} =\)`, mu, 2, '%'), num(T`\(\sigma_{250} =\)`, s, 2, '%')],
+    sol: T`\(\mu_{250} = 250\cdot ${ntc(mud)} = ${nt(mu)}\,\%\), \(\sigma_{250} = \sqrt{250}\cdot ${ntc(sd)} = ${nt(s)}\,\%\) – die Streuung wächst nur mit \(\sqrt n\).`
+  };
+});
+G('wuerfelsumme2', 's-zgws', 'Würfelsumme mindestens', () => {
+  const n = pick([20, 30, 50, 60]), E = 3.5 * n, s = Math.sqrt(n * 35 / 12), k = Math.round(E + R(5, 20) / 10 * s), z = rnd((k - E) / s, 2);
+  return {
+    q: T`Mit wie viel Prozent Wahrscheinlichkeit ist die Augensumme von \(${n}\) Würfeln mindestens \(${k}\) (Näherung über ZGWS)?`, table: true,
+    fields: [num(T`\(P \approx\)`, rnd(1 - Fst(z), 4), 4)],
+    sol: T`\(E = ${ntc(E)}\), \(\sigma_S = ${fx(s)}\), \(z = ${nt(z)}\). \(P(S \ge ${k}) \approx 1 - F_{St}(${nt(z)}) = ${nt(1 - Fst(z), 4)}\)`
+  };
+});
+G('nbenoetigt', 's-zgws', 'Wie viele Beobachtungen?', () => {
+  const s = R(5, 30), e = pick([0.5, 1, 2, 2.5]), n = Math.ceil((1.96 * s / e) ** 2);
+  return {
+    q: T`Messungen haben \(\sigma = ${s}\). Wie viele unabhängige Messungen braucht man mindestens, damit \(\bar X\) mit \(95\,\%\) Wahrscheinlichkeit höchstens \(${ntc(e)}\) von \(\mu\) abweicht?`,
+    fields: [num(T`\(n \ge\)`, n, 0)],
+    sol: T`\(1{,}96\cdot\frac{\sigma}{\sqrt n} \le ${ntc(e)}\Rightarrow n \ge \left(\frac{1{,}96\cdot ${s}}{${ntc(e)}}\right)^2 = ${nt((1.96 * s / e) ** 2)}\Rightarrow n = ${n}\)`
+  };
+});
+G('summevar', 's-zgws', 'Erwartungswert & Varianz einer Summe', () => {
+  const n = R(5, 50), mu = R(-5, 20), v = R(1, 30);
+  return {
+    q: T`\(X_1, \dots, X_{${n}}\) unabhängig mit \(E(X_i) = ${mu}\), \(V(X_i) = ${v}\). Bestimme \(E(S)\) und \(V(S)\) für \(S = \sum X_i\).`,
+    fields: [num(T`\(E(S) =\)`, n * mu, 2), num(T`\(V(S) =\)`, n * v, 2)],
+    sol: T`\(E(S) = n\mu = ${n * mu}\), \(V(S) = n\sigma^2 = ${n * v}\) (Kovarianzen sind wegen Unabhängigkeit 0).`
+  };
+});
+MCADD('zgwsmc', [
+  ['Warum werden Renditen oft als normalverteilt angenommen?', 'Sie entstehen aus vielen kleinen, unabhängigen Einflüssen (ZGWS).', ['Weil Kurse nie fallen.', 'Weil sie diskret sind.', 'Weil das Gesetz es vorschreibt.']],
+  ['Die Standardabweichung des Mittelwerts von n unabhängigen Beobachtungen ist …', T`\(\frac{\sigma}{\sqrt n}\)`, [T`\(\sigma\)`, T`\(n\sigma\)`, T`\(\frac{\sigma}{n}\)`]],
+  ['Was zeigt die Verteilung der Augensumme von 10 Würfeln?', 'Sie ist bereits annähernd glockenförmig.', ['Sie ist gleichverteilt.', 'Sie hat nur einen Wert.', 'Sie ist stark schief.']],
+  ['Die Verteilung der Summe nähert sich der Normalverteilung, wenn …', 'die Anzahl der Summanden groß wird', ['die Summanden stark korreliert sind', 'ein Summand dominiert', 'n = 1 ist']]
+]);
+
+
+/* ==================================================== Aufstockung */
+MCADD('rfmc', [
+  ['Konvergiert die Regula falsi immer gegen eine Nullstelle im Startintervall?', 'Ja, bei stetigem f und Vorzeichenwechsel bleibt die Nullstelle eingeschlossen.', ['Nein, sie divergiert oft.', 'Nur bei Polynomen.', 'Nur wenn f linear ist.']],
+  [T`Ist \(f\) linear, liefert die Regula falsi die Nullstelle …`, 'bereits im ersten Schritt exakt', ['nie exakt', 'erst nach 10 Schritten', 'nur näherungsweise']],
+  ['Was passiert, wenn f(a) und f(b) dasselbe Vorzeichen haben?', 'Das Verfahren ist nicht anwendbar – andere Startwerte wählen.', ['Man nimmt einfach x = a.', 'Die Nullstelle liegt sicher dazwischen.', 'Man vertauscht a und b.']]
+]);
+MCADD('effmc', [
+  ['Wie bestimmt man die Rendite einer 3-jährigen Kuponanleihe praktisch?', 'numerisch, z. B. mit der Regula falsi, oder näherungsweise mit der Praktikerformel', ['mit der p-q-Formel', 'durch Ablesen des Kupons', 'gar nicht']],
+  ['Rendite und Kurs einer Anleihe bewegen sich …', 'gegenläufig', ['gleichläufig', 'unabhängig', 'immer parallel']],
+  ['Der Effektivzins eines Kredits mit Gebühren ist …', 'höher als der Nominalzins', ['niedriger als der Nominalzins', 'gleich dem Nominalzins', 'immer 0']]
+]);
+MCADD('strukmc', [
+  [T`Welche Formel gilt für Forward Rates (exponentiell)?`, T`\((1 + r_{0t})^t = (1 + r_{0t'})^{t'}(1 + r_{t't})^{t-t'}\)`, [T`\(r_{t't} = r_{0t} - r_{0t'}\)`, T`\(r_{t't} = r_{0t}\cdot r_{0t'}\)`, T`\((1 + r_{0t}) = (1 + r_{t't})^t\)`]],
+  ['Eine inverse Zinsstruktur bedeutet …', 'kurzfristige Zinsen sind höher als langfristige', ['alle Zinsen sind negativ', 'langfristige Zinsen sind höher', 'Zinsen sind konstant']],
+  ['Warum diskontiert man mit Spot Rates statt mit einer Rendite?', 'Jede Zahlung wird mit dem für ihre Laufzeit passenden Zins bewertet.', ['Weil Spot Rates immer höher sind.', 'Weil es einfacher ist.', 'Weil die Rendite negativ ist.']]
+]);
+MCADD('deskmc', [
+  ['Was ist der Unterschied zwischen Datenreihe und Zufallsvariable?', 'Die Datenreihe enthält beobachtete Werte, die Zufallsvariable ist ein Modell mit Wahrscheinlichkeiten.', ['Es gibt keinen Unterschied.', 'Zufallsvariablen haben keinen Mittelwert.', 'Datenreihen sind immer normalverteilt.']],
+  [T`\(\sigma_{xy} > 0\) bedeutet …`, 'die Größen schwanken tendenziell gleichgerichtet', ['die Größen schwanken gegenläufig', 'kein Zusammenhang', 'beide Mittelwerte sind positiv']],
+  [T`Warum ist \(\sigma_x\) oft anschaulicher als \(\sigma_x^2\)?`, 'Sie hat dieselbe Einheit wie die Daten.', ['Sie ist immer kleiner.', 'Sie ist immer ganzzahlig.', 'Sie ist negativ möglich.']]
+]);
+MCADD('pfmc', [
+  ['Welches Portfolio hat das geringste Risiko bei ρ = −1?', T`\(w = \frac{\sigma_y}{\sigma_x + \sigma_y}\)`, [T`\(w = 0{,}5\)`, T`\(w = 1\)`, T`\(w = \frac{\sigma_x}{\sigma_x + \sigma_y}\)`]],
+  ['Wie hängt die Portfoliorendite von der Korrelation ab?', 'gar nicht', ['linear', 'quadratisch', 'exponentiell']],
+  ['Warum verwendet man oft gleichgewichtete Portfolios als Beispiel?', 'Mit w = 0,5 vereinfachen sich die Formeln, der Diversifikationseffekt ist gut sichtbar.', ['Weil sie das höchste Risiko haben.', 'Weil sie verboten sind.', 'Weil ρ dann 0 ist.']],
+  [T`\(\sigma_z^2\) enthält den Term \(2w(1-w)\sigma_{xy}\). Was bewirkt eine negative Kovarianz?`, 'Sie senkt das Portfoliorisiko.', ['Sie erhöht das Risiko.', 'Sie hat keinen Einfluss.', 'Sie senkt die Rendite.']]
+]);
+MCADD('regmc', [
+  ['Was ist α in der Regression von Aktie auf Index?', 'die mittlere Aktienrendite, die nicht durch den Index erklärt wird', ['die Steigung', 'die Korrelation', 'das Risiko']],
+  ['Eine Aktie mit β = 0,6 ist eher …', 'defensiv', ['aggressiv', 'risikolos', 'gegenläufig']],
+  ['Wie heißt das Modell mit einer Marktrendite als Einflussgröße?', 'Single-Index-Modell (Marktmodell)', ['Black-Scholes-Modell', 'Binomialmodell', 'Barwertmodell']],
+  ['Kann man aus ρ und den Standardabweichungen β berechnen?', T`ja: \(\beta = \rho\frac{\sigma_y}{\sigma_x}\)`, ['nein', T`ja: \(\beta = \rho\sigma_x\sigma_y\)`, 'nur bei ρ = 1']]
+]);
+MCADD('quantmc', [
+  ['Ein VaR von 4.236 € zum Niveau 95 % (10 Tage) heißt …', 'In 95 % der Fälle verliert man in 10 Tagen nicht mehr als 4.236 €.', ['Man verliert sicher 4.236 €.', 'Der maximale Verlust ist 4.236 €.', 'Man gewinnt 4.236 €.']],
+  ['Welche Schwäche hat der VaR?', 'Er sagt nichts über die Höhe der Verluste jenseits des Quantils.', ['Er ist immer negativ.', 'Er gilt nur für Aktien.', 'Er braucht keine Daten.']],
+  [T`\(n = 20\): Welches Quantil ist das Mittel aus \(x_{(4)}\) und \(x_{(5)}\)?`, T`das \(20\,\%\)-Quantil`, [T`das \(25\,\%\)-Quantil`, T`das \(4\,\%\)-Quantil`, 'der Median']],
+  ['Der VaR wird in der Praxis oft ermittelt durch …', 'Simulation oder Normalverteilungsannahme', ['Ableiten der Kostenfunktion', 'Bootstrapping', 'die Praktikerformel']]
+]);
+MCADD('zgwsmc', [
+  ['Unter welcher Bedingung ist die Summe von Zufallsvariablen exakt normalverteilt?', 'wenn die Summanden unabhängig und selbst normalverteilt sind', ['immer', 'nie', 'nur bei n = 2']],
+  ['Warum braucht die Binomialverteilung bei kleinem p ein großes n für die Normalapproximation?', 'Sie ist sonst stark schief.', ['Sie ist sonst symmetrisch.', 'Weil p negativ ist.', 'Weil E = 0 ist.']],
+  ['Die Varianz der Summe unabhängiger Zufallsvariablen ist …', 'die Summe der Varianzen', ['das Produkt der Varianzen', 'die Summe der Standardabweichungen', 'immer 1']],
+  ['Welches Beispiel zeigt das Skript zum ZGWS?', 'Augensummen beim Werfen mehrerer Würfel', ['Kupons von Anleihen', 'Polynomdivision', 'Zinsstruktur']]
+]);
+
+/* ==================================================== Zuordnung */
 const GEN_BY_ID = Object.fromEntries(GENS.map(g => [g.id, g]));
 const gensOf = tid => GENS.filter(g => g.topic === tid);
+const variantsOf = tid => sum(gensOf(tid).map(g => g.mcq ? MCBANK[g.id].length : (g.nv || 1)));
 
 "use strict";
 /* ============ Oberfläche ============ */
@@ -1494,6 +2921,10 @@ function viewHome() {
   <div class="glass kcard" style="margin-top:14px;--acc:#94a3b8;--accb:#64748b" data-modal="fst">
     <div class="row"><div class="ico">${ICONS.table}</div><div class="sp" style="margin-left:12px"><h3 style="margin:0">Tabelle \\(F_{St}(z)\\)</h3>
     <div class="sub">Standardnormalverteilung wie in der Formelsammlung</div></div></div>
+  </div>
+  <div class="glass kcard" style="margin-top:14px;--acc:#fbbf24;--accb:#f97316" data-go="#/formeln">
+    <div class="row"><div class="ico">${ICONS.book}</div><div class="sp" style="margin-left:12px"><h3 style="margin:0">Formelsammlung</h3>
+    <div class="sub">Komplette Klausur-Formelsammlung zum Nachschlagen</div></div>${ICONS.next.replace('<svg', '<svg style="width:22px;color:var(--muted)"')}</div>
   </div>`;
 }
 
@@ -1505,7 +2936,7 @@ function viewChapter(cid) {
   <div class="list">${TOPICS.filter(t => t.ch === cid).map(t => `
     <div class="glass trow" data-go="#/t/${t.id}">
       <span class="num">${t.nr}</span>
-      <div class="t"><b>${t.title}</b><small>${gensOf(t.id).length} Aufgabentypen</small></div>
+      <div class="t"><b>${t.title}</b><small>${variantsOf(t.id)} Aufgabenvarianten</small></div>
       ${ring(topicProgress(t.id))}
     </div>`).join('')}
   </div>
@@ -1526,7 +2957,10 @@ function viewTopic(tid, tab) {
   return `<div class="${c.cls}">` + header(t.title, '#/k/' + t.ch) + `<div style="margin-top:4px" class="muted small">${t.nr} · ${c.short}</div>` + tabs + body + `</div>`;
 }
 /* gewichtete Auswahl: Aufgabentypen mit Fehlern / wenig Übung häufiger */
+const LASTG = [];
 function chooseGen(list) {
+  const avoid = LASTG.slice(-Math.min(3, Math.max(0, list.length - 2)));
+  const cand = list.filter(g => !avoid.includes(g.id)); if (cand.length) list = cand;
   const w = list.map(g => { const s = Store.d.g[g.id]; if (!s || !s.last.length) return 3; return 1 + 3 * (1 - sum(s.last) / s.last.length); });
   let x = Math.random() * sum(w); for (let i = 0; i < list.length; i++) { x -= w[i]; if (x <= 0) return list[i]; } return list[list.length - 1];
 }
@@ -1595,7 +3029,7 @@ function mountPractice(tid) {
 function nextPractice(tid) {
   const sel = document.getElementById('gsel');
   const gen = sel.value ? GEN_BY_ID[sel.value] : chooseGen(gensOf(tid));
-  cur = newTask(gen); cur.done = false;
+  cur = newTask(gen); cur.done = false; LASTG.push(gen.id); if (LASTG.length > 10) LASTG.shift();
   const box = document.getElementById('taskbox');
   box.innerHTML = md(taskHTML(cur, { actions: `<button class="btn pri grow" id="chk">${ICONS.check} Prüfen</button><button class="btn" id="skip">Neue Aufgabe</button>` }));
   wireTask(box, cur);
@@ -1652,12 +3086,16 @@ function mountTestSetup() {
 }
 function startTest() {
   const cfg = TestState.cfg;
-  let pool = GENS.filter(g => cfg.topics.includes(g.topic) && (cfg.mc || !/mc$/.test(g.id)));
+  let pool = GENS.filter(g => cfg.topics.includes(g.topic) && (cfg.mc || !g.mcq));
   if (!pool.length) pool = GENS.filter(g => cfg.topics.includes(g.topic));
   /* möglichst gleichmäßig über Unterthemen verteilen */
   const byT = {}; pool.forEach(g => (byT[g.topic] = byT[g.topic] || []).push(g));
   const tids = shuffle(Object.keys(byT)), items = [];
-  let k = 0; while (items.length < cfg.n) { const tid = tids[k % tids.length]; items.push(newTask(pick(byT[tid]))); k++; }
+  const used = new Set(); let k = 0;
+  while (items.length < cfg.n) {
+    const tid = tids[k % tids.length], fresh = byT[tid].filter(g => !used.has(g.id) || g.mcq);
+    const g = pick(fresh.length ? fresh : byT[tid]); used.add(g.id); items.push(newTask(g)); k++;
+  }
   TestState.items = shuffle(items).map(t => ({ task: t, ans: null, res: null }));
   TestState.idx = 0; TestState.t0 = Date.now();
   location.hash = '#/test/run';
@@ -1714,6 +3152,18 @@ function viewTestResult() {
   <div class="actions"><button class="btn pri grow" data-go="#/test">Neuer Test</button><button class="btn" data-go="#/">Start</button></div></div>`;
 }
 
+/* ------------------------------------------------ Formelsammlung */
+function viewFormeln(sec) {
+  return `<div style="--acc:#fbbf24;--accb:#f97316">` + header('Formelsammlung', '#/') + `
+  <div class="hero"><h2>Formelsammlung</h2><p>Mathematik und Statistik · wie in der Klausur</p></div>
+  <div class="chips" style="margin-bottom:14px">${FORMELN.map(f => `<button class="tog ${sec === f.id ? 'on' : ''}" data-fjump="${f.id}">${f.title}</button>`).join('')}</div>
+  ${FORMELN.map(f => `<div class="glass sheet" id="f-${f.id}" style="margin-bottom:14px"><h3 style="font-size:19px">${f.title}</h3>${f.html}</div>`).join('')}</div>`;
+}
+function mountFormeln() {
+  const t = document.getElementById('fsttab'); if (t) t.innerHTML = fstTableHTML();
+  $app.querySelectorAll('[data-fjump]').forEach(b => b.onclick = () => { const el = document.getElementById('f-' + b.dataset.fjump); el && window.scrollTo({ top: el.getBoundingClientRect().top + scrollY - 70, behavior: 'smooth' }); });
+}
+
 /* ------------------------------------------------ Modal */
 function openModal(kind) {
   if (kind !== 'fst') return;
@@ -1736,6 +3186,7 @@ function render() {
   let html, mount = null;
   if (parts[0] === 'k' && chapterOf(+parts[1])) html = viewChapter(+parts[1]);
   else if (parts[0] === 't' && topicOf(parts[1])) { html = viewTopic(parts[1], parts[2]); if (parts[2] === 'ueben') mount = () => mountPractice(parts[1]); }
+  else if (parts[0] === 'formeln') { html = viewFormeln(); mount = mountFormeln; }
   else if (parts[0] === 'test' && parts[1] === 'run') { html = viewTestRun(); mount = mountTestRun; }
   else if (parts[0] === 'test' && parts[1] === 'result') html = viewTestResult();
   else if (parts[0] === 'test') { html = viewTestSetup(q); mount = mountTestSetup; }
