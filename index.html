@@ -7,6 +7,9 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <title>Mathe & Statistik – Lernapp</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-180.png">
 <style>:root{
   --bg1:#0b1020; --bg2:#141a33;
   --glass:rgba(255,255,255,.07); --glass2:rgba(255,255,255,.11);
@@ -1476,7 +1479,7 @@ function header(title, back, extra = '') {
 function viewHome() {
   const last = Store.d.tests.slice(-1)[0];
   return header('Mathe & Statistik', null) + `
-  <div class="hero"><h2>Hallo Jan 👋</h2><p>BA Mathematik und Statistik · Frankfurt School</p></div>
+  <div class="hero"><p>BA Mathematik und Statistik · Frankfurt School</p></div>
   <div class="grid cols">${CHAPTERS.map(c => `
     <div class="glass kcard ${c.cls}" data-go="#/k/${c.id}">
       <div class="ico">${ICONS[c.icon]}</div>
@@ -1747,6 +1750,7 @@ document.addEventListener('click', e => {
 window.addEventListener('hashchange', render);
 Store.load();
 render();
-</script>
+
+if ('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('sw.js').catch(() => {});</script>
 </body>
 </html>
