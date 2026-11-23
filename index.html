@@ -160,6 +160,8 @@ select.sel{background:rgba(0,0,0,.25);color:var(--txt);border:1px solid var(--li
 .sp{flex:1}
 .empty{padding:30px;text-align:center;color:var(--muted)}
 .q .box{border-left:3px solid var(--acc);background:rgba(255,255,255,.05);padding:10px 12px;border-radius:0 12px 12px 0}
+
+.lexletter{font-size:20px;font-weight:800;color:var(--acc);margin:10px 4px 2px;letter-spacing:.5px}
 </style>
 </head>
 <body>
@@ -3144,6 +3146,11 @@ function viewHome() {
   const last = Store.d.tests.slice(-1)[0];
   return header('Mathe & Statistik', null) + `
   <div class="hero"><p>BA Mathematik und Statistik · Frankfurt School</p></div>
+  ${Store.d.activeTest && Store.d.activeTest.items ? (() => { const a = Store.d.activeTest, done = a.items.filter(it => it.ans && it.ans.some(x => x != null && x !== '')).length;
+    return `<div class="glass kcard kt" style="margin-bottom:14px;border-color:var(--acc)" data-go="#/test/run">
+    <div class="row"><div class="ico">${ICONS.test}</div><div class="sp" style="margin-left:12px"><h3 style="margin:0">Test fortsetzen</h3>
+    <div class="sub">Aufgabe ${(a.idx || 0) + 1} von ${a.items.length} · ${done} beantwortet · ${Math.round((a.elapsed || 0) / 60000)} min</div></div>
+    <button class="btn" data-discard="1" style="padding:8px 12px;font-size:13px">Verwerfen</button></div></div>`; })() : ''}
   <div class="grid cols">${CHAPTERS.map(c => `
     <div class="glass kcard ${c.cls}" data-go="#/k/${c.id}">
       <div class="ico">${ICONS[c.icon]}</div>
@@ -3299,6 +3306,31 @@ function wireTask(root, task) {
 
 /* ------------------------------------------------ Test */
 const TestState = { cfg: null, items: [], idx: 0 };
+/* Laufenden Test im Browser speichern, damit er nach dem Schließen der App weitergeht.
+   Term-Aufgaben (Funktion zum Prüfen) werden als Wertetabelle gespeichert. */
+const EXPR_PTS = [0.37, 0.81, 1.23, 1.67, 2.11, 2.53, 3.07, -0.6, -1.3];
+function serTask(t) {
+  return Object.assign({}, t, { fields: t.fields.map(f => f.type !== 'expr' ? f : Object.assign({}, f, { fn: undefined, vals: EXPR_PTS.map(x => { const y = f.fn(x); return isFinite(y) ? y : null; }) })) });
+}
+function deserTask(t) {
+  t.fields.forEach(f => { if (f.type === 'expr' && f.vals) { const v = f.vals; f.fn = x => { const i = EXPR_PTS.indexOf(x); return i < 0 || v[i] == null ? NaN : v[i]; }; } });
+  return t;
+}
+function elapsedMs() { return (TestState.elapsed || 0) + (Date.now() - (TestState.resumeAt || Date.now())); }
+function saveTest() {
+  if (!TestState.items.length || TestState.items[0].res) return;
+  Store.d.activeTest = { items: TestState.items.map(it => ({ task: serTask(it.task), ans: it.ans })), idx: TestState.idx, elapsed: elapsedMs(), saved: Date.now() };
+  Store.save();
+}
+function restoreTest() {
+  const a = Store.d.activeTest; if (!a || !a.items) return false;
+  try {
+    TestState.items = a.items.map(it => ({ task: deserTask(it.task), ans: it.ans, res: null }));
+    TestState.idx = Math.min(a.idx || 0, TestState.items.length - 1); TestState.elapsed = a.elapsed || 0; TestState.resumeAt = Date.now();
+    return true;
+  } catch (e) { delete Store.d.activeTest; Store.save(); return false; }
+}
+function discardTest() { delete Store.d.activeTest; Store.save(); TestState.items = []; }
 function viewTestSetup(q) {
   const pre = q.ch ? [+q.ch] : [1, 2, 3];
   const cfg = TestState.cfg = TestState.cfg && !q.ch ? TestState.cfg : { ch: pre, topics: TOPICS.filter(t => pre.includes(t.ch)).map(t => t.id), n: 10, mc: true };
@@ -3308,6 +3340,7 @@ function viewTestSetup(q) {
   <div class="glass sect"><h4>Unterthemen</h4><div class="chips">${TOPICS.filter(t => cfg.ch.includes(t.ch)).map(t => `<button class="tog ${chapterOf(t.ch).cls} ${cfg.topics.includes(t.id) ? 'on' : ''}" data-ttop="${t.id}">${t.nr} ${esc(t.title)}</button>`).join('')}</div></div>
   <div class="glass sect"><h4>Anzahl Aufgaben</h4><div class="chips">${[5, 10, 15, 20].map(n => `<button class="tog ${cfg.n === n ? 'on' : ''}" data-tn="${n}">${n}</button>`).join('')}</div>
   <h4 style="margin-top:14px">Aufgabenarten</h4><div class="chips"><button class="tog ${cfg.mc ? 'on' : ''}" data-tmc="1">inkl. Verständnisfragen (MC)</button></div></div>
+  ${Store.d.activeTest ? `<p class="small muted" style="margin-top:12px">Hinweis: Ein neuer Test ersetzt deinen angefangenen Test. <a href="#/test/run" style="color:var(--acc)">Angefangenen Test fortsetzen</a></p>` : ''}
   <div class="actions"><button class="btn pri grow" id="tstart" ${cfg.topics.length ? '' : 'disabled'}>${ICONS.test} Test starten</button></div></div>`;
 }
 function mountTestSetup() {
@@ -3336,11 +3369,12 @@ function startTest() {
     const g = pick(fresh.length ? fresh : byT[tid]); used.add(g.id); items.push(newTask(g)); k++;
   }
   TestState.items = shuffle(items).map(t => ({ task: t, ans: null, res: null }));
-  TestState.idx = 0; TestState.t0 = Date.now();
+  TestState.idx = 0; TestState.elapsed = 0; TestState.resumeAt = Date.now();
+  saveTest();
   location.hash = '#/test/run';
 }
 function viewTestRun() {
-  if (!TestState.items.length) return viewTestSetup({});
+  if ((!TestState.items.length || TestState.items[0].res) && !restoreTest()) return viewTestSetup({});
   const i = TestState.idx, N = TestState.items.length, it = TestState.items[i];
   const last = i === N - 1;
   return `<div class="kt">` + header(`Test · ${i + 1}/${N}`, '#/test') + `<div class="prog"><i style="width:${(i) / N * 100}%"></i></div><div style="height:14px"></div>
@@ -3351,11 +3385,12 @@ function mountTestRun() {
   const it = TestState.items[TestState.idx];
   wireTask(box, it.task);
   if (it.ans) it.task.fields.forEach((f, i) => { const a = it.ans[i]; if (f.type === 'mc') { if (a != null) box.querySelector(`[data-mc="${i}:${a}"]`).classList.add('sel'); } else box.querySelector('#in' + i).value = a || ''; });
-  const save = () => { it.ans = readAnswers(it.task, box); };
-  const p = document.getElementById('tprev'); if (p) p.onclick = () => { save(); TestState.idx--; render(); };
+  const save = () => { it.ans = readAnswers(it.task, box); saveTest(); };
+  box.addEventListener('input', save); box.addEventListener('click', e => { if (e.target.closest('[data-mc]')) setTimeout(save, 0); });
+  const p = document.getElementById('tprev'); if (p) p.onclick = () => { save(); TestState.idx--; saveTest(); render(); };
   document.getElementById('tnext').onclick = () => {
     save();
-    if (TestState.idx < TestState.items.length - 1) { TestState.idx++; render(); window.scrollTo(0, 0); }
+    if (TestState.idx < TestState.items.length - 1) { TestState.idx++; saveTest(); render(); window.scrollTo(0, 0); }
     else finishTest();
   };
 }
@@ -3367,7 +3402,7 @@ function finishTest() {
     pts += it.res.filter(r => r.st !== 'bad').length / it.res.length;
   });
   const score = pts / TestState.items.length;
-  Store.d.tests.push({ date: Date.now(), score, n: TestState.items.length, mins: Math.round((Date.now() - TestState.t0) / 60000) }); Store.d.tests = Store.d.tests.slice(-30); Store.save();
+  Store.d.tests.push({ date: Date.now(), score, n: TestState.items.length, mins: Math.round(elapsedMs() / 60000) }); delete Store.d.activeTest; Store.d.tests = Store.d.tests.slice(-30); Store.save();
   TestState.score = score; location.hash = '#/test/result';
 }
 function viewTestResult() {
@@ -3415,11 +3450,19 @@ function lexFiltered() {
   const q = LexState.q.trim().toLowerCase();
   return LEX.filter(e => (!LexState.cat || e.cat === LexState.cat) && (!q || lexPlain(e.term).toLowerCase().includes(q) || e.def.toLowerCase().includes(q)));
 }
+/* Sortierschlüssel: TeX-Befehle entfernen, z. B. "\\(\\sigma_{xy}\\)" -> "sigmaxy" */
+const lexKey = t => lexPlain(t).replace(/\\(text|bar|tilde|mathbb|operatorname)\b/g, '').replace(/\\/g, '').replace(/ℕ/g, 'N').replace(/ℝ/g, 'R').replace(/[^0-9A-Za-zÄÖÜäöüß]/g, '');
 function lexListHTML() {
-  const l = lexFiltered(); if (!l.length) return '<div class="empty">Kein Begriff gefunden.</div>';
+  const l = lexFiltered().slice().sort((a, b) => lexKey(a.term).localeCompare(lexKey(b.term), 'de', { sensitivity: 'base' }));
+  if (!l.length) return '<div class="empty">Kein Begriff gefunden.</div>';
   const fach = b => b === 0 ? 'neu' : b >= 5 ? 'sicher' : 'Fach ' + b;
-  return l.map(e => `<details class="glass lexrow"><summary><b class="sp">${e.term}</b><span class="badge">${fach(lexBox(e.id))}</span></summary>
-    <div class="def">${e.def}</div>${e.f ? `<div class="fm">\\[${e.f}\\]</div>` : ''}<div class="small muted">${lexCat(e.cat).name}</div></details>`).join('');
+  let last = '';
+  return l.map(e => {
+    let L = lexKey(e.term).charAt(0).toUpperCase(); L = L.normalize('NFD').charAt(0); if (!/[A-Z]/.test(L)) L = '#';
+    const head = L !== last ? `<div class="lexletter">${L}</div>` : ''; last = L;
+    return head + `<details class="glass lexrow"><summary><b class="sp">${e.term}</b><span class="badge">${fach(lexBox(e.id))}</span></summary>
+    <div class="def">${e.def}</div>${e.f ? `<div class="fm">\\[${e.f}\\]</div>` : ''}<div class="small muted">${lexCat(e.cat).name}</div></details>`;
+  }).join('');
 }
 function mountLex() {
   const inp = document.getElementById('lexq');
@@ -3504,10 +3547,15 @@ function render() {
   if (mount) mount();
 }
 document.addEventListener('click', e => {
+  const dc = e.target.closest('[data-discard]'); if (dc) { e.preventDefault(); e.stopPropagation(); discardTest(); render(); return; }
   const go = e.target.closest('[data-go]'); if (go) { e.preventDefault(); const h = go.dataset.go; if (location.hash === h || (h === '#/' && !location.hash)) render(); else location.hash = h; window.scrollTo(0, 0); return; }
   const mo = e.target.closest('[data-modal]'); if (mo) openModal(mo.dataset.modal);
 });
 window.addEventListener('hashchange', render);
+document.addEventListener('visibilitychange', () => {
+  if (!TestState.items.length || TestState.items[0].res) return;
+  if (document.hidden) { TestState.elapsed = elapsedMs(); TestState.resumeAt = null; saveTest(); } else TestState.resumeAt = Date.now();
+});
 Store.load();
 render();
 
