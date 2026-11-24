@@ -162,6 +162,10 @@ select.sel{background:rgba(0,0,0,.25);color:var(--txt);border:1px solid var(--li
 .q .box{border-left:3px solid var(--acc);background:rgba(255,255,255,.05);padding:10px 12px;border-radius:0 12px 12px 0}
 
 .lexletter{font-size:20px;font-weight:800;color:var(--acc);margin:10px 4px 2px;letter-spacing:.5px}
+
+.pm{flex:none;width:52px;height:50px;border-radius:12px;border:1px solid var(--line2);background:var(--glass2);color:var(--txt);font:inherit;font-size:22px;font-weight:600;cursor:pointer;touch-action:manipulation}
+.pm:active{transform:scale(.95);background:color-mix(in srgb,var(--acc) 25%,transparent)}
+.pm:disabled{opacity:.35}
 </style>
 </head>
 <body>
@@ -3221,7 +3225,7 @@ function taskHTML(task, opts = {}) {
     if (f.type === 'mc') return `<div class="field" data-i="${i}">${f.label ? `<label>${f.label}</label>` : ''}<div class="mc">${f.opts.map((o, j) => `<button data-mc="${i}:${j}">${o}</button>`).join('')}</div><div class="fb"></div></div>`;
     const hint = f.type === 'expr' ? `<div class="hint">z. B. 3x^2 - 2x + 1 · e^(2x) · ln(x) · sqrt(x) · Variable: ${f.v}</div><div class="preview" id="pv${i}"></div>` : (f.unit === '%' ? '<div class="hint">in Prozent, z. B. 4,07</div>' : '');
     return `<div class="field" data-i="${i}"><label>${f.label}${f.type === 'num' ? ` <span class="small">(${f.dec} Nachkommastellen)</span>` : ''}</label>
-      <div class="inrow"><input id="in${i}" ${f.type === 'num' ? 'inputmode="decimal"' : 'autocapitalize="off" autocomplete="off" spellcheck="false"'} enterkeyhint="done"/>${f.unit ? `<span class="unit">${f.unit.replace('%²', '%²')}</span>` : ''}</div>${hint}<div class="fb"></div></div>`;
+      <div class="inrow"><input id="in${i}" ${f.type === 'num' ? 'inputmode="decimal"' : 'autocapitalize="off" autocomplete="off" spellcheck="false"'} enterkeyhint="done"/>${f.type === 'num' ? `<button type="button" class="pm" data-pm="${i}" aria-label="Vorzeichen wechseln">±</button>` : ''}${f.unit ? `<span class="unit">${f.unit.replace('%²', '%²')}</span>` : ''}</div>${hint}<div class="fb"></div></div>`;
   }).join('');
   return `<div class="glass task">
     <div class="meta"><span class="chip acc">${esc(g.title)}</span>${opts.showTopic ? `<span class="chip">${t.nr} ${esc(t.title)}</span>` : ''}${task.table ? `<button class="chip" data-modal="fst" style="cursor:pointer">${'Tabelle F_St'}</button>` : ''}</div>
@@ -3255,7 +3259,7 @@ function showGrading(task, root, res) {
     const el = root.querySelector(`.field[data-i="${i}"]`), fb = el.querySelector('.fb'), r = res[i];
     el.classList.remove('ok', 'bad', 'near'); el.classList.add(r.st);
     if (f.type === 'mc') { el.querySelectorAll('[data-mc]').forEach(b => { const j = +b.dataset.mc.split(':')[1]; if (j === f.ans) b.classList.add('right'); else if (b.classList.contains('sel')) b.classList.add('wrong'); b.disabled = true; }); }
-    else el.querySelector('input').disabled = true;
+    else { el.querySelector('input').disabled = true; const pm = el.querySelector('.pm'); if (pm) pm.disabled = true; }
     fb.className = 'fb ' + r.st;
     fb.innerHTML = r.st === 'ok' ? '✓ richtig' : r.st === 'near' ? '≈ fast – Rundungsabweichung, Lösung: ' + correctText(f) : '✗ ' + (r.msg ? r.msg + ' – ' : '') + (f.type === 'mc' ? 'siehe markierte Antwort' : 'Lösung: ' + correctText(f));
   });
@@ -3293,6 +3297,18 @@ function nextPractice(tid) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 function wireTask(root, task) {
+  /* ±-Taste: Vorzeichen umschalten, Tastatur bleibt offen */
+  root.querySelectorAll('[data-pm]').forEach(b => {
+    b.addEventListener('pointerdown', e => e.preventDefault());
+    b.onclick = e => {
+      e.preventDefault();
+      const inp = root.querySelector('#in' + b.dataset.pm); if (!inp || inp.disabled) return;
+      const v = inp.value.trim();
+      inp.value = v.startsWith('-') || v.startsWith('−') ? v.slice(1) : '-' + v;
+      inp.dispatchEvent(new Event('input', { bubbles: true }));
+      inp.focus(); const n = inp.value.length; try { inp.setSelectionRange(n, n); } catch (_) { }
+    };
+  });
   root.querySelectorAll('[data-mc]').forEach(b => b.onclick = () => {
     const [i] = b.dataset.mc.split(':'); root.querySelectorAll(`[data-mc^="${i}:"]`).forEach(x => x.classList.remove('sel')); b.classList.add('sel');
   });
