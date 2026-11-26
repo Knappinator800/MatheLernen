@@ -166,6 +166,13 @@ select.sel{background:rgba(0,0,0,.25);color:var(--txt);border:1px solid var(--li
 .pm{flex:none;width:52px;height:50px;border-radius:12px;border:1px solid var(--line2);background:var(--glass2);color:var(--txt);font:inherit;font-size:22px;font-weight:600;cursor:pointer;touch-action:manipulation}
 .pm:active{transform:scale(.95);background:color-mix(in srgb,var(--acc) 25%,transparent)}
 .pm:disabled{opacity:.35}
+
+.fsref{display:flex;gap:7px;align-items:flex-start;margin-top:10px;font-size:12.5px;color:var(--muted);line-height:1.45}
+.fsref svg{width:14px;height:14px;flex:none;margin-top:2px;color:#fbbf24}
+.fsref a{color:#fcd34d;text-decoration:none;border-bottom:1px dotted rgba(252,211,77,.5);cursor:pointer}
+
+.flashhl{animation:hl 1.6s ease-out}
+@keyframes hl{0%{background:rgba(251,191,36,.35);box-shadow:0 0 0 6px rgba(251,191,36,.35);border-radius:6px}100%{background:transparent;box-shadow:0 0 0 6px transparent}}
 </style>
 </head>
 <body>
@@ -741,7 +748,7 @@ function fstTableHTML() {
 "use strict";
 /* ============ Formelsammlung (wie Klausur-Formelsammlung, Stand 14. Januar 2025) ============ */
 const FORMELN = [
-{ id: 'elem', title: 'Elementare Rechenregeln', html: T`
+{ id: 'elem', pages: '1', title: 'Elementare Rechenregeln', html: T`
 <h3>Rechenregeln für Potenzen, Wurzeln und Logarithmen</h3>
 <p>Für reelle Zahlen \(x\), \(y\) und \(z\), für die die jeweiligen Ausdrücke gebildet werden dürfen, gilt:</p>
 \[x^{-y} = \frac{1}{x^y}\qquad x^y\cdot x^z = x^{y+z}\qquad \log(x\cdot y) = \log x + \log y\]
@@ -754,7 +761,7 @@ const FORMELN = [
 <p><b>a-b-c-Formel:</b> Liegt die Gleichung in der Form \(a\cdot x^2 + b\cdot x + c = 0\) mit \(a \ne 0\) vor, kann sie durch Division durch \(a\) auf die p-q-Form gebracht werden, oder direkt:</p>
 \[x_{1/2} = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}\]
 <p>Reelle Lösungen ergeben sich für \(b^2 - 4ac \ge 0\).</p>`},
-{ id: 'fin', title: 'Finanzmathematik', html: T`
+{ id: 'fin', pages: '2–3', title: 'Finanzmathematik', html: T`
 <h3>Zinsfaktoren</h3>
 <p>Ein Kapitalbetrag \(K_0\) wird einmalig über einen Zinszeitraum von \(t\) Jahren zu einem festen Zinssatz \(r\) (p.a.) angelegt. Mit dem Zinsfaktor \(ZF\) ergibt sich das Endkapital</p>
 \[K_t = ZF\cdot K_0\]
@@ -791,7 +798,7 @@ const FORMELN = [
 \[r_{01} = k_1,\qquad r_{0n} = \sqrt[n]{\frac{1 + k_n}{1 - k_n\sum_{i=1}^{n-1}(1 + r_{0i})^{-i}}} - 1\]
 <p><b>Par Rates</b> \(k_n\) aus den Zero Rates:</p>
 \[k_n = \frac{1 - (1 + r_{0n})^{-n}}{\sum_{i=1}^n (1 + r_{0i})^{-i}}\]`},
-{ id: 'fkt', title: 'Funktionen und Differentialrechnung', html: T`
+{ id: 'fkt', pages: '4–5', title: 'Funktionen und Differentialrechnung', html: T`
 <h3>Lineare Funktionen</h3>
 <div class="scroll"><table class="tb"><tr><th></th><th>gegeben</th><th>Funktionsterm</th></tr>
 <tr><th>Punkt-Steigungs-Form</th><td>Punkt \((x_1, y_1)\), Steigung \(a\)</td><td>\(y = f(x) = a\cdot(x - x_1) + y_1\)</td></tr>
@@ -836,7 +843,7 @@ oder \(f'(x_0) = 0\) und \(f''(x_0) < 0\) (Konkavität) \(\Rightarrow\) lokales 
 <div class="box"><b>notwendig:</b> \(f''(x_0) = 0\) (keine Krümmung), \(x_0\) ist dann Stelle eines Flachpunkts.<br>
 <b>hinreichend:</b> \(f''(x_0) = 0\) und \(f'''(x_0) > 0\) (Übergang Rechts- auf Linkskrümmung) \(\Rightarrow\) Wendestelle (konkav/konvex)<br>
 oder \(f''(x_0) = 0\) und \(f'''(x_0) < 0\) (Übergang Links- auf Rechtskrümmung) \(\Rightarrow\) Wendestelle (konvex/konkav)</div>`},
-{ id: 'stat', title: 'Statistik', html: T`
+{ id: 'stat', pages: '6–7', title: 'Statistik', html: T`
 <h3>Maßzahlen der beschreibenden Statistik</h3>
 <p>Zu einer Zahlenreihe \(x_1, \dots, x_n\):</p>
 \[\bar x = \frac1n\sum_{i=1}^n x_i\qquad \sigma_x^2 = \frac1n\sum_{i=1}^n (x_i - \bar x)^2 = \frac1n\sum_{i=1}^n x_i^2 - \bar x^2 = \overline{x^2} - \bar x^2\qquad \sigma_x = \sqrt{\sigma_x^2}\]
@@ -863,9 +870,15 @@ oder \(f''(x_0) = 0\) und \(f'''(x_0) < 0\) (Übergang Links- auf Rechtskrümmun
 <p>Gewichtete Summe \(\sum_{i=1}^n w_iX_i\):</p>
 \[E\left(\sum_{i=1}^n w_iX_i\right) = \sum_{i=1}^n w_iE(X_i)\]
 \[V\left(\sum_{i=1}^n w_iX_i\right) = \sum_{i=1}^n\sum_{j=1}^n w_iw_j\,\text{Cov}(X_i, X_j) = \sum_{i=1}^n w_i^2V(X_i) + 2\sum_{i=1}^n\sum_{j=i+1}^n w_iw_j\,\text{Cov}(X_i, X_j)\]`},
-{ id: 'tab', title: 'Tabelle der Standardnormalverteilung', html: T`
+{ id: 'tab', pages: '8', title: 'Tabelle der Standardnormalverteilung', html: T`
 <p>\(Z \sim N(0,1)\), \(F_{St}(z) = P(Z \le z) = \int_{-\infty}^z f_{St}(t)\,dt\). Für negative \(z\): \(F_{St}(-z) = 1 - F_{St}(z)\).</p>
-<div id="fsttab"></div>`}
+<div id="fsttab"></div>
+<p class="small muted">Ablesebeispiel: \(F_{St}(0{,}72) = 0{,}7642\), \(F_{St}(-0{,}72) = 1 - 0{,}7642 = 0{,}2358\)</p>
+<h3>Quantile der Standardnormalverteilung</h3>
+<p>Für die p-Quantile \(z_p\) gilt \(P(Z \le z_p) = p\), also \(F_{St}(z_p) = p\).</p>
+<div class="scroll"><table class="tb"><tr><th>\(p\)</th><td>0,6</td><td>0,667</td><td>0,75</td><td>0,8</td><td>0,875</td><td>0,9</td><td>0,95</td><td>0,975</td><td>0,99</td><td>0,995</td><td>0,999</td><td>0,9995</td></tr>
+<tr><th>\(z_p\)</th><td>0,253</td><td>0,431</td><td>0,674</td><td>0,842</td><td>1,150</td><td>1,282</td><td>1,645</td><td>1,960</td><td>2,326</td><td>2,576</td><td>3,090</td><td>3,291</td></tr></table></div>
+<p>Weitere Quantile für \(0 \le p \le 0{,}5\): \(z_p = -z_{1-p}\). Beispiel: \(z_{0{,}99} = 2{,}326\), \(z_{0{,}01} = -2{,}326\).</p>`}
 ];
 
 "use strict";
@@ -3122,6 +3135,74 @@ const gensOf = tid => GENS.filter(g => g.topic === tid);
 const variantsOf = tid => sum(gensOf(tid).map(g => g.mcq ? MCBANK[g.id].length : (g.nv || 1)));
 
 "use strict";
+/* ============ Verweise auf die Klausur-Formelsammlung (Stand 14.01.2025, 8 Seiten) ============ */
+const FS_REF = {
+  a: [1, 'Rechenregeln für Potenzen & Logarithmen', 'Rechenregeln für Potenzen'],
+  pq: [1, 'p-q- und a-b-c-Formel', 'Lösung quadratischer'],
+  zf: [2, 'Zinsfaktoren', 'Zinsfaktoren'],
+  eff: [2, 'Effektivzinssatz', 'Effektivzinssatz'],
+  rend: [2, 'Renditerechnung', 'Renditerechnung'],
+  prak: [2, 'Praktikerformel', 'Renditerechnung'],
+  rente: [3, 'Rentenbarwert- und Rentenendwertfaktoren', 'Rentenbarwert'],
+  ewig: [3, 'Barwert einer ewigen Rente', 'Rentenbarwert'],
+  fwd: [3, 'Forward Rates', 'Forward Rates'],
+  zero: [3, 'Zero Rates aus Par Rates', 'Forward Rates'],
+  par: [3, 'Par Rates aus Zero Rates', 'Forward Rates'],
+  lin: [4, 'Punkt-Steigungs- und Zwei-Punkte-Form', 'Lineare Funktionen'],
+  rf: [4, 'Regula Falsi', 'Regula Falsi'],
+  abl: [4, 'Ableitungen elementarer Funktionen', 'Ableitungen elementarer'],
+  regeln: [4, 'Ableitungsregeln', 'Ableitungsregeln'],
+  umk: [4, 'Ableitung der Umkehrfunktion', 'Ableitungsregeln'],
+  konv: [5, 'Konvexität/Konkavität', 'Vorzeichen der zweiten'],
+  ext: [5, 'Bedingungen für lokale Extrema', 'lokale Extrema'],
+  wende: [5, 'Bedingungen für Wendepunkte', 'Wendepunkte'],
+  mass: [6, 'Mittelwert, Varianz, Standardabweichung', 'Maßzahlen'],
+  kov: [6, 'Kovarianz und Korrelation', 'Maßzahlen'],
+  beta: [6, 'Beta und Regressionsgerade', 'Maßzahlen'],
+  pf: [6, 'Gewichtete Zahlenreihen (Portfolio)', 'Gewichtete Zahlenreihen'],
+  zv: [7, 'Verteilungskennzahlen von Zufallsvariablen', 'Verteilungskennzahlen'],
+  zvcov: [7, 'Kovarianz, Korrelation, Beta von Zufallsvariablen', 'Verteilungskennzahlen'],
+  rr: [7, 'Rechenregeln für E, V und Cov', 'Rechenregeln für Erwartungswerte'],
+  wsum: [7, 'Gewichtete Summe von Zufallsvariablen', 'Rechenregeln für Erwartungswerte'],
+  tab: [8, 'Tabelle der Standardnormalverteilung', ''],
+  quant: [8, 'Quantile der Standardnormalverteilung', 'Quantile der Standardnormalverteilung']
+};
+/* Seite -> Abschnitt der Formelsammlung in der App */
+const FS_SECTION = { 1: 'elem', 2: 'fin', 3: 'fin', 4: 'fkt', 5: 'fkt', 6: 'stat', 7: 'stat', 8: 'tab' };
+const GEN_REFS = {
+  /* Kapitel 1 */
+  lin2p: 'lin', linps: 'lin', kostenlin: 'lin', pabs: 'lin',
+  potenz: 'a', expgl: 'a', loggl: 'a', logrule: 'a', invexp: 'a', invpow: 'a',
+  pq: 'pq', abc: 'pq', polydiv: 'pq', breakeven: 'pq', diskr: 'pq', ausklammern: 'pq', biquad: 'pq', rationalnull: 'pq',
+  scheitel: 'abl ext', monoquad: 'abl', globquad: 'ext',
+  rf: 'rf', rfcheck: 'rf', rfexp: 'rf', rf3: 'rf', rfsek: 'rf', rfersetz: 'rf', zwsatz: 'rf', rfrendite: 'rf rend',
+  dpoly: 'abl regeln', drules: 'abl regeln', dexpr: 'abl regeln', tangente: 'abl lin', grenzk: 'abl', diffq: 'abl', hoeher: 'abl', umkabl: 'umk abl', gerade_anw: 'abl',
+  extrema: 'ext wende', konvex: 'konv', gewinnmax: 'ext', extquad: 'ext', stueckmin: 'ext regeln', erloesmax: 'ext', wendepkt: 'wende', globcubic: 'ext', monobereich: 'abl', gewinnkubisch: 'ext pq',
+  /* Kapitel 2 */
+  kt: 'zf', k0: 'zf', solvet: 'zf a', solver: 'zf', zinsentage: 'zf', wechselzins: 'zf', methvergl: 'zf', unterk0: 'zf', einfachr: 'zf', zfaktor: 'zf',
+  trans: 'eff', angebote: 'eff', stet2unt: 'eff', unt2unt: 'eff', einf2stet: 'eff',
+  bwstream: 'zf', bond: 'zf', bweinzel: 'zf', sparvgl: 'zf', projvgl: 'zf', bwhalb: 'zf', fairpreis: 'zf',
+  rente: 'rente', annu: 'rente', sparrate: 'rente', restschuld: 'rente', rentelaufzeit: 'rente', tilgung1: 'rente', ewig: 'ewig', ewigvor: 'ewig', ewigwachstum: 'ewig', rente_bE: 'zf rente',
+  yield2: 'rend pq', praktiker: 'prak', sparbrief: 'rend', irr2: 'rend pq', disagio: 'rend', nullkupon: 'rend', yield1: 'rend', bnetr: 'rend', praktvergl: 'prak rend',
+  pvspot: 'zf', dfspot: 'zf', arbitrage: 'zf', forward: 'fwd', spotfwd: 'fwd', fwdanlage: 'fwd', boot: 'zero', zero1: 'zero', par: 'par',
+  /* Kapitel 3 */
+  desk: 'mass', lintrans: 'mass', fehlwert: 'mass', varsummen: 'mass', wuerfeldaten: 'mass', renditen: 'mass', cov: 'kov', rhofrom: 'kov', covsummen: 'kov',
+  pf: 'pf', pfmin: 'pf', pfcov: 'pf', pfziel: 'pf', pfminvar: 'pf', pfrhovgl: 'pf', pfreihe: 'pf', pfgrenze: 'pf',
+  reg: 'beta', betarho: 'beta', regpred: 'beta', regstats: 'beta', varzerl: 'beta', betacov: 'beta zvcov', residuum: 'beta',
+  zv: 'zv', ex2: 'zv', spiel: 'zv', zvpf: 'zv rr', zvcov: 'zvcov', betazv: 'zvcov', zvlin: 'rr', covregeln: 'rr', drei: 'wsum', summevar: 'wsum',
+  nvp: 'tab', nvkurs: 'tab', nvzwischen: 'tab', nvzstd: 'tab', nvsym: 'tab', nvquant: 'tab', nvq: 'quant', nvsigma: 'quant', nvintervall: 'quant',
+  zgws: 'tab', zgws2: 'tab', mittelwertzgws: 'tab', binom: 'tab', wuerfelsumme2: 'tab', nbenoetigt: 'quant'
+};
+GENS.forEach(g => { if (GEN_REFS[g.id]) g.refs = GEN_REFS[g.id].split(' '); });
+
+/* Hinweiszeile unter der Aufgabe (leer, wenn nichts in der Formelsammlung steht) */
+function refHTML(gid) {
+  const g = GEN_BY_ID[gid]; if (!g || !g.refs) return '';
+  const r = g.refs.slice().sort((a, b) => FS_REF[a][0] - FS_REF[b][0]);
+  return `<div class="fsref">${ICONS.book}<span>Formelsammlung: ${r.map(k => `<a data-fsref="${k}">S. ${FS_REF[k][0]} · ${FS_REF[k][1]}</a>`).join(', ')}</span></div>`;
+}
+
+"use strict";
 /* ============ Oberfläche ============ */
 const $app = document.getElementById('app');
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -3229,7 +3310,7 @@ function taskHTML(task, opts = {}) {
   }).join('');
   return `<div class="glass task">
     <div class="meta"><span class="chip acc">${esc(g.title)}</span>${opts.showTopic ? `<span class="chip">${t.nr} ${esc(t.title)}</span>` : ''}${task.table ? `<button class="chip" data-modal="fst" style="cursor:pointer">${'Tabelle F_St'}</button>` : ''}</div>
-    <div class="q">${task.q}</div><div class="fields">${fields}</div>
+    <div class="q">${task.q}</div>${refHTML(task.gid)}<div class="fields">${fields}</div>
     <div class="actions" id="tact">${opts.actions || ''}</div>
     <div id="solbox"></div></div>`;
 }
@@ -3524,7 +3605,7 @@ function viewFormeln(sec) {
   return `<div style="--acc:#fbbf24;--accb:#f97316">` + header('Formelsammlung', '#/') + `
   <div class="hero"><h2>Formelsammlung</h2><p>Mathematik und Statistik · wie in der Klausur</p></div>
   <div class="chips" style="margin-bottom:14px">${FORMELN.map(f => `<button class="tog ${sec === f.id ? 'on' : ''}" data-fjump="${f.id}">${f.title}</button>`).join('')}</div>
-  ${FORMELN.map(f => `<div class="glass sheet" id="f-${f.id}" style="margin-bottom:14px"><h3 style="font-size:19px">${f.title}</h3>${f.html}</div>`).join('')}</div>`;
+  ${FORMELN.map(f => `<div class="glass sheet" id="f-${f.id}" style="margin-bottom:14px"><h3 style="font-size:19px">${f.title} <span class="badge">S. ${f.pages}</span></h3>${f.html}</div>`).join('')}</div>`;
 }
 function mountFormeln() {
   const t = document.getElementById('fsttab'); if (t) t.innerHTML = fstTableHTML();
@@ -3532,6 +3613,18 @@ function mountFormeln() {
 }
 
 /* ------------------------------------------------ Modal */
+function openFsSection(key) {
+  const ref = FS_REF[key]; if (!ref) return;
+  const f = FORMELN.find(x => x.id === FS_SECTION[ref[0]]); if (!f) return;
+  const m = document.createElement('div'); m.className = 'modal';
+  m.innerHTML = md(T`<div class="panel glass sheet" style="--acc:#fbbf24;--accb:#f97316"><div class="row"><h3 class="sp" style="margin:0;font-size:18px">${f.title} <span class="badge">S. ${f.pages}</span></h3><button class="ibtn" data-close>✕</button></div>${f.html}</div>`);
+  const t = m.querySelector('#fsttab'); if (t) t.innerHTML = fstTableHTML();
+  m.onclick = e => { if (e.target === m || e.target.closest('[data-close]')) m.remove(); };
+  document.body.appendChild(m);
+  /* direkt zur genannten Formel springen und kurz hervorheben */
+  const h = ref[2] && [...m.querySelectorAll('h3')].find(x => x.textContent.includes(ref[2]));
+  if (h) { const panel = m.querySelector('.panel'); panel.scrollTop = h.offsetTop - 12; h.classList.add('flashhl'); }
+}
 function openModal(kind) {
   if (kind !== 'fst') return;
   const m = document.createElement('div'); m.className = 'modal';
@@ -3566,6 +3659,7 @@ document.addEventListener('click', e => {
   const dc = e.target.closest('[data-discard]'); if (dc) { e.preventDefault(); e.stopPropagation(); discardTest(); render(); return; }
   const go = e.target.closest('[data-go]'); if (go) { e.preventDefault(); const h = go.dataset.go; if (location.hash === h || (h === '#/' && !location.hash)) render(); else location.hash = h; window.scrollTo(0, 0); return; }
   const mo = e.target.closest('[data-modal]'); if (mo) openModal(mo.dataset.modal);
+  const fr = e.target.closest('[data-fsref]'); if (fr) { e.preventDefault(); openFsSection(fr.dataset.fsref); }
 });
 window.addEventListener('hashchange', render);
 document.addEventListener('visibilitychange', () => {
