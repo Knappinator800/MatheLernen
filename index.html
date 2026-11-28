@@ -100,7 +100,8 @@ header.top h1{font-size:18px;margin:0;font-weight:650;flex:1;white-space:nowrap;
 .sheet .tip{border-left-color:var(--ok)}
 .fm{overflow-x:auto;overflow-y:hidden;padding:4px 0;margin:6px 0}
 math{font-family:"STIX Two Math","Cambria Math","Latin Modern Math","Noto Sans Math",serif;font-size:1.08em}
-math[display=block]{margin:6px 0}
+math[display=block]{margin:6px 0;display:block;overflow-x:auto;overflow-y:hidden;max-width:100%;padding-bottom:2px}
+.sheet .box{overflow-x:auto}
 table.tb{border-collapse:collapse;font-size:14px;margin:8px 0;width:100%;font-variant-numeric:tabular-nums}
 table.tb td,table.tb th{border:1px solid var(--line);padding:5px 7px;text-align:center}
 table.tb th{background:rgba(255,255,255,.06);font-weight:600}
@@ -310,7 +311,7 @@ const par = x => x < 0 ? `(${ntc(x)})` : ntc(x);
 
 /* ============ Term-Parser (für Eingabe von Funktionstermen) ============ */
 const ExprParser = (() => {
-  const FUN = ['sqrt', 'wurzel', 'ln', 'exp', 'log'];
+  const FUN = ['sqrt', 'wurzel', 'ln', 'exp', 'log', 'sin', 'cos'];
   function tokenize(s) {
     s = s.replace(/−/g, '-').replace(/[·×]/g, '*').replace(/÷/g, '/').replace(/²/g, '^2').replace(/³/g, '^3').replace(/\s+/g, '');
     const out = []; let i = 0;
@@ -363,7 +364,7 @@ const ExprParser = (() => {
   }
   function ev(n, env) {
     if ('num' in n) return n.num; if (n.v) return env[n.v]; if (n.paren) return ev(n.paren, env);
-    if (n.fn) { const a = ev(n.a, env); return n.fn === 'sqrt' ? Math.sqrt(a) : n.fn === 'ln' ? Math.log(a) : Math.exp(a); }
+    if (n.fn) { const a = ev(n.a, env); return n.fn === 'sqrt' ? Math.sqrt(a) : n.fn === 'ln' ? Math.log(a) : n.fn === 'sin' ? Math.sin(a) : n.fn === 'cos' ? Math.cos(a) : Math.exp(a); }
     if (n.op === 'neg') return -ev(n.a, env);
     const a = ev(n.a, env), b = ev(n.b, env);
     switch (n.op) { case '+': return a + b; case '-': return a - b; case '*': return a * b; case '/': return a / b; case '^': return Math.pow(a, b); }
@@ -373,6 +374,7 @@ const ExprParser = (() => {
     if (n.fn === 'sqrt') return T`\sqrt{` + toTeX(n.a.paren || n.a) + '}';
     if (n.fn === 'ln') return T`\ln\left(` + toTeX(n.a.paren || n.a) + T`\right)`;
     if (n.fn === 'exp') return 'e^{' + toTeX(n.a.paren || n.a) + '}';
+    if (n.fn === 'sin' || n.fn === 'cos') return '\\' + n.fn + '\\left(' + toTeX(n.a.paren || n.a) + '\\right)';
     if (n.op === 'neg') return '-' + toTeX(n.a);
     if (n.op === '/') return T`\frac{` + toTeX(n.a.paren || n.a) + '}{' + toTeX(n.b.paren || n.b) + '}';
     if (n.op === '^') return '{' + toTeX(n.a) + '}^{' + toTeX(n.b.paren || n.b) + '}';
@@ -799,6 +801,141 @@ function fstTableHTML() {
   }
   return h + '</table></div>';
 }
+
+"use strict";
+/* ============ Ergänzungen: Vorlesungsbeispiele (Skript S. 359–426), Mitschrift, Learning Lab ============ */
+const addSheet = (id, html) => { const t = TOPICS.find(x => x.id === id); if (t) t.sheet += html; };
+const VL = (src, html) => T`<div class="box ex"><b>Beispiel aus der Vorlesung</b> <span class="badge">${src}</span><br>${html}</div>`;
+
+/* ---------- 0.2 Rechengrundlagen (neues Unterthema) ---------- */
+TOPICS.splice(TOPICS.findIndex(t => t.id === 'g-lex') + 1, 0, { id: 'g-grund', ch: 0, nr: '0.2', title: 'Rechengrundlagen', sheet: T`
+<h3>Binomische Formeln</h3>
+\[(a + b)^2 = a^2 + 2ab + b^2\qquad (a - b)^2 = a^2 - 2ab + b^2\qquad (a + b)(a - b) = a^2 - b^2\]
+<div class="box tip">Rückwärts gelesen helfen sie beim Faktorisieren: \(x^2 - 9 = (x + 3)(x - 3)\).</div>
+<h3>Potenzen & Wurzeln</h3>
+\[a^n\cdot a^m = a^{n+m}\qquad \frac{a^n}{a^m} = a^{n-m}\qquad (a^n)^m = a^{n\cdot m}\qquad (a\cdot b)^n = a^n b^n\qquad a^{-n} = \frac{1}{a^n}\qquad a^{\frac1n} = \sqrt[n]{a}\]
+<h3>Logarithmus</h3>
+\[\log_b a = c \Leftrightarrow b^c = a\qquad \ln e = 1\qquad \ln 1 = 0\qquad e^{\ln a} = a\]
+<div class="box ex"><b>Beispiel (Mitschrift):</b> Wann werden aus 100 € bei \(2\,\%\) p.a. 10.000 €? \(100 = 1{,}02^n \Rightarrow n = \frac{\ln 100}{\ln 1{,}02} \approx 232{,}55\) Jahre.</div>
+<h3>Bruchrechnung & Bruchgleichungen</h3>
+<ul><li>Addieren: auf den kleinsten gemeinsamen Nenner bringen: \(\frac23 + \frac34 = \frac{8}{12} + \frac{9}{12} = \frac{17}{12}\)</li>
+<li>Bruchgleichung: mit allen Nennern multiplizieren; vorher ausschließen, dass ein Nenner 0 wird.</li></ul>
+<div class="box ex"><b>Beispiel (Learning Lab):</b> \(\frac{3}{x - 1} = \frac{2}{x + 2}\ \big|\cdot(x-1)(x+2)\ \Rightarrow\ 3(x + 2) = 2(x - 1) \Rightarrow x = -8\)</div>
+<h3>Betrag</h3>
+<p>\(|a| = a\) für \(a \ge 0\), sonst \(-a\). Betragsgleichung \(|ax + b| = c\) (mit \(c > 0\)): zwei Fälle \(ax + b = c\) oder \(ax + b = -c\).</p>
+<h3>Rechnen mit Funktionen</h3>
+\[(f + g)(x) = f(x) + g(x)\qquad (f\cdot g)(x) = f(x)\cdot g(x)\qquad \left(\frac fg\right)(x) = \frac{f(x)}{g(x)}\ (g(x) \ne 0)\]
+<p><b>Verkettung:</b> \((f\circ g)(x) = f(g(x))\) – erst \(g\) („innen“), dann \(f\) („außen“).</p>
+<div class="box ex"><b>Beispiel (Mitschrift):</b> \(K(x) = ax + b\), \(g(x) = cx^2 - dx\): \((K\circ g)(x) = a(cx^2 - dx) + b\).</div>
+<h3>Definitions- und Wertebereich</h3>
+<p><b>Definitionsbereich:</b> Menge aller \(x\), denen ein \(y\) zugeordnet ist. Ausschließen: Nenner \(= 0\), negativer Radikand bei \(\sqrt{\ }\), Argument \(\le 0\) bei \(\ln\).<br>
+<b>Wertebereich:</b> diejenigen Elemente der Zielmenge, die tatsächlich als Funktionswert vorkommen.</p>
+`});
+CHAPTERS.find(c => c.id === 0).sub = 'Kapitel 0 · Lexikon & Rechengrundlagen';
+
+/* ---------- 1.3 Polynome, gebrochen rationale Funktionen ---------- */
+addSheet('f-null', T`
+<h3>Polynomdivision mit Rest</h3>
+<p>Geht die Division nicht auf, bleibt ein Rest: \(f(x) = (x - a)\cdot g(x) + \text{Rest}\). Der Rest ist \(f(a)\) – geht die Division auf (Rest 0), ist \(a\) eine Nullstelle.</p>
+${VL('Learning Lab', T`\((x^3 - 6x^2 + 11x - 6) : (x - 1) = x^2 - 5x + 6\), also Nullstellen \(1,\ 2,\ 3\). Fehlt eine Potenz, mit \(0\cdot x^k\) auffüllen: \((x^3 + 0x^2 - 2x + 4) : (x - 1) = x^2 + x - 1\) Rest \(3\).`)}
+<h3>Gebrochen rationale Funktionen</h3>
+<p>\(f(x) = \frac{p(x)}{q(x)}\), Definitionsbereich: \(\mathbb R\) ohne die Nullstellen des Nenners. <b>Echt gebrochen</b>, wenn Zählergrad \(<\) Nennergrad, sonst unecht.</p>
+<div class="box"><b>Vorgehen:</b> Zähler und Nenner faktorisieren, dann
+<ul style="margin:4px 0 0"><li><b>Lücke (hebbar):</b> Faktor kürzt sich weg (steht in Zähler und Nenner)</li>
+<li><b>Polstelle:</b> Nullstelle des Nenners, die nach dem Kürzen übrig bleibt</li>
+<li><b>Nullstelle:</b> Nullstelle des Zählers, die nach dem Kürzen übrig bleibt</li></ul></div>
+${VL('Mitschrift 28.09.', T`\(f(x) = \frac{x^2 - x - 12}{x^4 - 3x^3 - 4x^2} = \frac{(x + 3)(x - 4)}{x^2(x + 1)(x - 4)}\), \(D = \mathbb R\setminus\{0, -1, 4\}\). Nullstelle \(x = -3\), Pole bei \(x = -1\) und \(x = 0\), Lücke bei \(x = 4\) (hebbar mit Wert \(\frac{7}{80}\)).`)}
+<p><b>Asymptoten:</b> Zählergrad \(<\) Nennergrad → waagerechte Asymptote \(y = 0\); gleicher Grad → \(y = \frac{\text{Leitkoeffizient Zähler}}{\text{Leitkoeffizient Nenner}}\).</p>
+<p>Ungerader Exponent beim Nennerfaktor → Vorzeichenwechsel an der Polstelle (z. B. \(\frac1x\)), gerader Exponent → beide Seiten gleiche Richtung (z. B. \(\frac{1}{x^2}\)).</p>
+`);
+
+/* ---------- 1.4 Stetigkeit, Grenzwerte ---------- */
+addSheet('f-eig', T`
+<h3>Einseitige Grenzwerte & Stetigkeit</h3>
+<p>Linksseitig: \(\lim_{x\to x_0^-} f(x)\), rechtsseitig: \(\lim_{x\to x_0^+} f(x)\). \(f\) ist in \(x_0\) stetig, wenn beide existieren, gleich sind und mit \(f(x_0)\) übereinstimmen.</p>
+<div class="box"><b>Arten von Unstetigkeitsstellen (Mitschrift):</b>
+<ul style="margin:4px 0 0"><li><b>Hebbare Lücke</b> (1. Ordnung): links- und rechtsseitiger Grenzwert gleich, aber \(f(x_0)\) fehlt oder passt nicht</li>
+<li><b>Endlicher Sprung</b> (2. Ordnung): beide Grenzwerte existieren, sind aber verschieden</li>
+<li><b>Unendlichkeitsstelle</b> (3. Ordnung, Polstelle): mindestens ein Grenzwert ist \(\pm\infty\)</li></ul></div>
+<h3>Verhalten für \(x \to \pm\infty\)</h3>
+<p>Konvergenz: \(f\) nähert sich einer Konstanten. Divergenz: \(f\) wächst über alle Grenzen (\(\pm\infty\)) oder hat keinen Grenzwert.</p>
+${VL('Mitschrift 05.10.', T`\(\lim_{x\to\infty} e^{-x} = 0\), \(\lim_{x\to\infty} x\,e^x = \infty\), \(\lim_{x\to-\infty} x\,e^x = 0\) – die e-Funktion „gewinnt“ gegen jede Potenz.`)}
+${VL('Mitschrift 31.10.', T`Umkehrfunktion von \(e^x\): \(y = e^x \Rightarrow \ln y = x\), Variablen tauschen: \(f^{-1}(x) = \ln x\), \(D = (0, \infty)\). Für \(f(x) = x^2\) existiert die Umkehrfunktion nur nach Einschränkung, z. B. \(x \ge 0\): \(f^{-1}(x) = \sqrt x\).`)}
+`);
+
+/* ---------- 1.6 Ableitungen: sin/cos ---------- */
+addSheet('f-abl', T`
+<h3>Trigonometrische Funktionen</h3>
+\[(\sin x)' = \cos x\qquad (\cos x)' = -\sin x\]
+<p>(Winkel im Bogenmaß.) Mit Kettenregel: \((\sin(bx))' = b\cos(bx)\), \((\cos(bx))' = -b\sin(bx)\).</p>
+${VL('Learning Lab', T`\(f(x) = \sin(3x)\Rightarrow f'(x) = 3\cos(3x)\);\(\quad f(x) = 3\sin x + 2\cos x \Rightarrow f'(x) = 3\cos x - 2\sin x\);\(\quad f(x) = x^2\sin x \Rightarrow f'(x) = 2x\sin x + x^2\cos x\).`)}
+${VL('Mitschrift', T`\(f(x) = \frac{5x - 4}{8x - 2}\Rightarrow f'(x) = \frac{5(8x - 2) - (5x - 4)\cdot 8}{(8x - 2)^2} = \frac{22}{(8x - 2)^2}\);\(\quad f(x) = (x^3 + 2x)^{50}\Rightarrow f'(x) = 50(x^3 + 2x)^{49}(3x^2 + 2)\) (äußere · innere).`)}
+`);
+
+/* ---------- 1.6 Kurvendiskussion, Gewinnmaximierung ---------- */
+addSheet('f-ext', T`
+<h3>Kurvendiskussion – vollständiges Schema</h3>
+<div class="box"><ol style="margin:0;padding-left:18px"><li>Definitionsbereich, Ableitungen \(f', f'', f'''\)</li><li>Nullstellen (\(f(x) = 0\)), y-Achsenabschnitt \(f(0)\)</li>
+<li>Extrema: \(f'(x) = 0\), Art über \(f''\)</li><li>Wendepunkte: \(f''(x) = 0\), \(f'''\ne 0\); Sattelpunkt, wenn zusätzlich \(f' = 0\)</li>
+<li>Monotonie & Krümmung (Tabelle mit den Nullstellen von \(f'\) bzw. \(f''\))</li><li>Verhalten für \(x\to\pm\infty\), bei Intervallen die <b>Randwerte</b> (globale Extrema!)</li></ol></div>
+${VL('Mitschrift', T`\(f(x) = x^3 - 3x^2 + 4\) auf \([-1{,}5;\ 3]\): Max. \((0|4)\), Min. \((2|0)\), Wendepunkt \((1|2)\). Randwerte \(f(-1{,}5) = -6{,}125\), \(f(3) = 4\) → globales Minimum am linken Rand.`)}
+${VL('Mitschrift', T`\(f(x) = x\,e^x\): \(f'(x) = e^x(1 + x)\), \(f''(x) = e^x(2 + x)\). Minimum bei \(x = -1\) (\(f = -0{,}3679\)), Wendepunkt bei \(x = -2\), einzige Nullstelle \(x = 0\).`)}
+<p><b>Monotonietabelle:</b> Nullstellen von \(f'\) teilen die Achse in Intervalle; in jedem Intervall einen Testwert in \(f'\) einsetzen → Vorzeichen \(+\) (steigt) oder \(-\) (fällt).</p>
+<h3>Kochrezept Gewinnmaximierung (Probeklausur)</h3>
+<div class="box"><ol style="margin:0;padding-left:18px"><li><b>Funktion:</b> \(G(x) = E(x) - K(x)\) – \(K(x)\) einklammern!</li><li><b>Ableiten:</b> \(G'(x)\) und \(G''(x)\)</li>
+<li><b>NB:</b> \(G'(x) = 0\) lösen (\(E'(x) = K'(x)\)), \(x < 0\) streichen → \(x^*\)</li><li><b>HB:</b> \(G''(x^*) < 0\) (+ Randcheck) → Maximum</li>
+<li><b>Ergebnis:</b> \(x^*\) in \(G(x)\) einsetzen → maximaler Gewinn</li></ol></div>
+<div class="box tip">Typischer Fehler (Probeklausur): \[G(x) = 35x - 6x^2 - 685x + 1600\quad\text{✗}\] Richtig – die Klammer dreht alle Vorzeichen: \[G(x) = 35x - (6x^2 - 685x + 1600)\] \[= -6x^2 + 720x - 1600\quad\text{✓}\]</div>
+<h3>Gewinn in Abhängigkeit vom Preis</h3>
+${VL('Learning Lab 28.10.', T`\(x(p) = 200 - 3p\), \(K(x) = 0{,}04x^2 + 12x + 800\). \(E(p) = p\cdot x(p)\), \(K(p) = K(x(p))\) einsetzen, \(G(p) = E(p) - K(p)\). \[G(p) = -3{,}36p^2 + 284p - 4800\] Break-even: \(G(p) = 0\Rightarrow p \approx 23{,}35\) und \(p \approx 61{,}17\).`)}
+`);
+
+/* ---------- 2.2 Renten ---------- */
+addSheet('z-rente', T`
+<h3>Herleitung der Rentenformel (Mitschrift)</h3>
+<p>Mit \(q = 1 + r\) aufzinsen: \(EW = R + Rq + Rq^2 + \dots + Rq^{n-1} = R(1 + q + \dots + q^{n-1})\). Geometrische Summe:</p>
+\[EW^{\text{nach}} = R\cdot\frac{q^n - 1}{q - 1}\qquad BW^{\text{nach}} = R\cdot\frac{q^n - 1}{q - 1}\cdot\frac{1}{q^n}\qquad \text{vorschüssig: jeweils }\cdot q\]
+${VL('Skript S. 359', T`11-malige Rente, Rate \(R = 1000\) pro Quartal, \(12\,\%\) p.a. (vierteljährlich, \(q = 1{,}03\)):
+\[EW = 1000\cdot\frac{1{,}03^{11} - 1}{0{,}03} = 12.807{,}80\,€\qquad BW = \frac{12.807{,}80}{1{,}03^{11}} = 9.252{,}62\,€\]`)}
+${VL('Skript S. 374', T`Annuität: \(20.000 = Z\cdot\frac{1{,}06^5 - 1}{0{,}06\cdot 1{,}06^5}\) – in q-Schreibweise \(\frac{q^n - 1}{q - 1}\cdot\frac{1}{q^n}\) mit \(q = 1{,}06\). \(Z = 4.747{,}93\).`)}
+${VL('Skript S. 379', T`Ewige Rente 40.000 €/Jahr, \(8\,\%\): \(B = \frac{40.000}{0{,}08} = 500.000\,€\). Da jährlich genau die Zinsen entnommen werden, bleibt der Kontostand bei 500.000 €. Äquivalenter Gesamtwert drei Jahre später: \(500.000\cdot 1{,}08^3 = 629.856\,€\).`)}
+`);
+
+/* ---------- 2.3 Rendite ---------- */
+addSheet('z-eff', T`
+<h3>Rendite = Yield to Maturity (YTM)</h3>
+<p>Der für alle Zahlungen gleiche Abzinsungssatz, mit dem der Barwert dem Preis entspricht. Bei Investitionen: interner Zinsfuß.</p>
+${VL('Skript S. 385', T`Sparbrief: \(102 = \frac{115}{(1 + r)^3}\Rightarrow r = \sqrt[3]{\frac{115}{102}} - 1 \approx 4{,}08\,\%\).<br>
+Investition: \(140 = \frac{50}{1 + r} + \frac{100}{(1 + r)^2}\Rightarrow 140r^2 + 230r - 10 = 0\Rightarrow r \approx 4{,}24\,\%\).`)}
+<div class="box tip"><b>Merke (S. 385):</b> Negative Lösungen der Gleichung werden nicht betrachtet. Bei \(r = -100\,\%\) liegt ein Pol – \(B_{\text{net}}\) wird unendlich groß.</div>
+${VL('Learning Lab', T`Kuponanleihe \(C = 3{,}20\), \(n = 3\), Preis \(98{,}90\): Praktikerformel \(r \approx \frac{3{,}20 + \frac{100 - 98{,}90}{3}}{98{,}90} \approx 3{,}61\,\%\).`)}
+`);
+
+/* ---------- 2.4 Zinsstruktur ---------- */
+addSheet('z-struk', T`
+${VL('Skript S. 413 (Hull)', T`Treasury Spot Rates bei <b>stetiger</b> Verzinsung: 0,5 J: 5,0 %, 1 J: 5,8 %, 1,5 J: 6,4 %, 2 J: 6,8 %. Zweijähriger Bond, Nennwert 100, Kupon 6 % p.a. halbjährlich (3 pro Halbjahr):
+\[B = 3e^{-0{,}05\cdot 0{,}5} + 3e^{-0{,}058\cdot 1} + 3e^{-0{,}064\cdot 1{,}5} + 103e^{-0{,}068\cdot 2} = 98{,}39\]`)}
+${VL('Skript S. 417–418', T`Bonds zu pari mit Kupons 5 / 6 / 6,9 / 7,7 % (1–4 Jahre). Bootstrapping: \(100 = \frac{105}{1 + z_1}\Rightarrow z_1 = 5\,\%\);\(\ 100 = \frac{6}{1{,}05} + \frac{106}{(1 + z_2)^2}\Rightarrow z_2 = 6{,}03\,\%\);\(\ z_3 = 6{,}99\,\%\);\(\ z_4 = 7{,}88\,\%\).`)}
+${VL('Skript S. 425–426', T`Mit dieser Zinsstruktur: \(r_{13} = \sqrt{\frac{1{,}0699^3}{1{,}05}} - 1 = 7{,}99\,\%\);\(\ r_{15} = \sqrt[4]{\frac{1{,}0869^5}{1{,}05}} - 1 = 9{,}63\,\%\). Idee („Law of one price“): Einmal 3 Jahre anlegen = 1 Jahr anlegen und danach 2 Jahre zur Forward Rate.`)}
+<h3>Spot Rates aus Zerobond-Preisen</h3>
+\[P_t = \frac{100}{(1 + r_{0t})^t}\ \Rightarrow\ r_{0t} = \left(\frac{100}{P_t}\right)^{\frac1t} - 1\]
+${VL('Mitschrift', T`Kuponanleihe 5 / 5 / 105 wird durch drei Zerobonds nachgebildet (gleiches Risiko, gleiche Cashflows) – jede Zahlung hat ihren „eigenen“ Zinssatz. Preise der Zerobonds \(4{,}5\), \(4\), \(99\) → \(r_{01} = 11{,}11\,\%\), \(r_{02} = 11{,}80\,\%\), \(r_{03} = 1{,}98\,\%\).`)}
+`);
+
+/* ---------- 3.1 Häufigkeit ---------- */
+addSheet('s-desk', T`
+<h3>Lageparameter (Learning Lab)</h3>
+<ul><li><b>Arithmetisches Mittel</b> \(\bar x\): Summe durch Anzahl</li><li><b>Median</b> \(\tilde x\): mittlerer Wert der geordneten Reihe</li><li><b>Modalwert</b>: der am häufigsten vorkommende Wert</li></ul>
+${VL('Learning Lab', T`Reihe \(4, 5, 5, 5, 6, 6, 7, 8, 9, 14\): \(\bar x = 6{,}9\), Median \(\frac{6 + 6}{2} = 6\), Modalwert \(5\).`)}
+`);
+
+/* ---------- 3.3 Regression ---------- */
+addSheet('s-reg', T`
+<h3>Prognose & Bestimmtheitsmaß</h3>
+<p>Prognose: \(\hat y = \alpha + \beta x\). Residuum \(e_i = y_i - \hat y_i\). Wie gut erklärt die Gerade die Daten?</p>
+\[R^2 = 1 - \frac{\sum (y_i - \hat y_i)^2}{\sum (y_i - \bar y)^2} = \rho_{xy}^2,\qquad 0 \le R^2 \le 1\]
+${VL('Learning Lab', T`DAX (x) und DB (y), Jan–Mai: \(\hat y = 1 + 2{,}4x\). DAX-Rendite \(3\,\%\) → Prognose \(\hat y = 8{,}2\,\%\). Bestimmtheitsmaß \(R^2 = 1 - \frac{4{,}40}{62} \approx 0{,}929\) – die Gerade erklärt rund \(93\,\%\) der Streuung.`)}
+`);
 
 "use strict";
 /* ============ Formelsammlung (wie Klausur-Formelsammlung, Stand 14. Januar 2025) ============ */
@@ -3932,6 +4069,510 @@ AZ('az_pf_zuordnen', 's-pf', 'zuordnen', () => {
 });
 
 "use strict";
+/* ============ Erweiterung (Skript-Update): neue Aufgaben, Ansatz, MC, Lexikon ============ */
+const G3 = (id, topic, title, f, o = {}) => {
+  G(id, topic, title, f); const g = GENS[GENS.length - 1]; GEN_BY_ID[id] = g;
+  if (o.refs) g.refs = o.refs.split(' '); if (o.nv) g.nv = o.nv; if (o.st) g.st = true;
+  else if (!o.mc) { try { if (isMultiNum(f())) g.multi = true; } catch (e) { } }
+  return g;
+};
+const MCQ3 = (id, topic, title, bank) => { MCQ(id, topic, title, bank); GEN_BY_ID[id] = GENS[GENS.length - 1]; };
+const sgnT = (c, first) => c < 0 ? ' - ' + ntc(-c) : (first ? ntc(c) : ' + ' + ntc(c));
+
+/* ==================================================== 0.2 Rechengrundlagen */
+G3('binomf', 'g-grund', 'Binomische Formeln', () => {
+  const a = R(1, 6), b = R(1, 9), v = pick(['p', 'm', 'pm']);
+  const A = a === 1 ? 'x' : a + 'x';
+  let qT, fn, aT, name;
+  if (v === 'p') { qT = T`(${A} + ${b})^2`; fn = x => (a * x + b) ** 2; aT = T`${a * a === 1 ? '' : a * a}x^2 + ${2 * a * b}x + ${b * b}`; name = '1. binomische Formel'; }
+  else if (v === 'm') { qT = T`(${A} - ${b})^2`; fn = x => (a * x - b) ** 2; aT = T`${a * a === 1 ? '' : a * a}x^2 - ${2 * a * b}x + ${b * b}`; name = '2. binomische Formel'; }
+  else { qT = T`(${A} + ${b})(${A} - ${b})`; fn = x => a * a * x * x - b * b; aT = T`${a * a === 1 ? '' : a * a}x^2 - ${b * b}`; name = '3. binomische Formel'; }
+  return {
+    q: T`Multipliziere mit einer binomischen Formel aus: \[${qT}\]`,
+    fields: [ex('Ergebnis', fn, aT)],
+    sol: T`${name}: \[${qT} = ${aT}\]`
+  };
+}, { nv: 3 });
+G3('potrech', 'g-grund', 'Potenzgesetze anwenden', () => {
+  const v = pick(['mul', 'div', 'pow', 'root']);
+  let qT, n, rule;
+  if (v === 'mul') { const a = R(2, 7), b = R(2, 7); n = a + b; qT = T`x^{${a}}\cdot x^{${b}}`; rule = T`a^n\cdot a^m = a^{n+m}`; }
+  else if (v === 'div') { const a = R(5, 12), b = R(1, 4), c = R(2, 5); n = a + c - b; qT = T`\frac{x^{${a}}\cdot x^{${c}}}{x^{${b}}}`; rule = T`a^n\cdot a^m = a^{n+m},\ \frac{a^n}{a^m} = a^{n-m}`; }
+  else if (v === 'pow') { const a = R(2, 5), b = R(2, 4); n = a * b; qT = T`\left(x^{${a}}\right)^{${b}}`; rule = T`(a^n)^m = a^{n\cdot m}`; }
+  else { const a = pick([2, 3, 4]), b = pick([1, 3, 5, 7].filter(k => k % a)); n = b / a; qT = T`\sqrt[${a}]{x^{${b}}}`; rule = T`\sqrt[n]{a^m} = a^{\frac mn}`; }
+  return {
+    q: T`Schreibe als eine Potenz \(x^k\) und gib den Exponenten \(k\) an: \[${qT}\]`,
+    fields: [num(T`\(k =\)`, n, 4)],
+    sol: T`\[${rule}\ \Rightarrow\ ${qT} = x^{${ntc(n, 4)}}\]`
+  };
+}, { refs: 'a', nv: 4 });
+G3('betrag', 'g-grund', 'Betragsgleichung', () => {
+  let a, b, c, x1, x2;
+  do { a = pick([1, 2, 3, 4, -2]); b = R(-9, 9); c = R(1, 12); x1 = (c - b) / a; x2 = (-c - b) / a; } while (!b || Math.abs(x1 * 4 - Math.round(x1 * 4)) > 1e-9 || Math.abs(x2 * 4 - Math.round(x2 * 4)) > 1e-9);
+  const [lo, hi] = [Math.min(x1, x2), Math.max(x1, x2)], L = T`${a === 1 ? '' : a === -1 ? '-' : a}x ${b < 0 ? '- ' + -b : '+ ' + b}`;
+  return {
+    q: T`Löse die Betragsgleichung \[|${L}| = ${c}\] Gib beide Lösungen an (kleinere zuerst).`,
+    fields: [num(T`\(x_1 =\)`, lo, 2), num(T`\(x_2 =\)`, hi, 2)],
+    sol: T`Zwei Fälle: \(${L} = ${c}\Rightarrow x = ${ntc(x1, 4)}\) und \(${L} = -${c}\Rightarrow x = ${ntc(x2, 4)}\).`,
+    steps: [S('Fall 1: Inhalt positiv', T`${L} = ${c}`, [num(T`\(x =\)`, x1, 2)], T`\(x = \frac{${c} - ${par(b)}}{${a}}\)`),
+      S('Fall 2: Inhalt negativ', T`${L} = -${c}`, [num(T`\(x =\)`, x2, 2)], T`\(x = \frac{-${c} - ${par(b)}}{${a}}\)`),
+      S('Sortieren', '', [num(T`\(x_1 =\)`, lo, 2), num(T`\(x_2 =\)`, hi, 2)], 'kleinere Lösung zuerst')]
+  };
+}, { st: true });
+G3('bruchgl', 'g-grund', 'Bruchgleichung', () => {
+  let a, b, p, q, x;
+  do { a = R(1, 7); b = R(1, 7); p = R(-6, 6); q = R(-6, 6); x = (b * p - a * q) / (a - b); }
+  while (a === b || p === q || !Number.isInteger(x) || x + p === 0 || x + q === 0 || Math.abs(x) > 30);
+  const d1 = minus('x', -p), d2 = minus('x', -q);
+  return {
+    q: T`Löse die Bruchgleichung \[\frac{${a}}{${d1}} = \frac{${b}}{${d2}}\]`,
+    fields: [num(T`\(x =\)`, x, 2)],
+    sol: T`Mit \((${d1})(${d2})\) multiplizieren: \(${a}(${d2}) = ${b}(${d1})\Rightarrow ${a - b}x = ${b * p - a * q}\Rightarrow x = ${x}\). Probe: kein Nenner wird 0.`,
+    steps: [S('Ausschließen', T`\text{Nenner} \ne 0`, [num('ausgeschlossen (kleinerer Wert)', Math.min(-p, -q), 0), num('ausgeschlossen (größerer Wert)', Math.max(-p, -q), 0)], T`\(x = ${-p}\) und \(x = ${-q}\) machen einen Nenner 0`),
+      S('Mit dem Hauptnenner multiplizieren', T`${a}(${d2}) = ${b}(${d1})`, [num(T`Koeffizient vor \(x\) (links − rechts)`, a - b, 0)], T`\(${a}x - ${b}x\)`),
+      S('Nach x auflösen', T`${a - b}x = ${b * p - a * q}`, [num(T`\(x =\)`, x, 2)], T`\(x = \frac{${b * p - a * q}}{${a - b}}\)`)]
+  };
+}, { st: true });
+G3('verkettung', 'g-grund', 'Verkettung von Funktionen', () => {
+  const a = pick([-3, -2, 2, 3, 4, 5]), b = R(-6, 6), c = R(1, 4), d = R(-5, 5), x0 = R(-3, 3);
+  const f = x => a * x + b, g = x => c * x * x + d, fog = x => f(g(x)), gof0 = g(f(x0));
+  const fT = polyTeX([b, a]), gT = polyTeX([d, 0, c]);
+  return {
+    q: T`Gegeben \(f(x) = ${fT}\) und \(g(x) = ${gT}\). Bestimme \((f\circ g)(x)\) und den Wert \((g\circ f)(${x0})\).`,
+    fields: [ex(T`\((f\circ g)(x) =\)`, fog, polyTeX([a * d + b, 0, a * c])), num(T`\((g\circ f)(${x0}) =\)`, gof0, 2)],
+    sol: T`\[(f\circ g)(x) = f(g(x)) = ${a}(${gT}) ${plusTerm(b)} = ${polyTeX([a * d + b, 0, a * c])}\]
+\[(g\circ f)(${x0}) = g(f(${x0})) = g(${f(x0)}) = ${gof0}\]`,
+    steps: [S('Innere Funktion einsetzen', T`(f\circ g)(x) = f(g(x)) = ${a}\cdot g(x) ${plusTerm(b)}`, [ex(T`\((f\circ g)(x) =\)`, fog, polyTeX([a * d + b, 0, a * c]))], T`\(${a}(${gT}) ${plusTerm(b)}\) ausmultiplizieren`),
+      S('Erst innen rechnen', T`f(${x0})`, [num(T`\(f(${x0}) =\)`, f(x0), 2)], T`\(${a}\cdot ${par(x0)} ${plusTerm(b)}\)`),
+      S('Dann außen', T`g(f(${x0}))`, [num(T`\((g\circ f)(${x0}) =\)`, gof0, 2)], T`\(${c}\cdot ${par(f(x0))}^2 ${plusTerm(d)}\)`)]
+  };
+}, { st: true });
+G3('fops', 'g-grund', 'Rechnen mit Funktionen', () => {
+  const a = R(1, 5), b = R(-6, 6), c = R(-4, 4) || 1, d = R(1, 9), x0 = R(-3, 4);
+  const f = x => a * x + b, g = x => c * x + d, fT = polyTeX([b, a]), gT = polyTeX([d, c]);
+  const prod = f(x0) * g(x0);
+  return {
+    q: T`Gegeben \(f(x) = ${fT}\) und \(g(x) = ${gT}\). Bestimme \((f + g)(x)\) und \((f\cdot g)(${x0})\).`,
+    fields: [ex(T`\((f + g)(x) =\)`, x => f(x) + g(x), polyTeX([b + d, a + c])), num(T`\((f\cdot g)(${x0}) =\)`, prod, 2)],
+    sol: T`\((f + g)(x) = ${polyTeX([b + d, a + c])}\);\(\quad (f\cdot g)(${x0}) = f(${x0})\cdot g(${x0}) = ${f(x0)}\cdot ${par(g(x0))} = ${prod}\)`
+  };
+});
+G3('defb', 'g-grund', 'Definitionsbereich bestimmen', () => {
+  const a = R(2, 9), v = pick(['sqrt', 'ln', 'frac', 'frac2', 'sqrtm']);
+  const D = s => T`\(D = ${s}\)`;
+  if (v === 'sqrt') return { q: T`Bestimme den Definitionsbereich von \(f(x) = \sqrt{x - ${a}}\).`, fields: [mc('', D(T`[${a};\ \infty)`), [D(T`(${a};\ \infty)`), D(T`\text{ℝ}\setminus\{${a}\}`), D(T`[-${a};\ \infty)`)])], sol: T`Radikand \(\ge 0\): \(x - ${a}\ge 0\Rightarrow x\ge ${a}\).` };
+  if (v === 'sqrtm') return { q: T`Bestimme den Definitionsbereich von \(f(x) = \sqrt{${a} - x}\).`, fields: [mc('', D(T`(-\infty;\ ${a}]`), [D(T`[${a};\ \infty)`), D(T`(-\infty;\ ${a})`), D(T`\text{ℝ}`)])], sol: T`\(${a} - x\ge 0\Rightarrow x\le ${a}\).` };
+  if (v === 'ln') return { q: T`Bestimme den Definitionsbereich von \(f(x) = \ln(x + ${a})\).`, fields: [mc('', D(T`(-${a};\ \infty)`), [D(T`[-${a};\ \infty)`), D(T`(${a};\ \infty)`), D(T`(0;\ \infty)`)])], sol: T`Argument des \(\ln\) muss \(> 0\) sein: \(x + ${a} > 0\Rightarrow x > -${a}\).` };
+  if (v === 'frac') return { q: T`Bestimme den Definitionsbereich von \(f(x) = \frac{x + 1}{x - ${a}}\).`, fields: [mc('', D(T`\text{ℝ}\setminus\{${a}\}`), [D(T`\text{ℝ}\setminus\{-1\}`), D(T`\text{ℝ}\setminus\{-${a}\}`), D(T`(${a};\ \infty)`)])], sol: T`Nenner \(\ne 0\): \(x\ne ${a}\).` };
+  return { q: T`Bestimme den Definitionsbereich von \(f(x) = \frac{3}{x^2 - ${a * a}}\).`, fields: [mc('', D(T`\text{ℝ}\setminus\{-${a};\ ${a}\}`), [D(T`\text{ℝ}\setminus\{${a}\}`), D(T`\text{ℝ}\setminus\{${a * a}\}`), D(T`(-${a};\ ${a})`)])], sol: T`\(x^2 - ${a * a} = (x - ${a})(x + ${a}) \ne 0\Rightarrow x\ne\pm ${a}\).` };
+}, { mc: true, nv: 5 });
+G3('logrech', 'g-grund', 'Exponentialgleichung mit ln lösen', () => {
+  const K = R(1, 20) * 100, r = R(10, 80) / 1000, fac = pick([2, 3, 5, 10, 100]);
+  const n = Math.log(fac) / Math.log(1 + r);
+  return {
+    q: T`Nach wie vielen Jahren werden aus \(${eur(K, 0)}\) bei \(${ptc(r)}\) p.a. (Zinseszins) \(${eur(K * fac, 0)}\)? Löse \(${nt(K * fac, 0)} = ${nt(K, 0)}\cdot ${ntc(1 + r, 4)}^n\) nach \(n\).`,
+    fields: [num(T`\(n =\)`, n, 2, 'Jahre')],
+    sol: T`\(${ntc(1 + r, 4)}^n = ${fac}\Rightarrow n = \frac{\ln ${fac}}{\ln ${ntc(1 + r, 4)}} = ${nt(n, 2)}\)`,
+    steps: [S('Durch das Startkapital teilen', T`${ntc(1 + r, 4)}^n = \frac{${nt(K * fac, 0)}}{${nt(K, 0)}}`, [num('rechte Seite', fac, 2)], ''),
+      S('Logarithmieren', T`n\cdot\ln ${ntc(1 + r, 4)} = \ln ${fac}`, [num(T`\(\ln ${fac} =\)`, Math.log(fac), 4), num(T`\(\ln ${ntc(1 + r, 4)} =\)`, Math.log(1 + r), 6)], ''),
+      S('Teilen', T`n = \frac{\ln ${fac}}{\ln ${ntc(1 + r, 4)}}`, [num(T`\(n =\)`, n, 2, 'Jahre')], T`\(\frac{${nt(Math.log(fac), 4)}}{${nt(Math.log(1 + r), 6)}}\)`)]
+  };
+}, { st: true, refs: 'a' });
+
+G3('binomfakt', 'g-grund', 'Faktorisieren mit binomischen Formeln', () => {
+  const a = R(1, 5), b = R(2, 9), v = Math.random() < 0.5, A = a === 1 ? 'x' : a + 'x', aa = a * a === 1 ? '' : a * a;
+  if (v) return { q: T`Faktorisiere \(${aa}x^2 - ${b * b}\).`, fields: [mc('', T`\((${A} + ${b})(${A} - ${b})\)`, [T`\((${A} - ${b})^2\)`, T`\((${A} + ${b})^2\)`, T`\((${A} - ${b})(${A} + ${b * b})\)`])], sol: T`3. binomische Formel rückwärts: \(a^2 - b^2 = (a + b)(a - b)\) mit \(a = ${A},\ b = ${b}\).` };
+  return { q: T`Faktorisiere \(${aa}x^2 + ${2 * a * b}x + ${b * b}\).`, fields: [mc('', T`\((${A} + ${b})^2\)`, [T`\((${A} - ${b})^2\)`, T`\((${A} + ${b})(${A} - ${b})\)`, T`\((${A} + ${b * b})^2\)`])], sol: T`1. binomische Formel rückwärts: \(a^2 + 2ab + b^2 = (a + b)^2\) mit \(a = ${A},\ b = ${b}\).` };
+}, { mc: true, nv: 2 });
+G3('potzahl', 'g-grund', 'Potenzen mit rationalen Exponenten', () => {
+  const [bT, eT, val, hint] = pick([
+    ...[[8, 2, 3], [27, 2, 3], [16, 3, 4], [125, 2, 3], [32, 3, 5], [81, 3, 4], [64, 5, 6]].map(([b, m, n]) => [String(b), T`\frac{${m}}{${n}}`, Math.round(b ** (1 / n)) ** m, T`\(\left(\sqrt[${n}]{${b}}\right)^{${m}} = ${Math.round(b ** (1 / n))}^{${m}}\)`]),
+    ...[[2, 3], [4, 2], [5, 2], [10, 3], [2, 5]].map(([b, n]) => [String(b), String(-n), 1 / b ** n, T`\(\frac{1}{${b}^{${n}}}\)`]),
+    ...[[8, 3], [27, 3], [16, 4], [9, 2]].map(([b, n]) => [String(b), T`-\frac{1}{${n}}`, 1 / Math.round(b ** (1 / n)), T`\(\frac{1}{\sqrt[${n}]{${b}}}\)`]),
+    ...[[4, 2], [2, 3], [5, 2]].map(([b, n]) => [T`\left(\frac1{${b}}\right)`, String(-n), b ** n, T`\(\left(\frac1{${b}}\right)^{-${n}} = ${b}^{${n}}\)`])]);
+  return { q: T`Berechne ohne Taschenrechner: \[${bT}^{${eT}}\]`, fields: [num('Ergebnis', val, 4)], sol: T`\(a^{-n} = \frac1{a^n}\), \(a^{\frac mn} = \left(\sqrt[n]{a}\right)^m\): ${hint} \(= ${nt(val, 4)}\)` };
+}, { refs: 'a', nv: 5 });
+G3('bruchrech', 'g-grund', 'Bruchrechnung', () => {
+  const a = R(1, 9), b = R(2, 9), c = R(1, 9), d = R(2, 9), op = pick(['+', '-', '*', ':']);
+  const v = op === '+' ? a / b + c / d : op === '-' ? a / b - c / d : op === '*' ? a * c / (b * d) : (a * d) / (b * c);
+  const opT = { '+': '+', '-': '-', '*': T`\cdot`, ':': ':' }[op];
+  const how = op === '+' || op === '-' ? T`Hauptnenner: \(\frac{${a}\cdot ${d} ${op} ${c}\cdot ${b}}{${b}\cdot ${d}} = \frac{${a * d + (op === '+' ? 1 : -1) * c * b}}{${b * d}}\)`
+    : op === '*' ? T`Zähler mal Zähler, Nenner mal Nenner: \(\frac{${a * c}}{${b * d}}\)` : T`Mit dem Kehrwert multiplizieren: \(\frac{${a}}{${b}}\cdot\frac{${d}}{${c}} = \frac{${a * d}}{${b * c}}\)`;
+  return { q: T`Berechne \(\frac{${a}}{${b}} ${opT} \frac{${c}}{${d}}\) (als Dezimalzahl).`, fields: [num('Ergebnis', v, 4)], sol: T`${how} \(= ${nt(v, 4)}\)` };
+}, { nv: 3 });
+G3('loggesetz', 'g-grund', 'Logarithmengesetze', () => {
+  const a = R(2, 9), b = R(3, 9), n = R(2, 5), v = pick(['sum', 'pow', 'e']);
+  if (v === 'sum') return { q: T`Fasse zusammen: \(\ln ${a} + \ln ${b} =\)`, fields: [mc('', T`\(\ln ${a * b}\)`, [T`\(\ln ${a + b}\)`, T`\(\ln ${a}\cdot\ln ${b}\)`, T`\(\ln\frac{${a}}{${b}}\)`])], sol: T`\(\ln a + \ln b = \ln(a\cdot b)\)` };
+  if (v === 'pow') return { q: T`Vereinfache: \(\ln\left(${a}^{${n}}\right) =\)`, fields: [mc('', T`\(${n}\ln ${a}\)`, [T`\((\ln ${a})^{${n}}\)`, T`\(\ln ${a * n}\)`, T`\(\frac{\ln ${a}}{${n}}\)`])], sol: T`\(\ln(a^n) = n\cdot\ln a\)` };
+  return { q: T`Berechne: \(\ln\left(e^{${n}}\right) + e^{\ln ${a}} =\)`, fields: [mc('', String(n + a), [String(n * a), T`\(e^{${n}} + ${a}\)`, String(n + 1)].filter((x, i, arr) => x !== String(n + a) && arr.indexOf(x) === i).slice(0, 3))], sol: T`\(\ln\) und \(e\) heben sich auf: \(${n} + ${a} = ${n + a}\)` };
+}, { mc: true, refs: 'a', nv: 3 });
+
+/* ==================================================== 1.3 gebrochen rationale Funktionen, Polynomdivision */
+G3('rat_analyse', 'f-null', 'Nullstelle, Pol und Lücke', () => {
+  let a, b, c; do { a = R(-6, 6); b = R(-6, 6); c = R(-6, 6); } while (new Set([a, b, c]).size < 3);
+  const num_ = polyTeX([a * b, -(a + b), 1]), den = polyTeX([b * c, -(b + c), 1]), hv = (b - a) / (b - c);
+  const fz = (u, v) => [Math.min(u, v), Math.max(u, v)];
+  const [z1, z2] = fz(a, b), [n1, n2] = fz(b, c);
+  return {
+    q: T`Untersuche \[f(x) = \frac{${num_}}{${den}}\] Gib die Nullstelle, die Polstelle und die (hebbare) Lücke an sowie den Grenzwert von \(f\) an der Lücke.`,
+    fields: [num('Nullstelle x =', a, 2), num('Polstelle x =', c, 2), num('Lücke x =', b, 2), num('Grenzwert an der Lücke', hv, 4)],
+    sol: T`\[f(x) = \frac{(${minus('x', a)})(${minus('x', b)})}{(${minus('x', b)})(${minus('x', c)})}\] Der Faktor \((${minus('x', b)})\) kürzt sich: Lücke bei \(x = ${b}\), Grenzwert \(\frac{${b} - ${par(a)}}{${b} - ${par(c)}} = ${nt(hv, 4)}\). Nullstelle \(x = ${a}\), Polstelle \(x = ${c}\).`,
+    steps: [S('Zähler faktorisieren', T`${num_} = 0`, [num(T`\(x_1 =\)`, z1, 2), num(T`\(x_2 =\)`, z2, 2)], 'p-q-Formel oder Satz von Vieta'),
+      S('Nenner faktorisieren', T`${den} = 0`, [num(T`\(x_1 =\)`, n1, 2), num(T`\(x_2 =\)`, n2, 2)], 'Nullstellen des Nenners → nicht im Definitionsbereich'),
+      S('Einordnen', 'Gemeinsamer Faktor → Lücke, Rest im Nenner → Pol, Rest im Zähler → Nullstelle', [num('Nullstelle x =', a, 2), num('Polstelle x =', c, 2), num('Lücke x =', b, 2)], T`gemeinsam ist \(x = ${b}\)`),
+      S('Grenzwert an der Lücke', T`\text{gekürzt: } \frac{${minus('x', a)}}{${minus('x', c)}}\text{ an } x = ${b}`, [num('Grenzwert an der Lücke', hv, 4)], T`\(\frac{${b} - ${par(a)}}{${b} - ${par(c)}}\)`)]
+  };
+}, { st: true });
+G3('polydiv_rest', 'f-null', 'Polynomdivision mit Rest', () => {
+  let a, p, q, s, rem; do { a = pick([-3, -2, -1, 1, 2, 3]); p = R(-5, 5); q = R(-8, 8); s = R(-9, 9); rem = s + a * (q + a * (p + a)); } while (!rem);
+  const q1 = p + a, q0 = q + a * q1, fT = polyTeX([s, q, p, 1]);
+  return {
+    q: T`Führe die Polynomdivision durch: \[(${fT}) : (${minus('x', a)})\] Gib den Quotienten \(g(x)\) und den Rest an.`,
+    fields: [ex(T`\(g(x) =\)`, x => x * x + q1 * x + q0, polyTeX([q0, q1, 1])), num('Rest =', rem, 2)],
+    sol: T`\[(${fT}) : (${minus('x', a)}) = ${polyTeX([q0, q1, 1])}\ \text{Rest}\ ${rem}\] Kontrolle: Der Rest ist \(f(${a}) = ${rem}\) – also ist \(${a}\) keine Nullstelle.`,
+    steps: [S('Erster Schritt', T`x^3 : x = x^2`, [num(T`Koeffizient vor \(x\) im Quotienten`, q1, 2)], T`\(${p} - (${-a}) = ${q1}\)`),
+      S('Zweiter Schritt', '', [num('Konstante im Quotienten', q0, 2)], T`\(${q} - (${-a})\cdot ${par(q1)} = ${q0}\)`),
+      S('Rest', T`\text{Rest} = f(${a})`, [ex(T`\(g(x) =\)`, x => x * x + q1 * x + q0, polyTeX([q0, q1, 1])), num('Rest =', rem, 2)], T`\(${s} - (${-a})\cdot ${par(q0)} = ${rem}\)`)]
+  };
+}, { st: true });
+
+/* ==================================================== 1.4 Asymptoten, einseitige Grenzwerte */
+G3('asymptote', 'f-eig', 'Pol und Asymptote', () => {
+  let a, p, b, c; do { a = R(-6, 6); p = R(-9, 9); b = pick([1, 2, 3, 4]); c = R(-5, 5); } while (!a || a * c + p === 0);
+  const q = -b * c;   // Nenner b x + q, Pol bei x = c
+  const fT = T`\frac{${polyTeX([p, a])}}{${polyTeX([q, b])}}`;
+  return {
+    q: T`Gegeben \[f(x) = ${fT}\] Bestimme die Polstelle und die waagerechte Asymptote \(y = \ldots\)`,
+    fields: [num('Polstelle x =', c, 2), num(T`Asymptote \(y =\)`, a / b, 4)],
+    sol: T`Nenner \(= 0\): \(x = ${c}\) (Zähler dort \(\ne 0\) → Polstelle). Gleicher Grad in Zähler und Nenner: \(y = \frac{${a}}{${b}} = ${nt(a / b, 4)}\).`
+  };
+});
+G3('einseitig', 'f-eig', 'Einseitige Grenzwerte & Stetigkeit', () => {
+  const x0 = R(-3, 4), a = pick([-3, -2, -1, 1, 2, 3]), b = R(-6, 6), c = pick([-2, -1, 1, 2, 4]), stet = Math.random() < 0.45;
+  const L = a * x0 + b, d = stet ? L - c * x0 : L - c * x0 + pick([-4, -3, -2, 2, 3, 5]), Rr = c * x0 + d;
+  return {
+    q: T`\[f(x) = \begin{cases} ${polyTeX([b, a])} & x < ${x0}\\ ${polyTeX([d, c])} & x \ge ${x0}\end{cases}\] Bestimme den links- und rechtsseitigen Grenzwert an \(x_0 = ${x0}\). Ist \(f\) dort stetig?`,
+    fields: [num(T`\(\lim_{x\to ${x0}^-} f(x) =\)`, L, 2), num(T`\(\lim_{x\to ${x0}^+} f(x) =\)`, Rr, 2), mc('Stetig?', stet ? 'ja, stetig' : 'nein, Sprungstelle', [stet ? 'nein, Sprungstelle' : 'ja, stetig', 'nein, Polstelle'])],
+    sol: T`Links: \(${a}\cdot ${par(x0)} ${plusTerm(b)} = ${L}\), rechts: \(${c}\cdot ${par(x0)} ${plusTerm(d)} = ${Rr}\). ${stet ? 'Beide gleich und gleich f(x₀) → stetig.' : 'Verschieden → endlicher Sprung (Unstetigkeit 2. Ordnung).'}`
+  };
+});
+MCQ3('limmc', 'f-eig', 'Grenzwerte für x → ±∞', [
+  [T`\(\lim_{x\to\infty} \frac{3x^2 + 1}{6x^2 - x} =\)`, T`\(\frac12\)`, [T`\(0\)`, T`\(\infty\)`, T`\(3\)`]],
+  [T`\(\lim_{x\to\infty} \frac{2x + 5}{x^2 + 1} =\)`, T`\(0\)`, [T`\(2\)`, T`\(\infty\)`, T`\(5\)`]],
+  [T`\(\lim_{x\to\infty} \frac{x^3}{x^2 + 4} =\)`, T`\(\infty\)`, [T`\(1\)`, T`\(0\)`, T`\(\frac14\)`]],
+  [T`\(\lim_{x\to\infty} e^{-x} =\)`, T`\(0\)`, [T`\(1\)`, T`\(\infty\)`, T`\(-\infty\)`]],
+  [T`\(\lim_{x\to-\infty} x\,e^{x} =\)`, T`\(0\)`, [T`\(-\infty\)`, T`\(\infty\)`, T`\(-1\)`]],
+  [T`\(\lim_{x\to\infty} \frac{\ln x}{x} =\)`, T`\(0\)`, [T`\(1\)`, T`\(\infty\)`, T`\(e\)`]],
+  [T`\(\lim_{x\to 0^+} \ln x =\)`, T`\(-\infty\)`, [T`\(0\)`, T`\(1\)`, T`\(\infty\)`]],
+  [T`\(\lim_{x\to 0^-} \frac1x =\)`, T`\(-\infty\)`, [T`\(\infty\)`, T`\(0\)`, 'existiert als Zahl']],
+  [T`\(\lim_{x\to\infty} \left(1 + \frac1x\right)^x =\)`, T`\(e\)`, [T`\(1\)`, T`\(\infty\)`, T`\(0\)`]],
+  [T`\(\lim_{x\to -\infty} (x^3 - 5x) =\)`, T`\(-\infty\)`, [T`\(\infty\)`, T`\(0\)`, T`\(-5\)`]],
+  [T`\(\lim_{x\to\infty} \frac{5 - 2x^2}{x^2} =\)`, T`\(-2\)`, [T`\(5\)`, T`\(0\)`, T`\(-\infty\)`]],
+  [T`Welche Asymptote hat \(f(x) = \frac{4x - 1}{2x + 3}\)?`, T`\(y = 2\)`, [T`\(y = 0\)`, T`\(y = -\frac13\)`, T`\(x = 2\)`]]
+]);
+
+/* ==================================================== 1.5 Ableitungen von sin und cos */
+G3('dtrig', 'f-abl', 'Ableiten mit sin und cos', () => {
+  const v = pick(['sinb', 'cosb', 'mix', 'prod', 'chain2', 'exp']);
+  const a = pick([2, 3, 4, 5, -2]), b = pick([2, 3, 4, 5]);
+  let fT, fn, dT, rule;
+  if (v === 'sinb') { fT = T`${a}\sin(${b}x)`; fn = x => a * b * Math.cos(b * x); dT = T`${a * b}\cos(${b}x)`; rule = T`Kettenregel: \((\sin u)' = \cos u\cdot u'\)`; }
+  else if (v === 'cosb') { fT = T`${a}\cos(${b}x)`; fn = x => -a * b * Math.sin(b * x); dT = T`${-a * b}\sin(${b}x)`; rule = T`Kettenregel: \((\cos u)' = -\sin u\cdot u'\)`; }
+  else if (v === 'mix') { fT = T`${a}\sin x + ${b}\cos x`; fn = x => a * Math.cos(x) - b * Math.sin(x); dT = T`${a}\cos x - ${b}\sin x`; rule = 'Summen- und Faktorregel'; }
+  else if (v === 'prod') { const n = pick([1, 2, 3]); fT = T`x^{${n}}\sin x`; fn = x => n * x ** (n - 1) * Math.sin(x) + x ** n * Math.cos(x); dT = T`${n === 1 ? '' : n}x^{${n - 1}}\sin x + x^{${n}}\cos x`; rule = T`Produktregel: \((uv)' = u'v + uv'\)`; }
+  else if (v === 'chain2') { fT = T`\sin(x^2 + ${b})`; fn = x => 2 * x * Math.cos(x * x + b); dT = T`2x\cos(x^2 + ${b})`; rule = 'Kettenregel: äußere · innere Ableitung'; }
+  else { fT = T`e^{x}\cos x`; fn = x => Math.exp(x) * (Math.cos(x) - Math.sin(x)); dT = T`e^{x}\cos x - e^{x}\sin x`; rule = 'Produktregel'; }
+  return {
+    q: T`Bestimme \(f'(x)\) für \[f(x) = ${fT}\]<div class="small muted">Eingabe z. B. <code>6cos(3x)</code> oder <code>2x*sin(x)+x^2*cos(x)</code></div>`,
+    fields: [ex(T`\(f'(x) =\)`, fn, dT)],
+    sol: T`\((\sin x)' = \cos x,\ (\cos x)' = -\sin x\). ${rule}: \[f'(x) = ${dT}\]`
+  };
+}, { refs: 'abl regeln', nv: 6 });
+G3('dtrigwert', 'f-abl', 'sin/cos: Steigung an einer Stelle', () => {
+  const [x0, x0T] = pick([[0, '0'], [Math.PI / 2, T`\frac{\pi}{2}`], [Math.PI, T`\pi`], [Math.PI / 3, T`\frac{\pi}{3}`]]);
+  const a = R(2, 6), b = R(1, 5), d = a * Math.cos(x0) - b * Math.sin(x0);
+  return {
+    q: T`Wie groß ist die Steigung von \(f(x) = ${a}\sin x + ${b}\cos x\) an der Stelle \(x_0 = ${x0T}\) (Bogenmaß)?`,
+    fields: [num(T`\(f'(${x0T}) =\)`, d, 4)],
+    sol: T`\(f'(x) = ${a}\cos x - ${b}\sin x\Rightarrow f'(${x0T}) = ${a}\cdot ${nt(Math.cos(x0), 4)} - ${b}\cdot ${nt(Math.sin(x0), 4)} = ${nt(d, 4)}\)`,
+    steps: [S('Ableiten', T`(\sin x)' = \cos x,\ (\cos x)' = -\sin x`, [ex(T`\(f'(x) =\)`, x => a * Math.cos(x) - b * Math.sin(x), T`${a}\cos x - ${b}\sin x`)], ''),
+      S('Einsetzen', T`f'(${x0T})`, [num(T`\(f'(${x0T}) =\)`, d, 4)], T`\(\cos(${x0T}) = ${nt(Math.cos(x0), 4)}\), \(\sin(${x0T}) = ${nt(Math.sin(x0), 4)}\) – Taschenrechner auf RAD`)]
+  };
+}, { st: true, refs: 'abl' });
+
+/* ==================================================== 1.6 Kurvendiskussion, Gewinnmaximierung */
+G3('kd_cubic', 'f-ext', 'Kurvendiskussion (kubisch)', () => {
+  let x1, x2; do { x1 = R(-4, 3); x2 = x1 + pick([2, 4, 6]); } while (false);
+  const p = -1.5 * (x1 + x2), q = 3 * x1 * x2, s = R(-6, 8), f = x => x ** 3 + p * x * x + q * x + s, xw = (x1 + x2) / 2;
+  const fT = polyTeX([s, q, p, 1]), dT = polyTeX([q, 2 * p, 3]), ddT = polyTeX([2 * p, 6]);
+  return {
+    q: T`Führe eine Kurvendiskussion für \[f(x) = ${fT}\] durch: Hoch- und Tiefpunkt sowie Wendestelle.`,
+    fields: [num(T`Hochpunkt \(x =\)`, x1, 2), num(T`\(f\) im Hochpunkt`, f(x1), 2), num(T`Tiefpunkt \(x =\)`, x2, 2), num(T`\(f\) im Tiefpunkt`, f(x2), 2), num(T`Wendestelle \(x =\)`, xw, 2)],
+    sol: T`\(f'(x) = ${dT} = 3(${minus('x', x1)})(${minus('x', x2)})\), \(f''(x) = ${ddT}\).
+\(f''(${x1}) = ${6 * x1 + 2 * p} < 0\) → Hochpunkt \((${x1}|${ntc(f(x1))})\); \(f''(${x2}) = ${6 * x2 + 2 * p} > 0\) → Tiefpunkt \((${x2}|${ntc(f(x2))})\). \(f''(x) = 0\Rightarrow x = ${ntc(xw)}\), \(f''' = 6 \ne 0\) → Wendepunkt.`,
+    steps: [S('Ableitungen bilden', T`f'(x),\ f''(x)`, [ex(T`\(f'(x) =\)`, x => 3 * x * x + 2 * p * x + q, dT)], 'Potenzregel'),
+      S('Notwendige Bedingung', T`f'(x) = 0`, [num(T`\(x_1 =\)`, x1, 2), num(T`\(x_2 =\)`, x2, 2)], T`\(${dT} = 0\ |\ :3\) und p-q-Formel`),
+      S('Hinreichende Bedingung', T`f''(x) = ${ddT}`, [num(T`\(f''(${x1}) =\)`, 6 * x1 + 2 * p, 2), num(T`\(f''(${x2}) =\)`, 6 * x2 + 2 * p, 2)], 'negativ → Hochpunkt, positiv → Tiefpunkt'),
+      S('Funktionswerte', T`f(x_1),\ f(x_2)`, [num(T`\(f\) im Hochpunkt`, f(x1), 2), num(T`\(f\) im Tiefpunkt`, f(x2), 2)], 'in die Ausgangsfunktion einsetzen'),
+      S('Wendestelle', T`f''(x) = 0,\ f'''(x) \ne 0`, [num(T`Wendestelle \(x =\)`, xw, 2)], T`\(${ddT} = 0\)`)]
+  };
+}, { st: true, refs: 'ext wende' });
+G3('kd_xex', 'f-ext', 'Kurvendiskussion mit e-Funktion', () => {
+  const k = pick([1, -1, 2, -2, 0.5, -0.5]), xe = -1 / k, xw = -2 / k, fe = xe * Math.exp(k * xe), dd = Math.exp(k * xe) * (2 * k + k * k * xe);
+  const eT = k === 1 ? 'e^{x}' : T`e^{${ntc(k)}x}`;
+  return {
+    q: T`Untersuche \(f(x) = x\cdot ${eT}\): Lage und Art des Extremums sowie die Wendestelle.`,
+    fields: [num(T`Extremstelle \(x =\)`, xe, 2), num(T`\(f\) an der Extremstelle`, fe, 4), mc('Art', k > 0 ? 'Minimum' : 'Maximum', [k > 0 ? 'Maximum' : 'Minimum', 'Sattelpunkt']), num(T`Wendestelle \(x =\)`, xw, 2)],
+    sol: T`Produktregel: \(f'(x) = ${eT}(1 ${k < 0 ? '-' : '+'} ${ntc(Math.abs(k))}x)\), \(f''(x) = ${eT}(${ntc(2 * k)} ${k * k === 1 ? '+' : '+ ' + ntc(k * k)}x)\). \(f' = 0\Rightarrow x = ${ntc(xe)}\) (\(e^{\ldots} > 0\)!), \(f''(${ntc(xe)}) = ${nt(dd, 4)}\) → ${k > 0 ? 'Minimum' : 'Maximum'}. \(f'' = 0\Rightarrow x = ${ntc(xw)}\).`,
+    steps: [S('Erste Ableitung (Produktregel)', T`(uv)' = u'v + uv'`, [ex(T`\(f'(x) =\)`, x => Math.exp(k * x) * (1 + k * x), T`${eT}(1 ${k < 0 ? '-' : '+'} ${ntc(Math.abs(k))}x)`)], T`\(u = x,\ v = ${eT},\ v' = ${ntc(k)}${eT}\)`),
+      S('Notwendige Bedingung', T`f'(x) = 0\ \Rightarrow\ 1 ${k < 0 ? '-' : '+'} ${ntc(Math.abs(k))}x = 0`, [num(T`Extremstelle \(x =\)`, xe, 2)], T`Die e-Funktion wird nie 0 – nur die Klammer`),
+      S('Hinreichende Bedingung', T`f''(x) = ${eT}(${ntc(2 * k)} + ${ntc(k * k)}x)`, [num(T`\(f''(${ntc(xe)}) =\)`, dd, 4), mc('Art', k > 0 ? 'Minimum' : 'Maximum', [k > 0 ? 'Maximum' : 'Minimum', 'Sattelpunkt'])], T`einsetzen: \(e^{-1}\cdot(${ntc(2 * k)} + ${ntc(k * k)}\cdot ${par(xe)})\)`),
+      S('Funktionswert', T`f(${ntc(xe)})`, [num(T`\(f\) an der Extremstelle`, fe, 4)], T`\(${ntc(xe)}\cdot e^{-1}\)`),
+      S('Wendestelle', T`f''(x) = 0`, [num(T`Wendestelle \(x =\)`, xw, 2)], T`\(${ntc(2 * k)} + ${ntc(k * k)}x = 0\)`)]
+  };
+}, { st: true, refs: 'abl regeln ext', nv: 6 });
+G3('gewinn_koch', 'f-ext', 'Gewinnmaximierung nach Kochrezept', () => {
+  let a, xs, e, b; do { a = R(2, 8); xs = R(15, 80); e = R(20, 90); b = 2 * a * xs - e; } while (b <= 0);
+  const Gm0 = a * xs * xs, c = Math.round(Gm0 * R(5, 40) / 100 / 100) * 100 || 100, Gm = Gm0 - c;
+  const KT = T`${a}x^2 - ${b}x + ${nt(c, 0)}`, GT = T`-${a}x^2 + ${b + e}x - ${nt(c, 0)}`;
+  return {
+    q: T`Ein Unternehmen hat den Erlös \(E(x) = ${e}x\) und die Kosten \(K(x) = ${KT}\). Bei welcher Menge \(x^*\) ist der Gewinn maximal, und wie hoch ist er?`,
+    fields: [num(T`\(x^* =\)`, xs, 2), num(T`\(G(x^*) =\)`, Gm, 2)],
+    sol: T`\(G(x) = ${e}x - (${KT}) = ${GT}\). \(G'(x) = -${2 * a}x + ${b + e} = 0\Rightarrow x^* = ${xs}\); \(G''(x) = -${2 * a} < 0\) → Maximum. \(G(${xs}) = ${nt(Gm, 0)}\).`,
+    steps: [S('1. Funktion aufstellen – K(x) einklammern!', T`G(x) = E(x) - \big(K(x)\big)`, [ex(T`\(G(x) =\)`, x => -a * x * x + (b + e) * x - c, GT)], T`\(${e}x - (${KT})\) – das Minus vor der Klammer dreht alle Vorzeichen: \(-${a}x^2 + ${b}x - ${nt(c, 0)}\)`),
+      S('2./3. Ableiten, notwendige Bedingung', T`G'(x) = 0`, [num(T`\(x^* =\)`, xs, 2)], T`\(G'(x) = -${2 * a}x + ${b + e}\)`),
+      S('4. Hinreichende Bedingung', T`G''(x^*) < 0`, [num(T`\(G''(x^*) =\)`, -2 * a, 2)], 'zweimal ableiten'),
+      S('5. Maximalen Gewinn berechnen', T`G(x^*)`, [num(T`\(G(x^*) =\)`, Gm, 2)], T`\(-${a}\cdot ${xs}^2 + ${b + e}\cdot ${xs} - ${nt(c, 0)}\)`)]
+  };
+}, { st: true, refs: 'ext' });
+G3('gewinn_preis', 'f-ext', 'Gewinn in Abhängigkeit vom Preis', () => {
+  let A, B, k; do { A = R(10, 40) * 10; B = R(2, 6); k = R(5, 30); } while (A <= k * B * 1.5);
+  const Gmax0 = (A - k * B) ** 2 / (4 * B), F = Math.max(10, Math.round(Gmax0 * R(25, 70) / 100 / 10) * 10), ps = (A + k * B) / (2 * B), xs = A - B * ps, Gm = Gmax0 - F;
+  const GT = T`-${B}p^2 + ${A + k * B}p - ${nt(k * A + F, 0)}`;
+  return {
+    q: T`Die Nachfrage ist \(x(p) = ${A} - ${B}p\), die Kosten \(K(x) = ${k}x + ${nt(F, 0)}\). Bei welchem Preis \(p^*\) ist der Gewinn maximal? Gib auch die Menge \(x(p^*)\) und den Gewinn an.`,
+    fields: [num(T`\(p^* =\)`, ps, 2, '€'), num(T`\(x(p^*) =\)`, xs, 2), num(T`\(G(p^*) =\)`, Gm, 2, '€')],
+    sol: T`\(E(p) = p\cdot x(p) = ${A}p - ${B}p^2\), \(K(p) = ${k}(${A} - ${B}p) + ${nt(F, 0)}\). \(G(p) = ${GT}\), \(G'(p) = -${2 * B}p + ${A + k * B} = 0\Rightarrow p^* = ${nt(ps, 2)}\), \(G'' = -${2 * B} < 0\). \(x(p^*) = ${nt(xs, 2)}\), \(G(p^*) = ${nt(Gm, 2)}\).`,
+    steps: [S('Gewinn als Funktion von p', T`G(p) = p\cdot x(p) - K(x(p))`, [ex(T`\(G(p) =\)`, p => -B * p * p + (A + k * B) * p - k * A - F, GT, 'p')], T`\(p(${A} - ${B}p) - [${k}(${A} - ${B}p) + ${nt(F, 0)}]\)`),
+      S('Notwendige Bedingung', T`G'(p) = 0`, [num(T`\(p^* =\)`, ps, 2, '€')], T`\(G'(p) = -${2 * B}p + ${A + k * B}\)`),
+      S('Menge und Gewinn', T`x(p^*),\ G(p^*)`, [num(T`\(x(p^*) =\)`, xs, 2), num(T`\(G(p^*) =\)`, Gm, 2, '€')], T`\(${A} - ${B}\cdot ${nt(ps, 2)}\)`)]
+  };
+}, { st: true, refs: 'ext' });
+
+/* ==================================================== 2.2 Renten */
+G3('rente_quartal', 'z-rente', 'Unterjährige Rente (Quartal/Monat)', () => {
+  const m = pick([4, 4, 12]), rr = m === 4 ? R(2, 30) * 0.004 : R(2, 10) * 0.012, i = rr / m, q = 1 + i, n = m === 4 ? R(6, 24) : R(12, 48), Z = m === 4 ? R(5, 40) * 100 : R(5, 40) * 25;
+  const EWF = (q ** n - 1) / (q - 1), E = Z * EWF, B = E / q ** n, per = m === 4 ? 'Quartal' : 'Monat';
+  return {
+    q: T`Eine ${n}-malige Rente zahlt am Ende jedes ${per}s \(Z = ${eur(Z, 0)}\). Zinssatz \(${ptc(rr, 1)}\) p.a., ${m === 4 ? 'vierteljährliche' : 'monatliche'} Verzinsung. Berechne Endwert \(E\) und Barwert \(B\).`,
+    fields: [num(T`\(E =\)`, E, 2, '€'), num(T`\(B =\)`, B, 2, '€')],
+    sol: T`\(q = 1 + \frac{${ntc(rr, 3)}}{${m}} = ${ntc(q, 4)}\)
+\[E = Z\cdot\frac{q^n - 1}{q - 1} = ${nt(Z, 0)}\cdot\frac{${ntc(q, 4)}^{${n}} - 1}{${ntc(i, 4)}} = ${eur(E)}\qquad B = \frac{E}{q^n} = ${eur(B)}\]`,
+    steps: [S('Zinsfaktor pro Periode', T`q = 1 + \frac rm`, [num(T`\(q =\)`, q, 4)], T`\(1 + \frac{${ntc(rr, 3)}}{${m}}\)`),
+      S('Endwertfaktor', T`EWF = \frac{q^n - 1}{q - 1}`, [num(T`\(EWF =\)`, EWF, 6)], T`\(\frac{${ntc(q, 4)}^{${n}} - 1}{${ntc(i, 4)}}\) – n = Anzahl der Zahlungen (${n})`),
+      S('Endwert', T`E = Z\cdot EWF`, [num(T`\(E =\)`, E, 2, '€')], T`\(${nt(Z, 0)}\cdot ${nt(EWF, 6)}\)`),
+      S('Barwert durch Abzinsen', T`B = \frac{E}{q^n}`, [num(T`\(B =\)`, B, 2, '€')], T`\(\frac{${nt(E, 2)}}{${ntc(q, 4)}^{${n}}}\)`)]
+  };
+}, { st: true, refs: 'rente', nv: 2 });
+G3('ewig_spaeter', 'z-rente', 'Ewige Rente: später bewertet / aufgeschoben', () => {
+  const Z = R(5, 80) * 1000, r = R(3, 10) / 100, k = R(2, 6), B = Z / r, v = Math.random() < 0.5;
+  if (v) {
+    const Bk = B * (1 + r) ** k;
+    return {
+      q: T`Eine ewige Rente zahlt jährlich nachschüssig \(Z = ${eur(Z, 0)}\) bei \(r = ${ptc(r, 0)}\). Bestimme den Barwert \(B\) und den äquivalenten Gesamtwert ${k} Jahre später.`,
+      fields: [num(T`\(B =\)`, B, 2, '€'), num(`Wert nach ${k} Jahren`, Bk, 2, '€')],
+      sol: T`\(B = \frac Zr = \frac{${nt(Z, 0)}}{${ntc(r, 2)}} = ${eur(B)}\); äquivalenter Wert: \(${nt(B, 0)}\cdot ${ntc(1 + r, 2)}^{${k}} = ${eur(Bk)}\) (vgl. Skript S. 379).`,
+      steps: [S('Barwert der ewigen Rente', T`B = \frac Zr`, [num(T`\(B =\)`, B, 2, '€')], T`\(\frac{${nt(Z, 0)}}{${ntc(r, 2)}}\)`),
+        S('Aufzinsen', T`B\cdot(1 + r)^{${k}}`, [num(`Wert nach ${k} Jahren`, Bk, 2, '€')], T`\(${nt(B, 0)}\cdot ${ntc(1 + r, 2)}^{${k}}\)`)]
+    };
+  }
+  const B0 = B / (1 + r) ** k;
+  return {
+    q: T`Eine ewige Rente über jährlich \(Z = ${eur(Z, 0)}\) beginnt erst in ${k + 1} Jahren (erste Zahlung am Ende von Jahr ${k + 1}). Wie hoch ist ihr Barwert heute bei \(r = ${ptc(r, 0)}\)?`,
+    fields: [num(T`\(B_0 =\)`, B0, 2, '€')],
+    sol: T`Wert am Ende von Jahr ${k}: \(\frac Zr = ${eur(B)}\); abzinsen: \(\frac{${nt(B, 0)}}{${ntc(1 + r, 2)}^{${k}}} = ${eur(B0)}\).`,
+    steps: [S(`Ewige Rente bewertet am Ende von Jahr ${k}`, T`\frac Zr`, [num(`Wert in t = ${k}`, B, 2, '€')], T`Die Formel liefert den Wert eine Periode vor der ersten Zahlung`),
+      S('Auf heute abzinsen', T`B_0 = \frac{Z/r}{(1 + r)^{${k}}}`, [num(T`\(B_0 =\)`, B0, 2, '€')], T`\(\frac{${nt(B, 0)}}{${ntc(1 + r, 2)}^{${k}}}\)`)]
+  };
+}, { st: true, refs: 'ewig zf', nv: 2 });
+
+/* ==================================================== 2.4 Zinsstruktur */
+G3('zerobond_spot', 'z-struk', 'Spot Rates aus Zerobond-Preisen', () => {
+  const r1 = R(10, 40) / 1000, r2 = r1 + R(-3, 12) / 1000, r3 = r2 + R(-3, 12) / 1000;
+  const P = [r1, r2, r3].map((r, i) => rnd(100 / (1 + r) ** (i + 1), 2)), rs = P.map((p, i) => (100 / p) ** (1 / (i + 1)) - 1), c = R(2, 8);
+  const price = c * P[0] / 100 + c * P[1] / 100 + (100 + c) * P[2] / 100;
+  return {
+    q: T`Zerobonds (Nennwert 100) kosten heute: 1 Jahr \(${nt(P[0], 2)}\), 2 Jahre \(${nt(P[1], 2)}\), 3 Jahre \(${nt(P[2], 2)}\). Bestimme die Spot Rates \(r_{02}\) und \(r_{03}\) sowie den arbitragefreien Preis einer dreijährigen Kuponanleihe mit \(${c}\,\%\) Kupon.`,
+    fields: [num(T`\(r_{02} =\)`, rs[1] * 100, 2, '%'), num(T`\(r_{03} =\)`, rs[2] * 100, 2, '%'), num('Preis Kuponanleihe', price, 2)],
+    sol: T`\(r_{0t} = \left(\frac{100}{P_t}\right)^{1/t} - 1\): \(r_{01} = ${pt(rs[0])}\), \(r_{02} = ${pt(rs[1])}\), \(r_{03} = ${pt(rs[2])}\). Nachbildung durch Zerobonds (Law of one price): \(${c}\cdot ${nt(P[0] / 100, 4)} + ${c}\cdot ${nt(P[1] / 100, 4)} + ${100 + c}\cdot ${nt(P[2] / 100, 4)} = ${nt(price, 2)}\).`,
+    steps: [S('Einjährige Spot Rate', T`r_{01} = \frac{100}{P_1} - 1`, [num(T`\(r_{01} =\)`, rs[0] * 100, 2, '%')], T`\(\frac{100}{${nt(P[0], 2)}} - 1\)`),
+      S('Zweijährige Spot Rate', T`r_{02} = \sqrt{\frac{100}{P_2}} - 1`, [num(T`\(r_{02} =\)`, rs[1] * 100, 2, '%')], T`\(\sqrt{\frac{100}{${nt(P[1], 2)}}} - 1\)`),
+      S('Dreijährige Spot Rate', T`r_{03} = \sqrt[3]{\frac{100}{P_3}} - 1`, [num(T`\(r_{03} =\)`, rs[2] * 100, 2, '%')], T`\(\left(\frac{100}{${nt(P[2], 2)}}\right)^{1/3} - 1\)`),
+      S('Kuponanleihe nachbilden', T`B = c\cdot\frac{P_1}{100} + c\cdot\frac{P_2}{100} + (100 + c)\cdot\frac{P_3}{100}`, [num('Preis Kuponanleihe', price, 2)], T`Jede Zahlung mit dem Preis „ihres“ Zerobonds bewerten`)]
+  };
+}, { st: true, refs: 'zf' });
+G3('spot_stetig', 'z-struk', 'Anleihe mit stetigen Spot Rates (Hull)', () => {
+  const r = [R(30, 60) / 1000]; for (let i = 1; i < 4; i++) r.push(r[i - 1] + R(0, 10) / 1000);
+  const c = pick([4, 5, 6, 7, 8]), cp = c / 2, ts = [0.5, 1, 1.5, 2], dfs = ts.map((t, i) => Math.exp(-r[i] * t));
+  const B = cp * (dfs[0] + dfs[1] + dfs[2]) + (100 + cp) * dfs[3];
+  return {
+    q: T`Spot Rates bei <b>stetiger</b> Verzinsung: 0,5 J: \(${ptc(r[0], 1)}\), 1 J: \(${ptc(r[1], 1)}\), 1,5 J: \(${ptc(r[2], 1)}\), 2 J: \(${ptc(r[3], 1)}\). Wie viel kostet ein zweijähriger Bond (Nennwert 100) mit \(${c}\,\%\) Kupon p.a., halbjährlich gezahlt?`,
+    fields: [num(T`\(B =\)`, B, 2)],
+    sol: T`Halbjährlicher Kupon \(${ntc(cp)}\):
+\[B = ${ntc(cp)}e^{-${ntc(r[0], 3)}\cdot 0{,}5} + ${ntc(cp)}e^{-${ntc(r[1], 3)}\cdot 1} + ${ntc(cp)}e^{-${ntc(r[2], 3)}\cdot 1{,}5} + ${ntc(100 + cp)}e^{-${ntc(r[3], 3)}\cdot 2} = ${nt(B, 2)}\]`,
+    steps: [S('Kupon pro Halbjahr', T`\frac{${c}}{2}`, [num('Kupon', cp, 2)], 'jährlicher Kupon geteilt durch 2'),
+      S('Diskontfaktoren (stetig)', T`DF = e^{-r\cdot t}`, dfs.map((d, i) => num(T`\(DF_{${ntc(ts[i])}} =\)`, d, 4)), T`z. B. \(e^{-${ntc(r[0], 3)}\cdot 0{,}5}\)`),
+      S('Barwert summieren', T`B = \sum \text{Zahlung}\cdot DF`, [num(T`\(B =\)`, B, 2)], T`Letzte Zahlung: \(${ntc(100 + cp)}\cdot DF_2\)`)]
+  };
+}, { st: true, refs: 'zf' });
+G3('boot4', 'z-struk', 'Bootstrapping über 4 Jahre', () => {
+  const k = [R(30, 50) / 1000]; for (let i = 1; i < 4; i++) k.push(k[i - 1] + R(4, 10) / 1000);
+  const z = [], dsum = [0];
+  for (let n = 0; n < 4; n++) { const s = sum(z.map((zi, i) => 1 / (1 + zi) ** (i + 1))); dsum[n] = s; z.push(((1 + k[n]) / (1 - k[n] * s)) ** (1 / (n + 1)) - 1); }
+  return {
+    q: T`Anleihen zu pari mit jährlichen Kupons \(${k.map(x => ptc(x, 1)).join(',\\ ')}\) (Laufzeit 1–4 Jahre). Bestimme per Bootstrapping die Zero Rates \(r_{02}, r_{03}, r_{04}\).`,
+    fields: [num(T`\(r_{02} =\)`, z[1] * 100, 2, '%'), num(T`\(r_{03} =\)`, z[2] * 100, 2, '%'), num(T`\(r_{04} =\)`, z[3] * 100, 2, '%')],
+    sol: T`\(100 = \frac{100 + c_1}{1 + r_{01}}\Rightarrow r_{01} = ${pt(z[0])}\); \(100 = \frac{c_2}{1 + r_{01}} + \frac{100 + c_2}{(1 + r_{02})^2}\Rightarrow r_{02} = ${pt(z[1])}\); \(r_{03} = ${pt(z[2])}\); \(r_{04} = ${pt(z[3])}\) (vgl. Skript S. 417–418).`,
+    steps: [1, 2, 3].map(n => S(`Zero Rate für ${n + 1} Jahre`, T`100 = \sum_{i=1}^{${n}}\frac{c}{(1 + r_{0i})^i} + \frac{100 + c}{(1 + r_{0${n + 1}})^{${n + 1}}}`,
+      [num(T`\(r_{0${n + 1}} =\)`, z[n] * 100, 2, '%')], T`Summe der Abzinsfaktoren bis Jahr ${n}: \(${nt(dsum[n], 6)}\); \(r_{0${n + 1}} = \left(\frac{1 + ${ntc(k[n], 3)}}{1 - ${ntc(k[n], 3)}\cdot ${nt(dsum[n], 6)}}\right)^{1/${n + 1}} - 1\)`))
+  };
+}, { st: true, refs: 'zero' });
+
+/* ==================================================== Kapitel 3 */
+G3('modalwert', 's-desk', 'Mittelwert, Median, Modalwert', () => {
+  let xs; do {
+    const mode = R(2, 12), n = pick([9, 10, 11]); xs = [mode, mode, mode];
+    while (xs.length < n) { const v = R(1, 16); if (xs.filter(x => x === v).length < 2) xs.push(v); }
+  } while (false);
+  xs = shuffle(xs); const s = xs.slice().sort((a, b) => a - b), n = s.length, med = n % 2 ? s[(n - 1) / 2] : (s[n / 2 - 1] + s[n / 2]) / 2;
+  const cnt = {}; s.forEach(v => cnt[v] = (cnt[v] || 0) + 1); const mo = +Object.keys(cnt).find(k => cnt[k] === 3);
+  return {
+    q: T`Gegeben die Datenreihe \(${xs.join(';\\ ')}\). Bestimme \(\bar x\), den Median und den Modalwert.`,
+    fields: [num(T`\(\bar x =\)`, meanA(s), 2), num('Median =', med, 2), num('Modalwert =', mo, 2)],
+    sol: T`Geordnet: \(${s.join(';\\ ')}\). \(\bar x = \frac{${sum(s)}}{${n}} = ${nt(meanA(s), 2)}\); Median ${n % 2 ? T`= \(${med}\) (mittlerer Wert)` : T`\(= \frac{${s[n / 2 - 1]} + ${s[n / 2]}}{2} = ${ntc(med)}\)`}; Modalwert \(${mo}\) (kommt 3-mal vor).`,
+    steps: [S('Ordnen und Mittelwert', T`\bar x = \frac1n\sum x_i`, [num(T`\(\bar x =\)`, meanA(s), 2)], T`Summe ${sum(s)}, \(n = ${n}\)`),
+      S('Median', 'mittlerer Wert der geordneten Reihe', [num('Median =', med, 2)], T`geordnet: \(${s.join(';\\ ')}\)`),
+      S('Modalwert', 'häufigster Wert', [num('Modalwert =', mo, 2)], 'zählen, welcher Wert am öftesten vorkommt')]
+  };
+}, { st: true, refs: 'mass' });
+G3('r2', 's-reg', 'Regression, Prognose & R²', () => {
+  let x, y, b, a, rho;
+  do {
+    const bt = pick([0.5, 0.8, 1.2, 1.5, 2, 2.4, -0.8, -1.5]), at = R(-3, 4);
+    x = shuffle([-2, -1, 0, 1, 2, 3, 4, 5, 6]).slice(0, 5); y = x.map(v => rnd(at + bt * v + R(-10, 10) / 10, 1));
+    b = covA(x, y) / varA(x); a = meanA(y) - b * meanA(x); rho = covA(x, y) / Math.sqrt(varA(x) * varA(y));
+  } while (Math.abs(rho) < 0.6 || !isFinite(rho));
+  const x0 = R(-1, 7), R2 = rho * rho;
+  return {
+    q: T`Gegeben die Wertepaare \((x_i,\ y_i)\): ${x.map((v, i) => T`\((${v};\ ${ntc(y[i])})\)`).join(', ')}. Bestimme die Regressionsgerade \(\hat y = \alpha + \beta x\), das Bestimmtheitsmaß \(R^2\) und die Prognose für \(x = ${x0}\).`,
+    fields: [num(T`\(\beta =\)`, b, 4), num(T`\(\alpha =\)`, a, 4), num(T`\(R^2 =\)`, R2, 4), num(T`\(\hat y(${x0}) =\)`, a + b * x0, 2)],
+    sol: T`\(\bar x = ${nt(meanA(x), 2)}\), \(\bar y = ${nt(meanA(y), 4)}\), \(\sigma_x^2 = ${nt(varA(x), 4)}\), \(\sigma_y^2 = ${nt(varA(y), 4)}\), \(\sigma_{xy} = ${nt(covA(x, y), 4)}\).
+\[\beta = \frac{\sigma_{xy}}{\sigma_x^2} = ${nt(b, 4)},\quad \alpha = \bar y - \beta\bar x = ${nt(a, 4)},\quad R^2 = \rho_{xy}^2 = \frac{\sigma_{xy}^2}{\sigma_x^2\sigma_y^2} = ${nt(R2, 4)}\]`,
+    steps: [S('Mittelwerte', T`\bar x,\ \bar y`, [num(T`\(\bar x =\)`, meanA(x), 2), num(T`\(\bar y =\)`, meanA(y), 4)], ''),
+      S('Varianzen und Kovarianz', T`\sigma_x^2,\ \sigma_y^2,\ \sigma_{xy}`, [num(T`\(\sigma_x^2 =\)`, varA(x), 4), num(T`\(\sigma_y^2 =\)`, varA(y), 4), num(T`\(\sigma_{xy} =\)`, covA(x, y), 4)], T`mit \(\frac1n\) wie in der Formelsammlung`),
+      S('Regressionsgerade', T`\beta = \frac{\sigma_{xy}}{\sigma_x^2},\ \alpha = \bar y - \beta\bar x`, [num(T`\(\beta =\)`, b, 4), num(T`\(\alpha =\)`, a, 4)], ''),
+      S('Bestimmtheitsmaß', T`R^2 = \rho_{xy}^2`, [num(T`\(R^2 =\)`, R2, 4)], T`\(\rho_{xy} = \frac{\sigma_{xy}}{\sigma_x\sigma_y} = ${nt(rho, 4)}\)`),
+      S('Prognose', T`\hat y = \alpha + \beta x`, [num(T`\(\hat y(${x0}) =\)`, a + b * x0, 2)], T`\(${nt(a, 4)} + ${nt(b, 4)}\cdot ${par(x0)}\)`)]
+  };
+}, { st: true, refs: 'mass kov beta' });
+
+/* ==================================================== Ansatz-Training */
+AZ('az_koch_ordnen', 'f-ext', 'ordnen', () => azOrder(T`Kochrezept Gewinnmaximierung: Gegeben \(E(x)\) und \(K(x)\). In welcher Reihenfolge gehst du vor?`, [
+  T`Gewinnfunktion aufstellen: \(G(x) = E(x) - (K(x))\) – Klammer!`, T`Ableiten: \(G'(x)\) und \(G''(x)\)`, T`Notwendige Bedingung: \(G'(x) = 0\) lösen, negative \(x\) streichen`, T`Hinreichende Bedingung: \(G''(x^*) < 0\) prüfen`, T`\(x^*\) in \(G(x)\) einsetzen → maximaler Gewinn`]));
+AZ('az_kd_ordnen', 'f-ext', 'ordnen', () => azOrder(T`Vollständige Kurvendiskussion einer Funktion auf einem Intervall – bring die Schritte in die übliche Reihenfolge.`, [
+  T`Definitionsbereich und Ableitungen \(f', f'', f'''\) bestimmen`, T`Nullstellen: \(f(x) = 0\)`, T`Extrema: \(f'(x) = 0\), Art über \(f''\)`, T`Wendepunkte: \(f''(x) = 0\), \(f''' \ne 0\)`, T`Randwerte berechnen und globale Extrema bestimmen`]));
+AZ('az_rat_ordnen', 'f-null', 'ordnen', () => azOrder(T`Wie bestimmst du bei \(f(x) = \frac{p(x)}{q(x)}\) Nullstellen, Pole und Lücken?`, [
+  T`Definitionsbereich: Nullstellen des Nenners ausschließen`, T`Zähler und Nenner faktorisieren`, T`Gemeinsame Faktoren kürzen → hebbare Lücken`, T`Übrige Nennernullstellen → Polstellen`, T`Übrige Zählernullstellen → Nullstellen`]));
+AZ('az_quartal_zuordnen', 'z-rente', 'zuordnen', () => {
+  const rr = R(2, 30) * 0.004, n = R(6, 24), Z = R(5, 40) * 100, q = 1 + rr / 4;
+  return azAssign(T`„Eine <b>${n}-malige</b> Rente zahlt am Ende jedes Quartals <b>${deN(Z)} €</b>. Der Zinssatz beträgt <b>${deN(rr * 100, 1)} %</b> p.a. bei vierteljährlicher Verzinsung. Wie hoch ist der Endwert?“`,
+    T`E = Z\cdot\frac{q^n - 1}{q - 1}`,
+    [[T`\(Z\)`, deN(Z) + ' €'], [T`\(q\)`, deN(q, 4)], [T`\(n\)`, String(n)]],
+    [deN(1 + rr, 4), String(n * 4), deN(rr, 4), String(Math.max(2, Math.round(n / 4)))],
+    T`Pro Quartal: \(q = 1 + \frac{r}{4}\); \(n\) ist die Anzahl der Zahlungen (${n}), nicht die Jahre.`);
+});
+AZ('az_trig_formel', 'f-abl', 'formel', () => {
+  const b = R(2, 6), a = R(2, 5), v = pick(['sin', 'cos', 'prod']);
+  if (v === 'sin') return azMC(T`Welche Ableitung hat \(f(x) = ${a}\sin(${b}x)\)?`, T`\(f'(x) = ${a * b}\cos(${b}x)\)`, [T`\(f'(x) = ${a}\cos(${b}x)\)`, T`\(f'(x) = -${a * b}\cos(${b}x)\)`, T`\(f'(x) = ${a * b}\sin(${b}x)\)`], T`\((\sin u)' = \cos u\cdot u'\) mit \(u' = ${b}\).`);
+  if (v === 'cos') return azMC(T`Welche Ableitung hat \(f(x) = ${a}\cos(${b}x)\)?`, T`\(f'(x) = -${a * b}\sin(${b}x)\)`, [T`\(f'(x) = ${a * b}\sin(${b}x)\)`, T`\(f'(x) = -${a}\sin(${b}x)\)`, T`\(f'(x) = -${a * b}\cos(${b}x)\)`], T`\((\cos u)' = -\sin u\cdot u'\) – das Minus nicht vergessen.`);
+  return azMC(T`Welche Ableitung hat \(f(x) = x^{${a}}\cos x\)?`, T`\(f'(x) = ${a}x^{${a - 1}}\cos x - x^{${a}}\sin x\)`, [T`\(f'(x) = -${a}x^{${a - 1}}\sin x\)`, T`\(f'(x) = ${a}x^{${a - 1}}\cos x + x^{${a}}\sin x\)`, T`\(f'(x) = ${a}x^{${a - 1}}\sin x - x^{${a}}\cos x\)`], T`Produktregel: \(u'v + uv'\) mit \(v' = -\sin x\).`);
+});
+AZ('az_zero_formel', 'z-struk', 'formel', () => {
+  const t = R(2, 5), P = rnd(100 / (1 + R(20, 60) / 1000) ** t, 2);
+  return azMC(T`Ein ${t}-jähriger Zerobond (Nennwert 100) kostet \(${nt(P, 2)}\). Wie berechnest du die Spot Rate \(r_{0${t}}\)?`,
+    T`\(r_{0${t}} = \left(\frac{100}{${nt(P, 2)}}\right)^{\frac1{${t}}} - 1\)`, [T`\(r_{0${t}} = \frac{100 - ${nt(P, 2)}}{${nt(P, 2)}}\)`, T`\(r_{0${t}} = \frac{100}{${nt(P, 2)}\cdot ${t}} - 1\)`, T`\(r_{0${t}} = \left(\frac{${nt(P, 2)}}{100}\right)^{\frac1{${t}}} - 1\)`],
+    T`\(P = \frac{100}{(1 + r_{0t})^t}\) nach \(r_{0t}\) auflösen.`);
+});
+AZ('az_ewig_formel', 'z-rente', 'formel', () => {
+  const Z = R(5, 60) * 1000, r = R(3, 9) / 100, k = R(2, 5);
+  return azMC(T`Eine ewige Rente über jährlich \(${eur(Z, 0)}\) zahlt erstmals am Ende von Jahr ${k + 1}. Ansatz für den Barwert heute (\(r = ${ptc(r, 0)}\))?`,
+    T`\(B_0 = \frac{${nt(Z, 0)}/${ntc(r, 2)}}{${ntc(1 + r, 2)}^{${k}}}\)`, [T`\(B_0 = \frac{${nt(Z, 0)}/${ntc(r, 2)}}{${ntc(1 + r, 2)}^{${k + 1}}}\)`, T`\(B_0 = \frac{${nt(Z, 0)}}{${ntc(r, 2)}}\)`, T`\(B_0 = \frac{${nt(Z, 0)}}{${ntc(r, 2)}}\cdot ${ntc(1 + r, 2)}^{${k}}\)`],
+    T`\(\frac Zr\) bewertet eine Periode vor der ersten Zahlung, also in \(t = ${k}\) – dann ${k} Jahre abzinsen.`);
+});
+
+/* ==================================================== MC-Ergänzungen */
+MCADD('eigmc', [
+  ['Links- und rechtsseitiger Grenzwert existieren, sind aber verschieden. Welche Unstetigkeit liegt vor?', 'endlicher Sprung (2. Ordnung)', ['hebbare Lücke (1. Ordnung)', 'Polstelle (3. Ordnung)', 'keine – f ist stetig']],
+  ['Beide einseitigen Grenzwerte sind gleich, aber f(x₀) ist nicht definiert. Was liegt vor?', 'eine hebbare Lücke', ['ein endlicher Sprung', 'eine Polstelle', 'ein Wendepunkt']],
+  [T`Für welche Einschränkung besitzt \(f(x) = x^2\) eine Umkehrfunktion \(f^{-1}(x) = \sqrt x\)?`, T`\(x \ge 0\)`, [T`\(x \in \text{ℝ}\)`, T`\(x \le -1\)`, 'für keine']]
+]);
+MCADD('nullmc', [
+  [T`Bei \(f(x) = \frac{(x - 2)(x + 1)}{(x - 2)(x - 5)}\) liegt bei \(x = 2\) …`, 'eine hebbare Lücke', ['eine Polstelle', 'eine Nullstelle', 'ein Sprung']],
+  [T`Wann ist \(f(x) = \frac{p(x)}{q(x)}\) „echt gebrochen“?`, 'wenn der Zählergrad kleiner als der Nennergrad ist', ['wenn der Zählergrad größer ist', 'wenn beide Grade gleich sind', 'wenn der Nenner keine Nullstelle hat']],
+  [T`Die Polynomdivision \(f(x) : (x - 3)\) liefert Rest 5. Was folgt?`, T`\(f(3) = 5\)`, [T`\(x = 3\) ist eine Nullstelle`, T`\(f(5) = 3\)`, T`\(f(-3) = 5\)`]]
+]);
+MCADD('dmc', [
+  [T`\((\sin x)' =\)`, T`\(\cos x\)`, [T`\(-\cos x\)`, T`\(-\sin x\)`, T`\(\sin x\)`]],
+  [T`\((\cos x)' =\)`, T`\(-\sin x\)`, [T`\(\sin x\)`, T`\(\cos x\)`, T`\(-\cos x\)`]],
+  [T`Die vierte Ableitung von \(\sin x\) ist …`, T`\(\sin x\)`, [T`\(-\sin x\)`, T`\(\cos x\)`, T`\(-\cos x\)`]],
+  [T`\(\left(\sin(5x)\right)' =\)`, T`\(5\cos(5x)\)`, [T`\(\cos(5x)\)`, T`\(5\cos x\)`, T`\(-5\cos(5x)\)`]]
+]);
+MCADD('effmc', [
+  ['Die Renditegleichung hat eine positive und eine negative Lösung. Welche nimmst du?', 'die positive – negative Lösungen werden nicht betrachtet', ['die negative', 'den Mittelwert beider', 'die betragsmäßig kleinere']],
+  ['Was bezeichnet die Yield to Maturity (YTM)?', 'den einheitlichen Zinssatz, mit dem der Barwert aller Zahlungen dem Preis entspricht', ['den Kuponzins der Anleihe', 'die Spot Rate für ein Jahr', 'den Zinssatz bei stetiger Verzinsung']]
+]);
+MCADD('strukmc', [
+  ['Warum lässt sich eine Kuponanleihe durch Zerobonds nachbilden?', 'gleiche Zahlungen zu gleichen Zeitpunkten müssen gleich viel kosten (Law of one price)', ['weil Zerobonds immer billiger sind', 'weil Kupons steuerfrei sind', 'weil alle Zinssätze gleich sind']],
+  [T`Ein zweijähriger Zerobond kostet \(90\). Wie lautet \(r_{02}\)?`, T`\(\sqrt{\frac{100}{90}} - 1\)`, [T`\(\frac{100}{90} - 1\)`, T`\(\frac{100 - 90}{2\cdot 90}\)`, T`\(\sqrt{\frac{90}{100}} - 1\)`]]
+]);
+MCADD('deskmc', [
+  ['Was ist der Modalwert einer Datenreihe?', 'der am häufigsten vorkommende Wert', ['der mittlere Wert der geordneten Reihe', 'der Durchschnitt', 'die Differenz zwischen Maximum und Minimum']],
+  [T`Reihe \(2;\ 3;\ 3;\ 4;\ 50\): Welcher Lageparameter wird vom Ausreißer 50 am stärksten beeinflusst?`, 'das arithmetische Mittel', ['der Median', 'der Modalwert', 'keiner']]
+]);
+MCADD('regmc', [
+  [T`Was bedeutet \(R^2 = 0{,}93\)?`, 'Die Regressionsgerade erklärt 93 % der Streuung von y.', ['93 % der Punkte liegen auf der Geraden', 'Die Steigung beträgt 0,93', 'Die Korrelation ist −0,93']],
+  [T`Wie hängen \(R^2\) und \(\rho_{xy}\) bei der einfachen linearen Regression zusammen?`, T`\(R^2 = \rho_{xy}^2\)`, [T`\(R^2 = \rho_{xy}\)`, T`\(R^2 = \sqrt{\rho_{xy}}\)`, T`\(R^2 = 1 - \rho_{xy}\)`]]
+]);
+
+/* ==================================================== Lexikon-Ergänzungen */
+const LEXADD = (cat, items) => items.forEach(([term, def, f]) => LEX.push({ id: cat + ':' + term.replace(/[^a-zA-Z0-9äöüÄÖÜß]+/g, ''), cat, term, def, f }));
+LEXADD('math', [
+  ['Binomische Formeln', 'Drei Formeln zum Ausmultiplizieren und Faktorisieren von Summen bzw. Differenzen zum Quadrat.', T`(a + b)^2 = a^2 + 2ab + b^2,\ (a - b)^2 = a^2 - 2ab + b^2,\ (a + b)(a - b) = a^2 - b^2`],
+  ['Verkettung', 'Hintereinanderausführung zweier Funktionen: erst die innere, dann die äußere.', T`(f\circ g)(x) = f(g(x))`]
+]);
+LEXADD('fkt', [
+  ['Hebbare Lücke', 'Stelle, an der Zähler und Nenner denselben Faktor haben; nach dem Kürzen existiert der Grenzwert. Unstetigkeit 1. Ordnung.', ''],
+  ['Asymptote', 'Gerade, der sich der Graph beliebig nähert – senkrecht an Polstellen, waagerecht für x → ±∞.', ''],
+  ['Echt gebrochen rational', 'Gebrochen rationale Funktion, deren Zählergrad kleiner ist als der Nennergrad (waagerechte Asymptote y = 0).', ''],
+  ['Einseitiger Grenzwert', 'Grenzwert bei Annäherung nur von links bzw. nur von rechts an x₀.', T`\lim_{x\to x_0^-} f(x),\ \lim_{x\to x_0^+} f(x)`],
+  ['Sprungstelle', 'Unstetigkeit, bei der links- und rechtsseitiger Grenzwert existieren, aber verschieden sind (2. Ordnung).', '']
+]);
+LEXADD('diff', [
+  ['Ableitung von sin und cos', 'Sinus abgeleitet ergibt Kosinus, Kosinus abgeleitet ergibt minus Sinus (Bogenmaß).', T`(\sin x)' = \cos x,\ (\cos x)' = -\sin x`],
+  ['Monotonietabelle', 'Tabelle mit den Nullstellen von f′ als Grenzen; das Vorzeichen von f′ im Intervall zeigt, ob f steigt (+) oder fällt (−).', ''],
+  ['Kochrezept Gewinnmaximierung', 'G(x) = E(x) − K(x) aufstellen (Klammer!), ableiten, G′ = 0 lösen, G″ < 0 prüfen, G(x*) berechnen.', T`G'(x^*) = 0,\ G''(x^*) < 0`]
+]);
+LEXADD('fin', [
+  ['Yield to Maturity (YTM)', 'Rendite bis zur Fälligkeit: einheitlicher Zinssatz, mit dem der Barwert aller Zahlungen dem Preis entspricht.', ''],
+  ['Law of one price', 'Gleiche Zahlungsströme müssen am Markt den gleichen Preis haben – Grundlage der Nachbildung durch Zerobonds und der Forward Rates.', '']
+]);
+LEXADD('stat', [
+  ['Modalwert', 'Der am häufigsten vorkommende Wert einer Datenreihe.', ''],
+  ['Bestimmtheitsmaß', 'Anteil der Streuung von y, der durch die Regressionsgerade erklärt wird; bei einfacher Regression gleich ρ².', T`R^2 = 1 - \frac{\sum (y_i - \hat y_i)^2}{\sum (y_i - \bar y)^2} = \rho_{xy}^2`],
+  ['Residuum', 'Abweichung eines Beobachtungswerts von der Regressionsgeraden.', T`e_i = y_i - \hat y_i`]
+]);
+
+"use strict";
 /* ============ Taschenrechner (offline, über jeder Aufgabe) ============ */
 const CALC = { expr: '', ans: null, hist: '', fresh: false, target: null, open: false };
 const calcPretty = e => e.replace(/sqrt\(/g, '√(').replace(/exp\(/g, 'e^(').replace(/\*/g, '×').replace(/\//g, '÷').replace(/-/g, '−').replace(/\./g, ',');
@@ -4064,14 +4705,13 @@ function viewHome() {
 
 /* ------------------------------------------------ Kapitel */
 function viewChapter(cid) {
-  if (cid === 0) return viewLex();
   const c = chapterOf(cid);
   return `<div class="${c.cls}">` + header(c.short, '#/') + `
-  <div class="hero"><h2>${c.title}</h2><p>${TOPICS.filter(t => t.ch === cid).length} Unterthemen · Lernzettel & Aufgaben</p></div>
+  <div class="hero"><h2>${c.title}</h2><p>${TOPICS.filter(t => t.ch === cid).length} Unterthemen · ${cid === 0 ? 'Lexikon & Rechengrundlagen' : 'Lernzettel & Aufgaben'}</p></div>
   <div class="list">${TOPICS.filter(t => t.ch === cid).map(t => `
     <div class="glass trow" data-go="#/t/${t.id}">
       <span class="num">${t.nr}</span>
-      <div class="t"><b>${t.title}</b><small>${variantsOf(t.id)} Aufgabenvarianten</small></div>
+      <div class="t"><b>${t.title}</b><small>${t.id === 'g-lex' ? LEX.length + ' Begriffe · Karteikarten & Quiz' : variantsOf(t.id) + ' Aufgabenvarianten'}</small></div>
       ${ring(topicProgress(t.id))}
     </div>`).join('')}
   </div>
@@ -4509,7 +5149,7 @@ function boxesHTML(list) {
 }
 function viewLex() {
   const learned = LEX.filter(e => lexBox(e.id) >= 4).length;
-  return `<div class="k0">` + header('Grundlagen', '#/') + `
+  return `<div class="k0">` + header('Lexikon', '#/k/0') + `
   <div class="hero"><h2>0.1 Lexikon</h2><p>${LEX.length} Begriffe & Formelzeichen · ${learned} sicher gelernt</p></div>
   <div class="glass sect" style="margin-top:0">${boxesHTML(LEX)}</div>
   <div class="actions" style="margin-top:14px"><button class="btn pri grow" data-go="#/lex/karten">${ICONS.book} Karteikarten</button><button class="btn grow" data-go="#/t/g-lex/ueben">${ICONS.check} Quiz</button></div>
@@ -4618,7 +5258,7 @@ function parseHash() {
 function render() {
   const { parts, q } = parseHash();
   let html, mount = null;
-  if (parts[0] === 'k' && chapterOf(+parts[1])) { html = viewChapter(+parts[1]); if (+parts[1] === 0) mount = mountLex; }
+  if (parts[0] === 'k' && chapterOf(+parts[1])) { html = viewChapter(+parts[1]); }
   else if (parts[0] === 'lex' && parts[1] === 'karten') { html = viewLexCards(); mount = mountLexCards; }
   else if (parts[0] === 't' && topicOf(parts[1])) { html = viewTopic(parts[1], parts[2]); if (parts[2] === 'ueben') mount = () => mountPractice(parts[1]); else if (parts[2] === 'ansatz') mount = () => mountPractice(parts[1], 'az'); else if (parts[1] === 'g-lex') mount = mountLex; }
   else if (parts[0] === 'ansatz') { html = viewAnsatzHome(); mount = mountAnsatzHome; }
