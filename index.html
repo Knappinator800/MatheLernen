@@ -173,6 +173,60 @@ select.sel{background:rgba(0,0,0,.25);color:var(--txt);border:1px solid var(--li
 
 .flashhl{animation:hl 1.6s ease-out}
 @keyframes hl{0%{background:rgba(251,191,36,.35);box-shadow:0 0 0 6px rgba(251,191,36,.35);border-radius:6px}100%{background:transparent;box-shadow:0 0 0 6px transparent}}
+/* ---- Schritt für Schritt ---- */
+.seg{display:flex;gap:4px;padding:4px;border-radius:14px;background:rgba(0,0,0,.25);border:1px solid var(--line);margin:0 0 12px}
+.seg button{flex:1;border:0;background:transparent;color:var(--muted);padding:9px 6px;border-radius:10px;font:inherit;font-size:14px;font-weight:600;cursor:pointer}
+.seg button.on{background:var(--glass2);color:var(--txt);box-shadow:inset 0 0 0 1px var(--line2)}
+.gsteps{margin-top:16px;display:flex;flex-direction:column}
+.gstep{display:flex;gap:12px;position:relative;padding-bottom:16px}
+.gstep:not(:last-child)::before{content:"";position:absolute;left:15px;top:32px;bottom:0;width:2px;background:var(--line2)}
+.gnum{width:32px;height:32px;border-radius:50%;flex:none;display:grid;place-items:center;font-weight:700;border:2px solid var(--line2);background:rgba(0,0,0,.25)}
+.gstep.done .gnum{background:var(--ok);border-color:var(--ok);color:#0b1020}
+.gstep.done.helped .gnum{background:var(--warn);border-color:var(--warn)}
+.gstep.active .gnum{border-color:var(--acc);box-shadow:0 0 0 4px color-mix(in srgb,var(--acc) 25%,transparent)}
+.gstep.locked{opacity:.45}
+.gbody{flex:1;min-width:0}.gtitle{font-weight:650;margin:4px 0}
+.gres{margin-top:3px;font-size:14.5px}.gres.ok{color:var(--ok)}.gres.help{color:var(--warn)}
+.gstep.active .gbody{background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-top:-4px}
+.gstep.active .fields{gap:10px}
+.ghint{margin-top:10px;font-size:14px;color:#fcd34d}
+.ghead{font-weight:650;color:var(--acc);margin:10px 0 -2px;font-size:14.5px}
+/* ---- Ansatz ---- */
+.olist{display:flex;flex-direction:column;gap:9px}
+.ocard{display:flex;align-items:center;gap:10px;padding:12px;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid var(--line);font-size:15px;touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab}
+.ocard.drag{border-color:var(--acc);box-shadow:0 12px 26px rgba(0,0,0,.45);background:color-mix(in srgb,var(--acc) 18%,rgba(20,26,51,.9));transform:scale(1.02)}
+.ocard.pick{border-color:var(--acc);box-shadow:0 0 0 3px color-mix(in srgb,var(--acc) 30%,transparent)}
+.ocard.right{border-color:var(--ok)} .ocard.wrong{border-color:var(--bad)} .ocard.locked{cursor:default}
+.ograb{color:var(--dim);letter-spacing:-2px}
+.onum{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:700;background:rgba(255,255,255,.1);flex:none}
+.olsol{margin:6px 0 0;padding-left:20px;color:#dfe3f7}
+.slots{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.slot{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 14px;border-radius:14px;border:1px dashed var(--line2);background:rgba(0,0,0,.2);cursor:pointer;min-height:50px}
+.slot b{font-weight:650;text-align:right}
+.slot[data-val]{border-style:solid}
+.slot.active{border-style:solid;border-color:var(--acc);box-shadow:0 0 0 3px color-mix(in srgb,var(--acc) 25%,transparent)}
+.slot.ok{border-color:var(--ok)} .slot.ok b{color:var(--ok)} .slot.wrong{border-color:var(--bad)} .slot.wrong b{color:var(--bad)}
+.neu{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.6px;padding:2px 7px;border-radius:99px;background:#facc15;color:#1a1400;vertical-align:middle;margin-left:4px}
+/* ---- Taschenrechner ---- */
+.fab{position:fixed;right:18px;bottom:calc(22px + env(safe-area-inset-bottom));width:58px;height:58px;border-radius:18px;border:0;display:grid;place-items:center;font-size:27px;cursor:pointer;
+ background:linear-gradient(135deg,#fbbf24,#f97316);box-shadow:0 10px 26px rgba(0,0,0,.45);z-index:9}
+.fab:active{transform:scale(.94)}
+.dim{position:fixed;inset:0;background:rgba(5,8,18,.45);z-index:15}
+.calc{position:fixed;left:0;right:0;bottom:0;z-index:20;max-width:560px;margin:0 auto;padding:14px 14px calc(16px + env(safe-area-inset-bottom));border-radius:24px 24px 0 0;background:rgba(16,21,44,.97);border:1px solid var(--line2);border-bottom:0;box-shadow:0 -12px 40px rgba(0,0,0,.5)}
+.cdisp{background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:14px;padding:8px 14px;text-align:right;overflow:hidden}
+.chist{font-size:12.5px;color:var(--dim);min-height:17px;white-space:nowrap;overflow-x:auto}
+.cexpr{color:var(--muted);font-size:16px;min-height:22px;font-variant-numeric:tabular-nums;white-space:nowrap;overflow-x:auto}
+.cres{font-size:30px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;overflow-x:auto}
+.ckeys{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:10px}
+.ckeys b{display:grid;place-items:center;height:46px;border-radius:12px;background:rgba(255,255,255,.07);border:1px solid var(--line);font-weight:600;font-size:17px;cursor:pointer;user-select:none;-webkit-user-select:none;touch-action:manipulation}
+.ckeys b:active{transform:scale(.95);background:rgba(255,255,255,.16)}
+.ckeys b.f{background:rgba(139,123,255,.16);font-size:15px}
+.ckeys b.op{background:rgba(251,146,60,.18)}
+.ckeys b.eq{background:linear-gradient(135deg,#fbbf24,#f97316);color:#1a1400;border:0}
+input.took{border-color:#fbbf24 !important;box-shadow:0 0 0 3px rgba(251,191,36,.35)}
+#app{padding-bottom:110px}
+.btn.sm{padding:10px 13px;font-size:14px}
+.fab{width:52px;height:52px;font-size:24px;opacity:.95}
 </style>
 </head>
 <body>
@@ -227,7 +281,8 @@ function tex(src, display) {
 function md(html) {
   return html
     .replace(/\\\[([\s\S]+?)\\\]/g, (_, s) => '<div class="fm">' + tex(s, true) + '</div>')
-    .replace(/\\\(([\s\S]+?)\\\)/g, (_, s) => tex(s, false));
+    .replace(/\\\(([\s\S]+?)\\\)/g, (_, s) => tex(s, false))
+    .replace(/\{,\}/g, ',');
 }
 
 /* ============ Polynom -> TeX ============ */
@@ -3132,7 +3187,7 @@ GENS[GENS.length - 1].mcq = false;
 /* ==================================================== Zuordnung */
 const GEN_BY_ID = Object.fromEntries(GENS.map(g => [g.id, g]));
 const gensOf = tid => GENS.filter(g => g.topic === tid);
-const variantsOf = tid => sum(gensOf(tid).map(g => g.mcq ? MCBANK[g.id].length : (g.nv || 1)));
+const variantsOf = tid => sum(gensOf(tid).filter(g => !g.az).map(g => g.mcq ? MCBANK[g.id].length : (g.nv || 1)));
 
 "use strict";
 /* ============ Verweise auf die Klausur-Formelsammlung (Stand 14.01.2025, 8 Seiten) ============ */
@@ -3203,6 +3258,752 @@ function refHTML(gid) {
 }
 
 "use strict";
+/* ============ Schritt für Schritt: Aufgaben mit Zwischenschritten ============
+   Ein Schritt: { t: Titel, h: Formel/Ansatz (TeX), f: [Felder], tip: Tipp mit Zahlen }
+   Die Generatoren ersetzen die bisherigen gleichnamigen Aufgaben (gleiche Fragen),
+   liefern aber zusätzlich die Zwischenschritte. */
+const S = (t, h, f, tip) => ({ t, h, f, tip });
+const STEPGEN = (id, fn) => { const g = GEN_BY_ID[id]; if (!g) { console.warn('STEPGEN fehlt', id); return; } g.f = fn; g.st = true; };
+const q4 = x => nt(x, 4), q6 = x => nt(x, 6);
+
+/* ---------------------------------------------------- 2.1 Zinsberechnung */
+STEPGEN('kt', () => {
+  const K0 = R(4, 60) * 500, r = R(10, 70) / 1000, mth = pick(['einf', 'exp', 'unt', 'stet']);
+  let t, ZF, zfT, zfS, name, m;
+  if (mth === 'einf') { t = pick([0.25, 0.5, 0.75, 1.5, 2]); ZF = 1 + r * t; zfS = T`ZF = 1 + r\cdot t`; zfT = T`1 + ${ntc(r, 4)}\cdot ${ntc(t)}`; name = 'einfacher'; }
+  else if (mth === 'exp') { t = R(2, 12); ZF = (1 + r) ** t; zfS = T`ZF = (1 + r)^t`; zfT = T`${ntc(1 + r, 4)}^{${t}}`; name = 'exponentieller'; }
+  else if (mth === 'unt') { t = R(2, 10); m = pick([2, 4, 12]); ZF = (1 + r / m) ** (m * t); zfS = T`ZF = \left(1 + \frac rm\right)^{m\cdot t}`; zfT = T`\left(1 + \frac{${ntc(r, 4)}}{${m}}\right)^{${m * t}}`; name = { 2: 'halbjährlicher', 4: 'quartalsweiser', 12: 'monatlicher' }[m] + ' (unterjährig exponentieller)'; }
+  else { t = R(2, 10); ZF = Math.exp(r * t); zfS = T`ZF = e^{r\cdot t}`; zfT = T`e^{${ntc(r, 4)}\cdot ${t}}`; name = 'stetiger'; }
+  const Kt = ZF * K0;
+  return {
+    q: T`Ein Kapital von \(K_0 = ${eur(K0, 0)}\) wird bei ${name} Verzinsung zu \(r = ${ptc(r, 2)}\) p.a. für \(t = ${ntc(t)}\) Jahre angelegt. Wie hoch ist das Endkapital \(K_t\)?`,
+    fields: [num(T`\(K_t =\)`, Kt, 2, '€')],
+    sol: T`\[K_t = ZF\cdot K_0 = ${zfT}\cdot ${nt(K0, 0)} = ${nt(ZF, 6)}\cdot ${nt(K0, 0)} = ${eur(Kt)}\]`,
+    steps: [S('Zinsfaktor aufstellen und berechnen', zfS, [num(T`\(ZF =\)`, ZF, 6)], T`\(ZF = ${zfT}\)`),
+      S('Endkapital berechnen', T`K_t = ZF\cdot K_0`, [num(T`\(K_t =\)`, Kt, 2, '€')], T`\(${nt(ZF, 6)}\cdot ${nt(K0, 0)}\)`)]
+  };
+});
+STEPGEN('k0', () => {
+  const Kt = R(10, 100) * 500, r = R(10, 60) / 1000, mth = pick(['exp', 'stet', 'einf']);
+  const M = METH[mth], tt = mth === 'einf' ? pick([0.5, 0.75, 1.5]) : R(2, 10), ZF = M.ZF(r, tt), K0 = Kt / ZF;
+  return {
+    q: T`Welches Kapital \(K_0\) muss heute bei ${M.n}er Verzinsung zu \(r = ${ptc(r)}\) angelegt werden, um nach \(t = ${ntc(tt)}\) Jahren \(K_t = ${eur(Kt, 0)}\) zu erhalten?`,
+    fields: [num(T`\(K_0 =\)`, K0, 2, '€')],
+    sol: T`\[K_0 = DF\cdot K_t = \frac{1}{${M.tex(r, tt)}}\cdot ${nt(Kt, 0)} = ${nt(1 / ZF, 6)}\cdot ${nt(Kt, 0)} = ${eur(K0)}\]`,
+    steps: [S('Zinsfaktor berechnen', mth === 'exp' ? T`ZF = (1 + r)^t` : mth === 'stet' ? T`ZF = e^{rt}` : T`ZF = 1 + rt`, [num(T`\(ZF =\)`, ZF, 6)], T`\(ZF = ${M.tex(r, tt)}\)`),
+      S('Diskontfaktor', T`DF = \frac{1}{ZF}`, [num(T`\(DF =\)`, 1 / ZF, 6)], T`\(\frac{1}{${nt(ZF, 6)}}\)`),
+      S('Abzinsen', T`K_0 = DF\cdot K_t`, [num(T`\(K_0 =\)`, K0, 2, '€')], T`\(${nt(1 / ZF, 6)}\cdot ${nt(Kt, 0)}\)`)]
+  };
+});
+STEPGEN('solvet', () => {
+  const r = R(10, 80) / 1000, mth = pick(['exp', 'exp', 'stet', 'einf']), dbl = Math.random() < 0.4;
+  const K0 = R(2, 40) * 500, fac = dbl ? 2 : R(115, 190) / 100, Kt = rnd(K0 * fac, 2), q = Kt / K0;
+  let t, s, st2;
+  if (mth === 'exp') { t = Math.log(q) / Math.log(1 + r); s = T`t = \frac{\ln(K_t/K_0)}{\ln(1+r)} = \frac{\ln(${ntc(q, 6)})}{\ln(${ntc(1 + r, 4)})}`;
+    st2 = [S('Logarithmieren', T`(1 + r)^t = \frac{K_t}{K_0}\ \Rightarrow\ t\cdot\ln(1 + r) = \ln\frac{K_t}{K_0}`, [num(T`\(\ln(K_t/K_0) =\)`, Math.log(q), 6), num(T`\(\ln(1 + r) =\)`, Math.log(1 + r), 6)], T`\(\ln(${ntc(q, 6)})\) und \(\ln(${ntc(1 + r, 4)})\)`)]; }
+  else if (mth === 'stet') { t = Math.log(q) / r; s = T`t = \frac{\ln(K_t/K_0)}{r} = \frac{\ln(${ntc(q, 6)})}{${ntc(r, 4)}}`;
+    st2 = [S('Logarithmieren', T`e^{rt} = \frac{K_t}{K_0}\ \Rightarrow\ r\,t = \ln\frac{K_t}{K_0}`, [num(T`\(\ln(K_t/K_0) =\)`, Math.log(q), 6)], T`\(\ln(${ntc(q, 6)})\)`)]; }
+  else { t = (q - 1) / r; s = T`t = \frac1r\left(\frac{K_t}{K_0} - 1\right) = \frac{${ntc(q, 6)} - 1}{${ntc(r, 4)}}`; st2 = []; }
+  return {
+    q: dbl ? T`Nach wie vielen Jahren verdoppelt sich ein Kapital bei ${METH[mth].n}er Verzinsung mit \(r = ${ptc(r)}\)?`
+      : T`Nach wie vielen Jahren wächst \(K_0 = ${eur(K0, 0)}\) bei ${METH[mth].n}er Verzinsung mit \(r = ${ptc(r)}\) auf \(K_t = ${eur(Kt)}\)?`,
+    fields: [num(T`\(t =\)`, t, 2, 'Jahre')],
+    sol: T`\[${s} = ${nt(t, 4)}\ \text{Jahre}\]`,
+    steps: [S('Wachstumsfaktor bestimmen', T`\frac{K_t}{K_0}`, [num(T`\(K_t/K_0 =\)`, q, 6)], dbl ? 'Verdopplung heißt K_t/K_0 = 2' : T`\(\frac{${nt(Kt)}}{${nt(K0, 0)}}\)`), ...st2,
+      S('Nach t auflösen', mth === 'exp' ? T`t = \frac{\ln(K_t/K_0)}{\ln(1+r)}` : mth === 'stet' ? T`t = \frac{\ln(K_t/K_0)}{r}` : T`t = \frac1r\left(\frac{K_t}{K_0} - 1\right)`, [num(T`\(t =\)`, t, 2, 'Jahre')], T`\(${s}\)`)]
+  };
+});
+STEPGEN('solver', () => {
+  const mth = pick(['exp', 'exp', 'stet', 'einf']), K0 = R(4, 40) * 500, t = mth === 'einf' ? pick([0.5, 1.5, 2]) : R(2, 10);
+  const r0 = R(10, 70) / 1000, Kt = rnd(METH[mth].ZF(r0, t) * K0, 2), q = Kt / K0;
+  let r, s, h;
+  if (mth === 'exp') { r = q ** (1 / t) - 1; s = T`${ntc(q, 6)}^{\frac{1}{${t}}} - 1`; h = T`r = \sqrt[t]{\frac{K_t}{K_0}} - 1`; }
+  else if (mth === 'stet') { r = Math.log(q) / t; s = T`\frac{\ln(${ntc(q, 6)})}{${t}}`; h = T`r = \frac{\ln(K_t/K_0)}{t}`; }
+  else { r = (q - 1) / t; s = T`\frac{${ntc(q, 6)} - 1}{${ntc(t)}}`; h = T`r = \frac1t\left(\frac{K_t}{K_0} - 1\right)`; }
+  return {
+    q: T`Ein Kapital von \(${eur(K0, 0)}\) wächst bei ${METH[mth].n}er Verzinsung in \(t = ${ntc(t)}\) Jahren auf \(${eur(Kt)}\). Welcher Zinssatz \(r\) liegt zugrunde?`,
+    fields: [num(T`\(r =\)`, r * 100, 2, '%')],
+    sol: T`\[${h} = ${s} = ${pt(r, 4)}\]`,
+    steps: [S('Wachstumsfaktor', T`\frac{K_t}{K_0}`, [num(T`\(K_t/K_0 =\)`, q, 6)], T`\(\frac{${nt(Kt)}}{${nt(K0, 0)}}\)`),
+      S('Nach r auflösen', h, [num(T`\(r =\)`, r * 100, 2, '%')], T`\(r = ${s}\), dann mal 100 für Prozent`)]
+  };
+});
+STEPGEN('unterk0', () => {
+  const Kt = R(10, 80) * 500, r = R(10, 60) / 1000, m = pick([2, 4, 12]), t = R(2, 8), ZF = (1 + r / m) ** (m * t);
+  return {
+    q: T`Welcher Betrag muss heute angelegt werden, um nach \(${t}\) Jahren bei \(${ptc(r)}\) p.a. und \(m = ${m}\) Zinsperioden \(${eur(Kt, 0)}\) zu haben?`,
+    fields: [num(T`\(K_0 =\)`, Kt / ZF, 2, '€')],
+    sol: T`\[K_0 = \frac{K_t}{\left(1 + \frac rm\right)^{mt}} = \frac{${nt(Kt, 0)}}{\left(1 + \frac{${ntc(r, 4)}}{${m}}\right)^{${m * t}}} = ${eur(Kt / ZF)}\]`,
+    steps: [S('Zinssatz pro Periode', T`\frac rm`, [num(T`\(r/m =\)`, r / m, 6)], T`\(\frac{${ntc(r, 4)}}{${m}}\)`),
+      S('Zinsfaktor', T`ZF = \left(1 + \frac rm\right)^{m\cdot t}`, [num(T`\(ZF =\)`, ZF, 6)], T`\(${nt(1 + r / m, 6)}^{${m * t}}\)`),
+      S('Abzinsen', T`K_0 = \frac{K_t}{ZF}`, [num(T`\(K_0 =\)`, Kt / ZF, 2, '€')], T`\(\frac{${nt(Kt, 0)}}{${nt(ZF, 6)}}\)`)]
+  };
+});
+STEPGEN('wechselzins', () => {
+  const K0 = R(4, 40) * 500, r1 = R(10, 40) / 1000, r2 = R(10, 60) / 1000, n1 = R(1, 4), n2 = R(1, 5);
+  const K1 = K0 * (1 + r1) ** n1, Kt = K1 * (1 + r2) ** n2, rm = (Kt / K0) ** (1 / (n1 + n2)) - 1;
+  return {
+    q: T`\(K_0 = ${eur(K0, 0)}\) wird ${n1} Jahre zu \(${ptc(r1)}\) und anschließend ${n2} Jahre zu \(${ptc(r2)}\) exponentiell verzinst. Bestimme \(K_t\) und den durchschnittlichen Zinssatz p.a.`,
+    fields: [num(T`\(K_t =\)`, Kt, 2, '€'), num(T`\(\bar r =\)`, rm * 100, 2, '%')],
+    sol: T`\(K_t = ${nt(K0, 0)}\cdot ${ntc(1 + r1, 4)}^{${n1}}\cdot ${ntc(1 + r2, 4)}^{${n2}} = ${eur(Kt)}\). \(\bar r = \sqrt[${n1 + n2}]{\frac{K_t}{K_0}} - 1 = ${pt(rm)}\).`,
+    steps: [S(`Kapital nach ${n1} Jahren`, T`K_{${n1}} = K_0\cdot(1 + r_1)^{${n1}}`, [num(T`\(K_{${n1}} =\)`, K1, 2, '€')], T`\(${nt(K0, 0)}\cdot ${ntc(1 + r1, 4)}^{${n1}}\)`),
+      S('Weiterverzinsen', T`K_t = K_{${n1}}\cdot(1 + r_2)^{${n2}}`, [num(T`\(K_t =\)`, Kt, 2, '€')], T`\(${nt(K1)}\cdot ${ntc(1 + r2, 4)}^{${n2}}\)`),
+      S('Durchschnittlicher Zinssatz', T`\bar r = \sqrt[t]{\frac{K_t}{K_0}} - 1`, [num(T`\(\bar r =\)`, rm * 100, 2, '%')], T`\(\left(\frac{${nt(Kt)}}{${nt(K0, 0)}}\right)^{1/${n1 + n2}} - 1\)`)]
+  };
+});
+
+/* ---------------------------------------------------- 2.1 Transformation */
+STEPGEN('trans', () => {
+  const v = pick(['unt2exp', 'stet2exp', 'exp2stet', 'exp2unt', 'einf2exp', 'exp2einf']), r = R(10, 80) / 1000;
+  let q, ans, lab, steps;
+  const fin = (h, tip) => S('Gesuchten Zinssatz berechnen', h, [num(T`\(${lab} =\)`, ans * 100, 2, '%')], tip);
+  if (v === 'unt2exp') { const m = pick([2, 4, 12]), zf = (1 + r / m) ** m; ans = zf - 1; lab = T`r_{\text{exp}}`;
+    q = T`Ein Konto wird mit \(${ptc(r)}\) p.a. bei ${{ 2: 'halbjährlicher', 4: 'vierteljährlicher', 12: 'monatlicher' }[m]} Zinsgutschrift (\(m = ${m}\)) verzinst. Wie hoch ist der Effektivzinssatz \(r_{\text{exp}}\)?`;
+    steps = [S('Zinsfaktor für ein Jahr', T`ZF = \left(1 + \frac{r_{\text{unt exp}}}{m}\right)^m`, [num(T`\(ZF =\)`, zf, 6)], T`\(\left(1 + \frac{${ntc(r, 4)}}{${m}}\right)^{${m}}\)`), fin(T`r_{\text{exp}} = ZF - 1`, T`\(${nt(zf, 6)} - 1\), mal 100`)]; }
+  else if (v === 'stet2exp') { const zf = Math.exp(r); ans = zf - 1; lab = T`r_{\text{exp}}`; q = T`Welcher exponentielle Zinssatz \(r_{\text{exp}}\) entspricht dem stetigen Zinssatz \(r_{\text{stet}} = ${ptc(r)}\)?`;
+    steps = [S('Zinsfaktor für ein Jahr', T`ZF = e^{r_{\text{stet}}}`, [num(T`\(ZF =\)`, zf, 6)], T`\(e^{${ntc(r, 4)}}\)`), fin(T`r_{\text{exp}} = ZF - 1`, T`\(${nt(zf, 6)} - 1\)`)]; }
+  else if (v === 'exp2stet') { ans = Math.log(1 + r); lab = T`r_{\text{stet}}`; q = T`Welcher stetige Zinssatz \(r_{\text{stet}}\) liefert denselben Ertrag wie \(r_{\text{exp}} = ${ptc(r)}\)?`;
+    steps = [S('Zinsfaktoren gleichsetzen', T`e^{r_{\text{stet}}} = 1 + r_{\text{exp}}`, [num(T`\(1 + r_{\text{exp}} =\)`, 1 + r, 4)], T`\(1 + ${ntc(r, 4)}\)`), fin(T`r_{\text{stet}} = \ln(1 + r_{\text{exp}})`, T`\(\ln(${ntc(1 + r, 4)})\)`)]; }
+  else if (v === 'exp2unt') { const m = pick([2, 4, 12]), w = (1 + r) ** (1 / m); ans = m * w - m; lab = T`r_{\text{unt exp}}`;
+    q = T`Wie hoch muss der Zinssatz \(r_{\text{unt exp}}\) bei \(m = ${m}\) Zinsperioden p.a. sein, um denselben Ertrag wie \(r_{\text{exp}} = ${ptc(r)}\) zu erzielen?`;
+    steps = [S('m-te Wurzel des Jahreszinsfaktors', T`\left(1 + \frac{r_{\text{unt exp}}}{m}\right)^m = 1 + r_{\text{exp}}\ \Rightarrow\ 1 + \frac{r_{\text{unt exp}}}{m} = (1 + r_{\text{exp}})^{\frac1m}`, [num(T`\((1 + r_{\text{exp}})^{1/${m}} =\)`, w, 6)], T`\(${ntc(1 + r, 4)}^{1/${m}}\)`),
+      fin(T`r_{\text{unt exp}} = m\cdot(1 + r_{\text{exp}})^{\frac1m} - m`, T`\(${m}\cdot ${nt(w, 6)} - ${m}\)`)]; }
+  else if (v === 'einf2exp') { const t = pick([0.25, 0.5, 0.75]), zf = 1 + r * t; ans = zf ** (1 / t) - 1; lab = T`r_{\text{exp}}`;
+    q = T`Eine Geldanlage über \(t = ${ntc(t)}\) Jahre wird einfach mit \(r_{\text{einf}} = ${ptc(r)}\) verzinst. Wie hoch ist der Effektivzinssatz \(r_{\text{exp}}\)?`;
+    steps = [S('Zinsfaktor der einfachen Verzinsung', T`ZF = 1 + r_{\text{einf}}\cdot t`, [num(T`\(ZF =\)`, zf, 6)], T`\(1 + ${ntc(r, 4)}\cdot ${ntc(t)}\)`), fin(T`r_{\text{exp}} = ZF^{\frac1t} - 1`, T`\(${nt(zf, 6)}^{1/${ntc(t)}} - 1\)`)]; }
+  else { const t = R(2, 5), zf = (1 + r) ** t; ans = (zf - 1) / t; lab = T`r_{\text{einf}}`;
+    q = T`Welcher einfache Zinssatz \(r_{\text{einf}}\) liefert über \(t = ${t}\) Jahre denselben Ertrag wie \(r_{\text{exp}} = ${ptc(r)}\)?`;
+    steps = [S('Exponentieller Zinsfaktor', T`ZF = (1 + r_{\text{exp}})^t`, [num(T`\(ZF =\)`, zf, 6)], T`\(${ntc(1 + r, 4)}^{${t}}\)`), fin(T`r_{\text{einf}} = \frac{ZF - 1}{t}`, T`\(\frac{${nt(zf, 6)} - 1}{${t}}\)`)]; }
+  return { q, fields: [num(T`\(${lab} =\)`, ans * 100, 2, '%')], sol: T`Zinsfaktoren gleichsetzen. Ergebnis: \(${lab} = ${pt(ans, 4)}\)`, steps };
+});
+
+/* ---------------------------------------------------- 2.2 Barwert */
+STEPGEN('bwstream', () => {
+  const n = pick([3, 3, 4]), Z = Array.from({ length: n }, () => R(4, 20) * 10), r = R(20, 90) / 1000;
+  const pv = Z.map((z, i) => z / (1 + r) ** (i + 1)), B = sum(pv), A = Math.round(B * R(88, 112) / 100 / 5) * 5, Bn = B - A;
+  const ctx = pick(['Eine Maschine kostet in der Anschaffung', 'Ein Projekt erfordert heute eine Investition von']);
+  return {
+    q: T`${ctx} \(A = ${ntc(A)}\) TEUR und erzeugt am Ende der Jahre 1 bis ${n} die Rückflüsse ${Z.map(z => T`\(${z}\)`).join(', ')} TEUR. Opportunitätszinssatz \(r = ${ptc(r)}\) (exponentiell).`,
+    fields: [num(T`Barwert \(B =\)`, B, 2, 'TEUR'), num(T`Nettobarwert \(B_{\text{net}} =\)`, Bn, 2, 'TEUR')],
+    sol: T`\[B = ${Z.map((z, i) => T`\frac{${z}}{${ntc(1 + r, 4)}^{${i + 1}}}`).join(' + ')} = ${nt(B)}\qquad B_{\text{net}} = ${nt(B)} - ${ntc(A)} = ${nt(Bn)}\]`,
+    steps: [S('Jeden Rückfluss abzinsen', T`\frac{Z_i}{(1 + r)^{i}}`, pv.map((v, i) => num(T`Jahr ${i + 1}: \(\frac{${Z[i]}}{${ntc(1 + r, 4)}^{${i + 1}}} =\)`, v, 2)), T`z. B. Jahr 1: \(${Z[0]} : ${ntc(1 + r, 4)}\)`),
+      S('Barwerte addieren', T`B = \sum \frac{Z_i}{(1+r)^i}`, [num(T`\(B =\)`, B, 2, 'TEUR')], T`\(${pv.map(v => nt(v)).join(' + ')}\)`),
+      S('Anschaffung abziehen', T`B_{\text{net}} = B - A`, [num(T`\(B_{\text{net}} =\)`, Bn, 2, 'TEUR')], T`\(${nt(B)} - ${ntc(A)}\)`)]
+  };
+});
+STEPGEN('bond', () => {
+  const c = R(2, 8), n = R(3, 6), r = R(15, 80) / 1000, F = bwf(r, n), pk = c * F, pr = 100 / (1 + r) ** n, B = pk + pr;
+  return {
+    q: T`Eine Kuponanleihe mit Nennwert 100 zahlt jährlich einen Kupon von \(${c}\,\%\) und wird in \(${n}\) Jahren zu 100 zurückgezahlt. Berechne den Barwert bei einem Marktzinssatz von \(r = ${ptc(r)}\).`,
+    fields: [num(T`\(B =\)`, B, 2, '')],
+    sol: T`\[B = ${Array.from({ length: n }, (_, i) => T`\frac{${i === n - 1 ? c + 100 : c}}{${ntc(1 + r, 4)}^{${i + 1}}}`).join(' + ')} = ${nt(B)}\]`,
+    steps: [S('Die Kupons sind eine Rente: Barwertfaktor', T`BWF = \frac{(1+r)^n - 1}{r(1+r)^n}`, [num(T`\(BWF =\)`, F, 6)], T`\(\frac{${ntc(1 + r, 4)}^{${n}} - 1}{${ntc(r, 4)}\cdot ${ntc(1 + r, 4)}^{${n}}}\)`),
+      S('Barwert der Kupons', T`c\cdot BWF`, [num('Kupons', pk, 2)], T`\(${c}\cdot ${nt(F, 6)}\)`),
+      S('Barwert der Rückzahlung', T`\frac{100}{(1+r)^n}`, [num('Rückzahlung', pr, 2)], T`\(\frac{100}{${ntc(1 + r, 4)}^{${n}}}\)`),
+      S('Addieren', T`B = c\cdot BWF + \frac{100}{(1+r)^n}`, [num(T`\(B =\)`, B, 2)], T`\(${nt(pk)} + ${nt(pr)}\)`)]
+  };
+});
+STEPGEN('bweinzel', () => {
+  const Z = R(5, 100) * 500, r = R(10, 70) / 1000, m = pick(['exp', 'stet', 'einf']);
+  const tt = m === 'einf' ? pick([0.25, 0.5, 0.75]) : pick([1.5, 2, 3, 4.5, 6, 10]), ZF = METH[m].ZF(r, tt), B = Z / ZF;
+  return {
+    q: T`Welchen Barwert hat eine Zahlung von \(${eur(Z, 0)}\) in \(${ntc(tt)}\) Jahren bei ${METH[m].n}er Verzinsung mit \(r = ${ptc(r)}\)?`,
+    fields: [num(T`\(B =\)`, B, 2, '€')],
+    sol: T`\(B = DF\cdot Z = \frac{${nt(Z, 0)}}{${METH[m].tex(r, tt)}} = ${eur(B)}\)`,
+    steps: [S('Zinsfaktor', m === 'exp' ? T`ZF = (1+r)^t` : m === 'stet' ? T`ZF = e^{rt}` : T`ZF = 1 + rt`, [num(T`\(ZF =\)`, ZF, 6)], T`\(${METH[m].tex(r, tt)}\)`),
+      S('Abzinsen', T`B = \frac{Z}{ZF}`, [num(T`\(B =\)`, B, 2, '€')], T`\(\frac{${nt(Z, 0)}}{${nt(ZF, 6)}}\)`)]
+  };
+});
+
+/* ---------------------------------------------------- 2.2 Renten */
+STEPGEN('rente', () => {
+  const vor = Math.random() < 0.5, m = pick([1, 1, 12]), n = R(3, 20), r = R(15, 70) / 1000;
+  const Z = m === 12 ? R(5, 40) * 10 : R(5, 50) * 100, wantE = Math.random() < 0.5;
+  const F = wantE ? ewf(r, n, m, vor) : bwf(r, n, m, vor), V = F * Z, qv = 1 + r / m, N = m * n;
+  const q = m === 1 ? ntc(1 + r, 4) : T`\left(1 + \frac{${ntc(r, 4)}}{12}\right)`, Nt = m === 1 ? n : `12\\cdot ${n}`, rr = m === 1 ? ntc(r, 4) : T`\frac{${ntc(r, 4)}}{12}`;
+  const fT = wantE ? T`${vor ? q + T`\cdot` : ''}\frac{${q}^{${Nt}} - 1}{${rr}}` : T`\frac{${q}^{${Nt}} - 1}{${rr}\cdot ${q}^{${Nt}${vor ? ' - 1' : ''}}}`;
+  const sym = wantE ? (vor ? T`EWF = q\cdot\frac{q^{N} - 1}{i}` : T`EWF = \frac{q^{N} - 1}{i}`) : (vor ? T`BWF = \frac{q^{N} - 1}{i\cdot q^{N-1}}` : T`BWF = \frac{q^{N} - 1}{i\cdot q^{N}}`);
+  return {
+    q: T`Über \(n = ${n}\) Jahre werden ${m === 12 ? 'monatlich' : 'jährlich'} <b>${vor ? 'vorschüssig' : 'nachschüssig'}</b> \(Z = ${eur(Z, 0)}\) gezahlt. Zinssatz \(r = ${ptc(r)}\) p.a.${m === 12 ? ' (unterjährig exponentiell, \\(m = 12\\))' : ''}. Berechne den ${wantE ? 'Endwert \\(E\\)' : 'Barwert \\(B\\)'}.`,
+    fields: [num(wantE ? T`\(E =\)` : T`\(B =\)`, V, 2, '€')],
+    sol: T`\[${wantE ? 'EWF' : 'BWF'} = ${fT} = ${nt(F, 6)}\qquad ${wantE ? 'E' : 'B'} = ${nt(F, 6)}\cdot ${nt(Z, 0)} = ${eur(V)}\]`,
+    steps: [S('Zinssatz pro Periode und Anzahl Zahlungen', T`i = \frac rm,\quad q = 1 + i,\quad N = m\cdot n`, [num(T`\(q =\)`, qv, 6), num(T`\(N =\)`, N, 0)], T`\(m = ${m}\): \(q = 1 + \frac{${ntc(r, 4)}}{${m}}\), \(N = ${m}\cdot ${n}\)`),
+      S(`${wantE ? 'Endwertfaktor' : 'Barwertfaktor'} (${vor ? 'vorschüssig' : 'nachschüssig'})`, sym, [num(T`\(${wantE ? 'EWF' : 'BWF'} =\)`, F, 6)], T`\(${fT}\)`),
+      S(wantE ? 'Endwert' : 'Barwert', wantE ? T`E = EWF\cdot Z` : T`B = BWF\cdot Z`, [num(wantE ? T`\(E =\)` : T`\(B =\)`, V, 2, '€')], T`\(${nt(F, 6)}\cdot ${nt(Z, 0)}\)`)]
+  };
+});
+STEPGEN('annu', () => {
+  const B = R(10, 60) * 5000, n = R(5, 25), r = R(20, 70) / 1000, F = bwf(r, n), Z = B / F;
+  return {
+    q: T`Ein Darlehen über \(${eur(B, 0)}\) soll in \(n = ${n}\) gleich hohen jährlichen, nachschüssigen Annuitäten getilgt werden. Zinssatz \(r = ${ptc(r)}\). Wie hoch ist die Annuität \(Z\)?`,
+    fields: [num(T`\(Z =\)`, Z, 2, '€')],
+    sol: T`\[BWF = \frac{${ntc(1 + r, 4)}^{${n}} - 1}{${ntc(r, 4)}\cdot ${ntc(1 + r, 4)}^{${n}}} = ${nt(F, 6)}\qquad Z = \frac{${nt(B, 0)}}{${nt(F, 6)}} = ${eur(Z)}\]`,
+    steps: [S('Aufzinsungsfaktor', T`(1 + r)^n`, [num(T`\((1 + r)^{${n}} =\)`, (1 + r) ** n, 6)], T`\(${ntc(1 + r, 4)}^{${n}}\)`),
+      S('Barwertfaktor', T`BWF = \frac{(1+r)^n - 1}{r(1+r)^n}`, [num(T`\(BWF =\)`, F, 6)], T`\(\frac{${nt((1 + r) ** n, 6)} - 1}{${ntc(r, 4)}\cdot ${nt((1 + r) ** n, 6)}}\)`),
+      S('Annuität', T`Z = \frac{B}{BWF}`, [num(T`\(Z =\)`, Z, 2, '€')], T`\(\frac{${nt(B, 0)}}{${nt(F, 6)}}\)`)]
+  };
+});
+STEPGEN('sparrate', () => {
+  const E = R(10, 100) * 1000, n = R(5, 25), r = R(10, 60) / 1000, vor = Math.random() < 0.5, F = ewf(r, n, 1, vor);
+  return {
+    q: T`Wie viel muss jährlich ${vor ? 'vorschüssig' : 'nachschüssig'} gespart werden, um bei \(${ptc(r)}\) nach ${n} Jahren \(${eur(E, 0)}\) zu haben?`,
+    fields: [num(T`\(Z =\)`, E / F, 2, '€')],
+    sol: T`\(EWF = ${vor ? T`${ntc(1 + r, 4)}\cdot` : ''}\frac{${ntc(1 + r, 4)}^{${n}} - 1}{${ntc(r, 4)}} = ${nt(F, 6)}\), \(Z = \frac{E}{EWF} = ${eur(E / F)}\)`,
+    steps: [S(`Endwertfaktor (${vor ? 'vorschüssig' : 'nachschüssig'})`, vor ? T`EWF = (1+r)\frac{(1+r)^n - 1}{r}` : T`EWF = \frac{(1+r)^n - 1}{r}`, [num(T`\(EWF =\)`, F, 6)], T`\(${vor ? T`${ntc(1 + r, 4)}\cdot` : ''}\frac{${ntc(1 + r, 4)}^{${n}} - 1}{${ntc(r, 4)}}\)`),
+      S('Nach Z auflösen', T`E = EWF\cdot Z\ \Rightarrow\ Z = \frac{E}{EWF}`, [num(T`\(Z =\)`, E / F, 2, '€')], T`\(\frac{${nt(E, 0)}}{${nt(F, 6)}}\)`)]
+  };
+});
+STEPGEN('restschuld', () => {
+  const B = R(10, 50) * 5000, n = R(8, 25), r = R(20, 60) / 1000, k = R(1, n - 2), F = bwf(r, n), Z = B / F, F2 = bwf(r, n - k), Rk = Z * F2;
+  return {
+    q: T`Darlehen \(${eur(B, 0)}\), \(r = ${ptc(r)}\), Laufzeit ${n} Jahre, jährliche nachschüssige Annuität. Wie hoch sind Annuität und Restschuld nach ${k} Jahren?`,
+    fields: [num(T`\(Z =\)`, Z, 2, '€'), num(T`Restschuld nach ${k} J.`, Rk, 2, '€')],
+    sol: T`\(Z = \frac{B}{BWF} = ${eur(Z)}\). Restschuld = Barwert der restlichen \(${n - k}\) Annuitäten \(= ${eur(Rk)}\)`,
+    steps: [S(`Barwertfaktor für ${n} Jahre`, T`BWF_{${n}} = \frac{(1+r)^{${n}} - 1}{r(1+r)^{${n}}}`, [num(T`\(BWF_{${n}} =\)`, F, 6)], T`\(r = ${ntc(r, 4)}\), \(n = ${n}\)`),
+      S('Annuität', T`Z = \frac{B}{BWF_{${n}}}`, [num(T`\(Z =\)`, Z, 2, '€')], T`\(\frac{${nt(B, 0)}}{${nt(F, 6)}}\)`),
+      S(`Barwertfaktor der restlichen ${n - k} Jahre`, T`BWF_{${n - k}}`, [num(T`\(BWF_{${n - k}} =\)`, F2, 6)], T`gleiche Formel mit \(n = ${n - k}\)`),
+      S('Restschuld = Barwert der restlichen Raten', T`R_{${k}} = Z\cdot BWF_{${n - k}}`, [num('Restschuld', Rk, 2, '€')], T`\(${nt(Z)}\cdot ${nt(F2, 6)}\)`)]
+  };
+});
+STEPGEN('rentelaufzeit', () => {
+  const r = R(20, 60) / 1000, n0 = R(5, 30), Z = R(5, 40) * 100, B = rnd(Z * bwf(r, n0), 0), x = r * B / Z;
+  const n = -Math.log(1 - x) / Math.log(1 + r);
+  return {
+    q: T`Ein Kapital von \(${eur(B, 0)}\) soll bei \(${ptc(r)}\) jährlich nachschüssig \(${eur(Z, 0)}\) auszahlen. Wie viele Jahre reicht es?`,
+    fields: [num(T`\(n =\)`, n, 2, 'Jahre')],
+    sol: T`\(B = Z\cdot\frac{(1+r)^n - 1}{r(1+r)^n}\Rightarrow (1+r)^{-n} = 1 - \frac{rB}{Z}\Rightarrow n = -\frac{\ln(1 - ${ntc(x, 6)})}{\ln ${ntc(1 + r, 4)}} = ${nt(n)}\)`,
+    steps: [S('Hilfsgröße', T`\frac{r\cdot B}{Z}`, [num(T`\(\frac{rB}{Z} =\)`, x, 6)], T`\(\frac{${ntc(r, 4)}\cdot ${nt(B, 0)}}{${nt(Z, 0)}}\)`),
+      S('Umstellen', T`(1+r)^{-n} = 1 - \frac{rB}{Z}`, [num(T`\(1 - \frac{rB}{Z} =\)`, 1 - x, 6)], T`\(1 - ${nt(x, 6)}\)`),
+      S('Logarithmieren', T`n = -\frac{\ln\left(1 - \frac{rB}{Z}\right)}{\ln(1+r)}`, [num(T`\(n =\)`, n, 2, 'Jahre')], T`\(-\frac{\ln(${nt(1 - x, 6)})}{\ln(${ntc(1 + r, 4)})}\)`)]
+  };
+});
+
+/* ---------------------------------------------------- 2.3 Rendite */
+STEPGEN('yield2', () => {
+  const c = R(2, 8), A = RS(94, 106, 0.5), D = c * c + 4 * A * (100 + c), qv = (c + Math.sqrt(D)) / (2 * A), r = qv - 1;
+  return {
+    q: T`Eine zweijährige Anleihe mit jährlichem Kupon von \(${c}\,\%\) wird zu \(${ntc(A)}\,\%\) des Nennwertes gekauft. Berechne die Rendite \(r\) bei exponentieller Verzinsung.`,
+    fields: [num(T`\(r =\)`, r * 100, 2, '%')],
+    sol: T`\[${ntc(A)} = \frac{${c}}{q} + \frac{${100 + c}}{q^2}\ \Rightarrow\ ${ntc(A)}q^2 - ${c}q - ${100 + c} = 0\ \Rightarrow\ q = ${nt(qv, 6)},\ r = ${pt(r)}\]`,
+    steps: [S('Gleichung aufstellen und mit q² multiplizieren', T`A = \frac{c}{q} + \frac{100 + c}{q^2}\ \Rightarrow\ A q^2 - c\,q - (100 + c) = 0`, [num('Diskriminante \\(b^2 - 4ac =\\)', D, 2)], T`\(a = ${ntc(A)}\), \(b = -${c}\), \(c = -${100 + c}\): \(${c}^2 + 4\cdot ${ntc(A)}\cdot ${100 + c}\)`),
+      S('a-b-c-Formel (positive Lösung)', T`q = \frac{c + \sqrt{D}}{2A}`, [num(T`\(q =\)`, qv, 6)], T`\(\frac{${c} + \sqrt{${nt(D)}}}{2\cdot ${ntc(A)}}\)`),
+      S('Rendite', T`r = q - 1`, [num(T`\(r =\)`, r * 100, 2, '%')], T`\(${nt(qv, 6)} - 1\)`)]
+  };
+});
+STEPGEN('praktiker', () => {
+  const c = R(1, 8), n = R(2, 10), P = RS(88, 115, 0.5), a = (100 - P) / n, r = (c + a) / P;
+  return {
+    q: T`Eine Kuponanleihe (Kupon \(${c}\,\%\), Restlaufzeit \(${n}\) Jahre, Rückzahlung 100) notiert bei \(${ntc(P)}\). Schätze die Rendite mit der Praktikerformel.`,
+    fields: [num(T`\(r \approx\)`, r * 100, 2, '%')],
+    sol: T`\[r \approx \frac{${c} + \frac{100 - ${ntc(P)}}{${n}}}{${ntc(P)}} = ${pt(r)}\]`,
+    steps: [S('Kursgewinn/-verlust pro Jahr', T`\frac{\text{Rückzahlung} - \text{Preis}}{\text{Restlaufzeit}}`, [num('pro Jahr', a, 4)], T`\(\frac{100 - ${ntc(P)}}{${n}}\)`),
+      S('Zähler: Kupon + Kursanteil', T`\text{Kupon} + \frac{100 - P}{n}`, [num('Zähler', c + a, 4)], T`\(${c} + ${q4(a)}\)`),
+      S('Durch den Preis teilen', T`r \approx \frac{\text{Zähler}}{\text{Preis}}`, [num(T`\(r \approx\)`, r * 100, 2, '%')], T`\(\frac{${q4(c + a)}}{${ntc(P)}}\), mal 100`)]
+  };
+});
+STEPGEN('sparbrief', () => {
+  const A = R(2, 20) * 500, t = R(2, 8), r0 = R(15, 60) / 1000, Kt = Math.round(A * (1 + r0) ** t), qv = Kt / A, r = qv ** (1 / t) - 1;
+  return {
+    q: T`Ein Sparbrief kostet heute \(A = ${eur(A, 0)}\) und zahlt nach \(${t}\) Jahren einmalig \(${eur(Kt, 0)}\) zurück. Wie hoch ist die Rendite (exponentiell)?`,
+    fields: [num(T`\(r =\)`, r * 100, 2, '%')],
+    sol: T`\[r = \sqrt[${t}]{\frac{${nt(Kt, 0)}}{${nt(A, 0)}}} - 1 = ${pt(r)}\]`,
+    steps: [S('Wachstumsfaktor', T`\frac{K_t}{A}`, [num(T`\(K_t/A =\)`, qv, 6)], T`\(\frac{${nt(Kt, 0)}}{${nt(A, 0)}}\)`),
+      S('t-te Wurzel ziehen', T`r = \left(\frac{K_t}{A}\right)^{\frac1t} - 1`, [num(T`\(r =\)`, r * 100, 2, '%')], T`\(${nt(qv, 6)}^{1/${t}} - 1\)`)]
+  };
+});
+STEPGEN('nullkupon', () => {
+  const n = R(2, 10), P = RS(60, 98, 0.5), qv = 100 / P, r = qv ** (1 / n) - 1;
+  return {
+    q: T`Ein Nullkuponanleihe (Zerobond) mit Laufzeit ${n} Jahre kostet \(${ntc(P)}\) und zahlt 100 zurück. Rendite?`,
+    fields: [num(T`\(r =\)`, r * 100, 2, '%')],
+    sol: T`\(r = \sqrt[${n}]{\frac{100}{${ntc(P)}}} - 1 = ${pt(r)}\)`,
+    steps: [S('Wachstumsfaktor', T`\frac{100}{P}`, [num(T`\(100/P =\)`, qv, 6)], T`\(\frac{100}{${ntc(P)}}\)`),
+      S('n-te Wurzel ziehen', T`r = \left(\frac{100}{P}\right)^{\frac1n} - 1`, [num(T`\(r =\)`, r * 100, 2, '%')], T`\(${nt(qv, 6)}^{1/${n}} - 1\)`)]
+  };
+});
+STEPGEN('irr2', () => {
+  let A, Z1, Z2; do { A = R(80, 150) * 10; Z1 = R(30, 80) * 10; Z2 = R(40, 100) * 10; } while (Z1 + Z2 <= A);
+  const D = Z1 * Z1 + 4 * A * Z2, qv = (Z1 + Math.sqrt(D)) / (2 * A), r = qv - 1;
+  return {
+    q: T`Eine Investition kostet \(${nt(A, 0)}\,€\) und bringt nach einem Jahr \(${nt(Z1, 0)}\,€\) und nach zwei Jahren \(${nt(Z2, 0)}\,€\). Bestimme den internen Zinsfuß.`,
+    fields: [num(T`\(r =\)`, r * 100, 2, '%')],
+    sol: T`\(${nt(A, 0)}q^2 - ${nt(Z1, 0)}q - ${nt(Z2, 0)} = 0\Rightarrow q = ${nt(qv, 6)}\Rightarrow r = ${pt(r)}\)`,
+    steps: [S('Gleichung aufstellen', T`A = \frac{Z_1}{q} + \frac{Z_2}{q^2}\ \Rightarrow\ A q^2 - Z_1 q - Z_2 = 0`, [num('Diskriminante', D, 0)], T`\(${nt(Z1, 0)}^2 + 4\cdot ${nt(A, 0)}\cdot ${nt(Z2, 0)}\)`),
+      S('a-b-c-Formel', T`q = \frac{Z_1 + \sqrt{D}}{2A}`, [num(T`\(q =\)`, qv, 6)], T`\(\frac{${nt(Z1, 0)} + \sqrt{${nt(D, 0)}}}{2\cdot ${nt(A, 0)}}\)`),
+      S('Interner Zinsfuß', T`r = q - 1`, [num(T`\(r =\)`, r * 100, 2, '%')], T`\(${nt(qv, 6)} - 1\)`)]
+  };
+});
+STEPGEN('disagio', () => {
+  const N = R(10, 100) * 1000, rn = R(20, 70) / 1000, aus = pick([0.95, 0.96, 0.97, 0.98, 0.99]), r = (N * (1 + rn)) / (N * aus) - 1;
+  return {
+    q: T`Ein Kredit über \(${eur(N, 0)}\) wird zu \(${ntc(aus * 100)}\,\%\) ausgezahlt und nach einem Jahr inkl. \(${ptc(rn)}\) Nominalzins zurückgezahlt. Effektivzins?`,
+    fields: [num(T`\(r =\)`, r * 100, 2, '%')],
+    sol: T`\(r = \frac{${nt(N * (1 + rn))}}{${nt(N * aus, 0)}} - 1 = ${pt(r)}\)`,
+    steps: [S('Tatsächliche Auszahlung', T`N\cdot\text{Auszahlungskurs}`, [num('Auszahlung', N * aus, 2, '€')], T`\(${nt(N, 0)}\cdot ${ntc(aus)}\)`),
+      S('Rückzahlung nach einem Jahr', T`N\cdot(1 + r_{\text{nom}})`, [num('Rückzahlung', N * (1 + rn), 2, '€')], T`\(${nt(N, 0)}\cdot ${ntc(1 + rn, 4)}\)`),
+      S('Effektivzins', T`r = \frac{\text{Rückzahlung}}{\text{Auszahlung}} - 1`, [num(T`\(r =\)`, r * 100, 2, '%')], T`\(\frac{${nt(N * (1 + rn))}}{${nt(N * aus, 0)}} - 1\)`)]
+  };
+});
+
+/* ---------------------------------------------------- 2.4 Zinsstruktur */
+STEPGEN('pvspot', () => {
+  const r1 = R(10, 40) / 1000, r2 = r1 + R(0, 10) / 1000, r3 = r2 + R(0, 10) / 1000, c = R(2, 8), rs = [r1, r2, r3];
+  const Z = [c, c, 100 + c], pv = Z.map((z, i) => z / (1 + rs[i]) ** (i + 1)), B = sum(pv);
+  return {
+    q: T`Spot Rates: \(r_{01} = ${ptc(r1)}\), \(r_{02} = ${ptc(r2)}\), \(r_{03} = ${ptc(r3)}\). Berechne den Barwert einer dreijährigen Kuponanleihe mit \(${c}\,\%\) Kupon (Nennwert 100).`,
+    fields: [num(T`\(B =\)`, B, 2, '')],
+    sol: T`\[B = \frac{${c}}{${ntc(1 + r1, 4)}} + \frac{${c}}{${ntc(1 + r2, 4)}^2} + \frac{${100 + c}}{${ntc(1 + r3, 4)}^3} = ${nt(B)}\]`,
+    steps: [S('Jede Zahlung mit ihrer Spot Rate abzinsen', T`\frac{Z_t}{(1 + r_{0t})^t}`, pv.map((v, i) => num(T`Jahr ${i + 1} (\(Z = ${Z[i]}\)):`, v, 4)), T`Jahr 2: \(\frac{${c}}{${ntc(1 + r2, 4)}^2}\)`),
+      S('Addieren', T`B = \sum_t \frac{Z_t}{(1 + r_{0t})^t}`, [num(T`\(B =\)`, B, 2)], T`\(${pv.map(q4).join(' + ')}\)`)]
+  };
+});
+STEPGEN('forward', () => {
+  const [tp, t] = pick([[1, 2], [1, 3], [2, 3], [2, 4], [1, 4], [3, 5]]), a = R(10, 50) / 1000, b = a + R(-5, 15) / 1000;
+  const ratio = (1 + b) ** t / (1 + a) ** tp, f = ratio ** (1 / (t - tp)) - 1;
+  return {
+    q: T`Die aktuelle Zinsstruktur gibt \(r_{0${tp}} = ${ptc(a)}\) und \(r_{0${t}} = ${ptc(b)}\) vor. Welchen Zinssatz \(r_{${tp}${t}}\) kann man sich heute für eine Anlage von \(t' = ${tp}\) bis \(t = ${t}\) festschreiben lassen?`,
+    fields: [num(T`\(r_{${tp}${t}} =\)`, f * 100, 2, '%')],
+    sol: T`\[r_{${tp}${t}} = \left[\frac{${ntc(1 + b, 4)}^{${t}}}{${ntc(1 + a, 4)}^{${tp}}}\right]^{\frac{1}{${t - tp}}} - 1 = ${pt(f)}\]`,
+    steps: [S('Zinsfaktoren ins Verhältnis setzen', T`\frac{(1 + r_{0t})^t}{(1 + r_{0t'})^{t'}}`, [num('Verhältnis', ratio, 6)], T`\(\frac{${ntc(1 + b, 4)}^{${t}}}{${ntc(1 + a, 4)}^{${tp}}}\)`),
+      S(`${t - tp === 1 ? 'Minus 1' : `${t - tp}-te Wurzel ziehen`}`, T`r_{t't} = \left[\ldots\right]^{\frac{1}{t - t'}} - 1`, [num(T`\(r_{${tp}${t}} =\)`, f * 100, 2, '%')], T`\(${nt(ratio, 6)}^{1/${t - tp}} - 1\)`)]
+  };
+});
+STEPGEN('boot', () => {
+  const k1 = R(10, 40) / 1000, k2 = k1 + R(0, 10) / 1000, k3 = k2 + R(0, 10) / 1000;
+  const r1 = k1, r2 = Math.sqrt((1 + k2) / (1 - k2 / (1 + r1))) - 1, s3 = k3 / (1 + r1) + k3 / (1 + r2) ** 2;
+  const r3 = ((1 + k3) / (1 - s3)) ** (1 / 3) - 1;
+  return {
+    q: T`Am Kapitalmarkt werden ein-, zwei- und dreijährige Anlagen mit jährlicher Zinszahlung zu \(k_1 = ${ptc(k1)}\), \(k_2 = ${ptc(k2)}\), \(k_3 = ${ptc(k3)}\) angeboten (Par Rates). Bestimme die Zero Rates \(r_{02}\) und \(r_{03}\).`,
+    fields: [num(T`\(r_{02} =\)`, r2 * 100, 2, '%'), num(T`\(r_{03} =\)`, r3 * 100, 2, '%')],
+    sol: T`\(r_{01} = k_1\), \(r_{02} = ${pt(r2)}\), \(r_{03} = ${pt(r3)}\) (rekursiv mit der Formel aus der Formelsammlung).`,
+    steps: [S('Erste Zero Rate', T`r_{01} = k_1`, [num(T`\(r_{01} =\)`, r1 * 100, 2, '%')], 'einfach übernehmen'),
+      S('Zweite Zero Rate', T`r_{02} = \sqrt{\frac{1 + k_2}{1 - \frac{k_2}{1 + r_{01}}}} - 1`, [num(T`\(r_{02} =\)`, r2 * 100, 2, '%')], T`\(\sqrt{\frac{${ntc(1 + k2, 4)}}{1 - \frac{${ntc(k2, 4)}}{${ntc(1 + r1, 4)}}}} - 1\)`),
+      S('Summe der abgezinsten Kupons für Jahr 3', T`\frac{k_3}{1 + r_{01}} + \frac{k_3}{(1 + r_{02})^2}`, [num('Summe', s3, 6)], T`\(\frac{${ntc(k3, 4)}}{${ntc(1 + r1, 4)}} + \frac{${ntc(k3, 4)}}{${nt(1 + r2, 6)}^2}\)`),
+      S('Dritte Zero Rate', T`r_{03} = \sqrt[3]{\frac{1 + k_3}{1 - \text{Summe}}} - 1`, [num(T`\(r_{03} =\)`, r3 * 100, 2, '%')], T`\(\left(\frac{${ntc(1 + k3, 4)}}{1 - ${nt(s3, 6)}}\right)^{1/3} - 1\)`)]
+  };
+});
+STEPGEN('par', () => {
+  const r1 = R(10, 40) / 1000, r2 = r1 + R(0, 12) / 1000, num1 = 1 - (1 + r2) ** -2, den = (1 + r1) ** -1 + (1 + r2) ** -2, k2 = num1 / den;
+  return {
+    q: T`Gegeben die Zero Rates \(r_{01} = ${ptc(r1)}\) und \(r_{02} = ${ptc(r2)}\). Bestimme den zweijährigen Anlagezinssatz (Par Rate) \(k_2\).`,
+    fields: [num(T`\(k_2 =\)`, k2 * 100, 2, '%')],
+    sol: T`\[k_2 = \frac{1 - ${ntc(1 + r2, 4)}^{-2}}{${ntc(1 + r1, 4)}^{-1} + ${ntc(1 + r2, 4)}^{-2}} = ${pt(k2)}\]`,
+    steps: [S('Zähler', T`1 - (1 + r_{02})^{-2}`, [num('Zähler', num1, 6)], T`\(1 - ${ntc(1 + r2, 4)}^{-2}\)`),
+      S('Nenner: Summe der Diskontfaktoren', T`(1 + r_{01})^{-1} + (1 + r_{02})^{-2}`, [num('Nenner', den, 6)], T`\(${ntc(1 + r1, 4)}^{-1} + ${ntc(1 + r2, 4)}^{-2}\)`),
+      S('Par Rate', T`k_2 = \frac{\text{Zähler}}{\text{Nenner}}`, [num(T`\(k_2 =\)`, k2 * 100, 2, '%')], T`\(\frac{${nt(num1, 6)}}{${nt(den, 6)}}\)`)]
+  };
+});
+
+/* ---------------------------------------------------- 3.7 Normalverteilung */
+const fstStep = z => z >= 0 ? T`F_{St}(${nt(z)})` : T`F_{St}(${nt(z)}) = 1 - F_{St}(${nt(-z)})`;
+STEPGEN('nvp', () => {
+  const mu = R(2, 14), s = R(5, 25), v = pick(['le', 'ge', 'bw']);
+  const a = Math.round(mu + R(-20, 20) / 10 * s), z = rnd((a - mu) / s, 2), za = Math.abs(z), Fa = Fst(za), Fz = Fst(z);
+  const intro = T`Die Jahresrendite \(R\) einer Aktie ist normalverteilt mit \(\mu = ${mu}\,\%\) und \(\sigma = ${s}\,\%\).`;
+  const zStep = S('Standardisieren (auf 2 Stellen runden)', T`z = \frac{a - \mu}{\sigma}`, [num(T`\(z =\)`, z, 2)], T`\(\frac{${a} - ${mu}}{${s}}\)`);
+  const tabStep = S('In der Tabelle ablesen', T`F_{St}(|z|)`, [num(T`\(F_{St}(${nt(za)}) =\)`, Fa, 4)], T`Zeile ${nt(Math.floor(za * 10) / 10, 1)}, Spalte ${nt(rnd(za - Math.floor(za * 10) / 10, 2), 2)}`);
+  if (v === 'bw') {
+    const b = 2 * mu - a, lo = Math.min(a, b), hi = Math.max(a, b), P = rnd(2 * Fa - 1, 4);
+    return {
+      q: T`${intro} Wie groß ist die Wahrscheinlichkeit, dass die Rendite zwischen \(${lo}\,\%\) und \(${hi}\,\%\) liegt?`, table: true,
+      fields: [num('\\(z =\\) (Abstand in σ, positiv)', za, 2), num(T`\(P =\)`, P, 4)],
+      sol: T`\[z = \frac{${hi} - ${mu}}{${s}} = ${nt(za)},\quad P = 2F_{St}(${nt(za)}) - 1 = ${nt(P, 4)}\]`,
+      steps: [S('Abstand der Grenze von μ in σ (symmetrisch)', T`z = \frac{b - \mu}{\sigma}`, [num(T`\(z =\)`, za, 2)], T`\(\frac{${hi} - ${mu}}{${s}}\)`), tabStep,
+        S('Symmetrisches Intervall', T`P = 2F_{St}(z) - 1`, [num(T`\(P =\)`, P, 4)], T`\(2\cdot ${nt(Fa, 4)} - 1\)`)]
+    };
+  }
+  const P = v === 'le' ? Fz : rnd(1 - Fz, 4);
+  const steps = [zStep, tabStep];
+  if (z < 0) steps.push(S('Negatives z: Symmetrie', T`F_{St}(-z) = 1 - F_{St}(z)`, [num(T`\(F_{St}(${nt(z)}) =\)`, Fz, 4)], T`\(1 - ${nt(Fa, 4)}\)`));
+  if (v === 'ge') steps.push(S('„Mindestens“ → Gegenwahrscheinlichkeit', T`P(R \ge a) = 1 - F_{St}(z)`, [num(T`\(P =\)`, P, 4)], T`\(1 - ${nt(Fz, 4)}\)`));
+  else if (z >= 0) steps[1].f[0].label = T`\(P = F_{St}(${nt(za)}) =\)`;
+  return {
+    q: T`${intro} Wie groß ist die Wahrscheinlichkeit, dass die Rendite ${v === 'le' ? T`höchstens \(${a}\,\%\)` : T`mindestens \(${a}\,\%\)`} beträgt?`, table: true,
+    fields: [num(T`\(z =\)`, z, 2), num(T`\(P =\)`, P, 4)],
+    sol: T`\[z = \frac{${a} - ${mu}}{${s}} = ${nt(z)}\qquad P = ${v === 'le' ? fstStep(z) : T`1 - F_{St}(${nt(z)})`} = ${nt(P, 4)}\]`,
+    steps
+  };
+});
+STEPGEN('nvkurs', () => {
+  const mu = R(4, 14), s = R(6, 25), K0 = R(40, 150), K1 = Math.round(K0 * (1 + R(-35, -5) / 100)), a = (K1 / K0 - 1) * 100, z = rnd((rnd(a, 2) - mu) / s, 2);
+  return {
+    q: T`Jahresrendite \(R \sim N(${mu}\,\%,\ (${s}\,\%)^2)\). Der Kurs beträgt heute \(${K0}\). Wie wahrscheinlich liegt er in einem Jahr höchstens bei \(${K1}\)?`, table: true,
+    fields: [num(T`nötige Rendite \(a =\)`, a, 2, '%'), num(T`\(P =\)`, Fst(z), 4)],
+    sol: T`\(a = \frac{${K1}}{${K0}} - 1 = ${nt(a)}\,\%\), \(z = ${nt(z)}\), \(P = ${nt(Fst(z), 4)}\)`,
+    steps: [S('Kursziel in Rendite umrechnen', T`a = \frac{K_1}{K_0} - 1`, [num(T`\(a =\)`, a, 2, '%')], T`\(\frac{${K1}}{${K0}} - 1\), mal 100`),
+      S('Standardisieren', T`z = \frac{a - \mu}{\sigma}`, [num(T`\(z =\)`, z, 2)], T`\(\frac{${nt(a)} - ${mu}}{${s}}\)`),
+      S('Tabelle (positives z)', T`F_{St}(|z|)`, [num(T`\(F_{St}(${nt(-z)}) =\)`, Fst(-z), 4)], 'z ist negativ → mit |z| ablesen'),
+      S('Symmetrie', T`P = F_{St}(z) = 1 - F_{St}(|z|)`, [num(T`\(P =\)`, Fst(z), 4)], T`\(1 - ${nt(Fst(-z), 4)}\)`)]
+  };
+});
+STEPGEN('nvzwischen', () => {
+  const mu = R(0, 12), s = R(5, 20), a = mu + R(-25, 5) / 10 * s, b = mu + R(0, 25) / 10 * s, lo = Math.round(Math.min(a, b)), hi = Math.round(Math.max(a, b)) + 1;
+  const za = rnd((lo - mu) / s, 2), zb = rnd((hi - mu) / s, 2), P = rnd(Fst(zb) - Fst(za), 4);
+  return {
+    q: T`\(X \sim N(${mu},\ ${s}^2)\). Berechne \(P(${lo} \le X \le ${hi})\).`, table: true,
+    fields: [num(T`\(P =\)`, P, 4)],
+    sol: T`\(P = F_{St}(${nt(zb)}) - F_{St}(${nt(za)}) = ${nt(Fst(zb), 4)} - ${nt(Fst(za), 4)} = ${nt(P, 4)}\)`,
+    steps: [S('Beide Grenzen standardisieren', T`z_a = \frac{a - \mu}{\sigma},\quad z_b = \frac{b - \mu}{\sigma}`, [num(T`\(z_a =\)`, za, 2), num(T`\(z_b =\)`, zb, 2)], T`\(\frac{${lo} - ${mu}}{${s}}\) und \(\frac{${hi} - ${mu}}{${s}}\)`),
+      S('Beide Werte der Verteilungsfunktion', T`F_{St}(z_a),\ F_{St}(z_b)\quad(\text{negativ: } 1 - F_{St}(|z|))`, [num(T`\(F_{St}(z_a) =\)`, Fst(za), 4), num(T`\(F_{St}(z_b) =\)`, Fst(zb), 4)], T`${za < 0 ? T`\(F_{St}(${nt(za)}) = 1 - ${nt(Fst(-za), 4)}\)` : 'direkt ablesen'}`),
+      S('Differenz', T`P = F_{St}(z_b) - F_{St}(z_a)`, [num(T`\(P =\)`, P, 4)], T`\(${nt(Fst(zb), 4)} - ${nt(Fst(za), 4)}\)`)]
+  };
+});
+STEPGEN('nvq', () => {
+  if (Math.random() < 0.5) {
+    const mu = R(4, 14), s = R(5, 25), pp = pick([0.99, 0.95, 0.975, 0.9]), p = rnd(1 - pp, 3), a = QTAB[p], x = mu + a * s;
+    return {
+      q: T`Die Jahresrendite einer Aktie sei normalverteilt mit \(\mu = ${mu}\,\%\) und \(\sigma = ${s}\,\%\). Welche Rendite wird mit einer Wahrscheinlichkeit von \(${ntc(pp * 100)}\,\%\) mindestens erreicht?`, table: true,
+      fields: [num(T`\(x_{${ntc(p * 100)}\%} =\)`, x, 2, '%')],
+      sol: T`\(x_p = \mu + a\sigma = ${mu} - ${ntc(-a, 3)}\cdot ${s} = ${nt(x)}\,\%\)`,
+      steps: [S('Welches Quantil?', T`P(R \ge x) = ${ntc(pp)}\ \Rightarrow\ x = x_{p}\ \text{mit}\ p = 1 - ${ntc(pp)}`, [num(T`\(p =\)`, p * 100, 2, '%')], T`\(1 - ${ntc(pp)}\)`),
+        S('Quantil der Standardnormalverteilung', T`a = z_p = -z_{1-p}`, [num(T`\(a =\)`, a, 3)], T`Formelsammlung S. 8: \(z_{${ntc(pp, 3)}} = ${ntc(-a, 3)}\) → negativ`),
+        S('Zurückrechnen', T`x_p = \mu + a\cdot\sigma`, [num(T`\(x_p =\)`, x, 2, '%')], T`\(${mu} + (${ntc(a, 3)})\cdot ${s}\)`)]
+    };
+  }
+  const mu = R(-50, 50) * 10, s = R(10, 50) * 100, p = pick([0.05, 0.01, 0.025]), a = QTAB[p], x = mu + a * s, VaR = -x;
+  return {
+    q: T`Die Wertveränderung \(\Delta V\) (in €) eines Portfolios über 10 Tage sei normalverteilt mit \(\mu = ${ntc(mu)}\) und \(\sigma = ${ntc(s)}\). Berechne den Value at Risk zum Konfidenzniveau \(${ntc((1 - p) * 100)}\,\%\).`, table: true,
+    fields: [num(T`\(\text{VaR}_{${ntc((1 - p) * 100)}\%} =\)`, VaR, 0, '€')],
+    sol: T`\(x_{${ntc(p * 100)}\%} = ${par(mu)} - ${ntc(-a, 3)}\cdot ${ntc(s)} = ${nt(x, 0)}\), \(\text{VaR} = ${nt(VaR, 0)}\,€\)`,
+    steps: [S('Quantil der Standardnormalverteilung', T`a = z_{${ntc(p, 3)}}`, [num(T`\(a =\)`, a, 3)], T`\(z_{${ntc(1 - p, 3)}} = ${ntc(-a, 3)}\) → für \(${ntc(p * 100)}\,\%\) negativ`),
+      S('Quantil der Wertveränderung', T`x_p = \mu + a\sigma`, [num(T`\(x_p =\)`, x, 0, '€')], T`\(${par(mu)} + (${ntc(a, 3)})\cdot ${ntc(s)}\)`),
+      S('Value at Risk', T`\text{VaR}_{1-p} = -x_p`, [num('VaR', VaR, 0, '€')], 'Vorzeichen umdrehen')]
+  };
+});
+STEPGEN('nvsigma', () => {
+  const mu = R(4, 12), zt = pick([1.282, 1.645, 1.96, 2.326]), p = { 1.282: 0.10, 1.645: 0.05, 1.96: 0.025, 2.326: 0.01 }[zt], s = R(5, 25), a = rnd(mu - zt * s, 2), sg = (mu - a) / zt;
+  return {
+    q: T`Die Rendite sei normalverteilt mit \(\mu = ${mu}\,\%\). Mit \(${ntc(p * 100)}\,\%\) Wahrscheinlichkeit liegt sie unter \(${ntc(a)}\,\%\). Wie groß ist \(\sigma\)?`, table: true,
+    fields: [num(T`\(\sigma =\)`, sg, 2, '%')],
+    sol: T`\(\sigma = \frac{${mu} - ${par(a)}}{${ntc(zt, 3)}} = ${nt(sg)}\,\%\)`,
+    steps: [S('Quantil ablesen', T`z_{${ntc(p, 3)}} = -z_{${ntc(1 - p, 3)}}`, [num(T`\(a =\)`, -zt, 3)], 'Formelsammlung S. 8, negatives Vorzeichen'),
+      S('Gleichung nach σ auflösen', T`x_p = \mu + a\sigma\ \Rightarrow\ \sigma = \frac{x_p - \mu}{a}`, [num(T`\(\sigma =\)`, sg, 2, '%')], T`\(\frac{${ntc(a)} - ${mu}}{${ntc(-zt, 3)}}\)`)]
+  };
+});
+STEPGEN('nvquant', () => {
+  const mu = R(0, 20), s = R(2, 15), zt = R(10, 250) / 100, p = Fst(zt), lower = Math.random() < 0.5;
+  const pp = lower ? rnd(1 - p, 4) : p, x = lower ? mu - zt * s : mu + zt * s;
+  return {
+    q: T`\(X \sim N(${mu},\ ${s}^2)\). Bestimme den Wert \(x\) mit \(P(X \le x) = ${nt(pp, 4)}\).`, table: true,
+    fields: [num(T`\(x =\)`, x, 2)],
+    sol: T`\(a = ${lower ? '-' : ''}${nt(zt)}\), \(x = ${mu} ${lower ? '-' : '+'} ${nt(zt)}\cdot ${s} = ${nt(x)}\)`,
+    steps: [S('Tabellenwert suchen', lower ? T`p < 0{,}5\ \Rightarrow\ \text{suche } F_{St}(|a|) = 1 - p` : T`\text{suche } F_{St}(a) = p`, [num('gesuchter Tabellenwert', p, 4)], lower ? T`\(1 - ${nt(pp, 4)}\)` : 'direkt p'),
+      S('z-Wert in der Tabelle', T`a = z_p`, [num(T`\(a =\)`, lower ? -zt : zt, 2)], T`Tabelle: \(F_{St}(${nt(zt)}) = ${nt(p, 4)}\)${lower ? ' → negativ' : ''}`),
+      S('Zurückrechnen', T`x = \mu + a\sigma`, [num(T`\(x =\)`, x, 2)], T`\(${mu} + (${nt(lower ? -zt : zt)})\cdot ${s}\)`)]
+  };
+});
+STEPGEN('nvsym', () => {
+  const a = pick([0.5, 1, 1.5, 1.96, 2, 2.5, 3, 1.25, 0.8]), P = rnd(2 * Fst(a) - 1, 4);
+  return {
+    q: T`Wie groß ist für eine normalverteilte Zufallsvariable die Wahrscheinlichkeit, dass sie höchstens \(${ntc(a)}\) Standardabweichungen vom Erwartungswert abweicht?`, table: true,
+    fields: [num(T`\(P(\mu - ${ntc(a)}\sigma \le X \le \mu + ${ntc(a)}\sigma) =\)`, P, 4)],
+    sol: T`\[2F_{St}(${nt(a)}) - 1 = 2\cdot ${nt(Fst(a), 4)} - 1 = ${nt(P, 4)}\]`,
+    steps: [S('Tabellenwert', T`F_{St}(a)`, [num(T`\(F_{St}(${nt(a)}) =\)`, Fst(a), 4)], 'direkt ablesen'),
+      S('Symmetrisches Intervall', T`P = 2F_{St}(a) - 1`, [num(T`\(P =\)`, P, 4)], T`\(2\cdot ${nt(Fst(a), 4)} - 1\)`)]
+  };
+});
+STEPGEN('nvintervall', () => {
+  const mu = R(0, 15), s = R(3, 20), lv = pick([[0.95, 1.96], [0.99, 2.576], [0.9, 1.645]]);
+  return {
+    q: T`\(X \sim N(${mu},\ ${s}^2)\). In welchem symmetrischen Intervall um \(\mu\) liegt \(X\) mit \(${ntc(lv[0] * 100)}\,\%\) Wahrscheinlichkeit?`, table: true,
+    fields: [num('untere Grenze', mu - lv[1] * s, 2), num('obere Grenze', mu + lv[1] * s, 2)],
+    sol: T`\(a = ${ntc(lv[1], 3)}\), Grenzen \(${mu} \pm ${nt(lv[1] * s)}\)`,
+    steps: [S('Benötigter Tabellenwert', T`2F_{St}(a) - 1 = ${ntc(lv[0])}\ \Rightarrow\ F_{St}(a) = \frac{1 + ${ntc(lv[0])}}{2}`, [num(T`\(F_{St}(a) =\)`, (1 + lv[0]) / 2, 4)], T`\(\frac{1 + ${ntc(lv[0])}}{2}\)`),
+      S('Quantil ablesen', T`a = z_{${ntc((1 + lv[0]) / 2, 4)}}`, [num(T`\(a =\)`, lv[1], 3)], 'Quantiltabelle S. 8'),
+      S('Grenzen', T`\mu \pm a\sigma`, [num('untere Grenze', mu - lv[1] * s, 2), num('obere Grenze', mu + lv[1] * s, 2)], T`\(${mu} \pm ${ntc(lv[1], 3)}\cdot ${s}\)`)]
+  };
+});
+
+/* ---------------------------------------------------- automatische Schritte */
+/* Mehrteilige Aufgaben ohne eigene Schritte: jedes Teilergebnis wird zu einem Schritt */
+function stepsOf(task) {
+  if (task.steps && task.steps.length) return task.steps;
+  return task.fields.map(f => S(f.label ? f.label.replace(/<[^>]+>/g, '') : 'Antwort', '', [f], ''));
+}
+const isMultiNum = t => t.fields.length >= 2 && t.fields.some(f => f.type === 'num');
+/* einmalig prüfen, welche Generatoren mehrteilig sind */
+GENS.forEach(g => { if (g.st || g.mcq || g.az || g.id === 'lexq') return; try { const t = g.f(); if (isMultiNum(t)) g.multi = true; } catch (e) { } });
+const hasSteps = g => !!(g.st || g.multi);
+
+"use strict";
+/* ============ Ansatz-Training: ohne Rechnen ============
+   Arten: 'formel' (richtigen Ansatz wählen), 'ordnen' (Lösungsschritte sortieren), 'zuordnen' (Werte den Formelzeichen zuordnen) */
+const AZ_KIND = { formel: 'Welcher Ansatz passt?', ordnen: 'Schritte ordnen', zuordnen: 'Werte zuordnen' };
+const AZ = (id, topic, kind, f) => { G(id, topic, AZ_KIND[kind], f); const g = GENS[GENS.length - 1]; g.az = true; g.kind = kind; GEN_BY_ID[id] = g; };
+const azMC = (q, right, wrong, expl) => ({ q: q + T`<div class="small muted" style="margin-top:6px">Nicht rechnen – nur den richtigen Ansatz wählen.</div>`, fields: [mc('', right, wrong)], sol: expl });
+const azOrder = (q, items, expl) => ({ q: q + T`<div class="small muted" style="margin-top:6px">Bring die Schritte in die richtige Reihenfolge (ziehen oder zwei Karten nacheinander antippen zum Tauschen).</div>`, fields: [{ type: 'order', label: '', items }], sol: expl || '' });
+/* slots: [[Formelzeichen (TeX), richtiger Wert]], extra: Ablenker */
+const azAssign = (q, formula, slots, extra, expl) => {
+  const vals = [...new Set(slots.map(s => s[1]).concat(extra))];
+  return { q: q + T`<div class="small muted" style="margin-top:6px">Tippe ein Formelzeichen an und wähle den passenden Wert aus der Aufgabe.</div><div class="fm" style="text-align:center">\[${formula}\]</div>`,
+    fields: [{ type: 'assign', label: '', slots: slots.map(([lab, ans]) => ({ lab, ans })), pool: shuffle(vals) }], sol: expl || '' };
+};
+const deN = (x, d = 4) => fmtc(x, d);   // Zahl als Text, deutsch
+
+/* ==================================================== 2.1 Zinsberechnung */
+AZ('az_zf', 'z-meth', 'formel', () => {
+  const r = R(15, 60) / 1000, K0 = R(2, 40) * 500, rr = ntc(r, 4);
+  const v = pick(['einf', 'exp', 'unt', 'stet']);
+  if (v === 'einf') { const d = pick([90, 120, 180, 270]); return azMC(T`Eine Geldmarktanlage über \(${eur(K0, 0)}\) läuft <b>${d} Tage</b> zu \(${ptc(r)}\) p.a. (act/360, einfache Verzinsung). Wie berechnest du das Endkapital?`,
+    T`\(K_t = \left(1 + ${rr}\cdot\frac{${d}}{360}\right)\cdot ${nt(K0, 0)}\)`, [T`\(K_t = ${ntc(1 + r, 4)}^{\frac{${d}}{360}}\cdot ${nt(K0, 0)}\)`, T`\(K_t = (1 + ${rr}\cdot ${d})\cdot ${nt(K0, 0)}\)`, T`\(K_t = e^{${rr}\cdot\frac{${d}}{360}}\cdot ${nt(K0, 0)}\)`],
+    T`Einfache Verzinsung: \(ZF = 1 + r\,t\) mit \(t\) in Jahren, also \(t = \frac{${d}}{360}\).`); }
+  if (v === 'exp') { const t = R(3, 10); return azMC(T`\(${eur(K0, 0)}\) werden <b>${t} Jahre</b> mit jährlicher Zinsgutschrift (Zinseszins) zu \(${ptc(r)}\) angelegt. Ansatz für \(K_t\)?`,
+    T`\(K_t = ${ntc(1 + r, 4)}^{${t}}\cdot ${nt(K0, 0)}\)`, [T`\(K_t = (1 + ${rr}\cdot ${t})\cdot ${nt(K0, 0)}\)`, T`\(K_t = \left(1 + \frac{${rr}}{12}\right)^{12\cdot ${t}}\cdot ${nt(K0, 0)}\)`, T`\(K_t = ${ntc(1 + r, 4)}\cdot ${t}\cdot ${nt(K0, 0)}\)`],
+    T`Jährliche Gutschrift mit Zinseszins = exponentielle Verzinsung: \(ZF = (1 + r)^t\).`); }
+  if (v === 'unt') { const t = R(2, 8), m = pick([4, 12]); return azMC(T`Ein Sparkonto mit \(${ptc(r)}\) p.a. schreibt die Zinsen <b>${m === 12 ? 'monatlich' : 'vierteljährlich'}</b> gut. Ansatz für das Kapital nach ${t} Jahren bei \(K_0 = ${eur(K0, 0)}\)?`,
+    T`\(K_t = \left(1 + \frac{${rr}}{${m}}\right)^{${m}\cdot ${t}}\cdot ${nt(K0, 0)}\)`, [T`\(K_t = ${ntc(1 + r, 4)}^{${m}\cdot ${t}}\cdot ${nt(K0, 0)}\)`, T`\(K_t = \left(1 + \frac{${rr}}{${m}}\right)^{${t}}\cdot ${nt(K0, 0)}\)`, T`\(K_t = (1 + ${m}\cdot ${rr})^{${t}}\cdot ${nt(K0, 0)}\)`],
+    T`Unterjährig: Zinssatz pro Periode \(\frac rm\), Anzahl Perioden \(m\cdot t\).`); }
+  const t = R(2, 8); return azMC(T`\(${eur(K0, 0)}\) werden <b>stetig</b> zu \(${ptc(r)}\) für ${t} Jahre verzinst. Ansatz?`,
+    T`\(K_t = e^{${rr}\cdot ${t}}\cdot ${nt(K0, 0)}\)`, [T`\(K_t = ${ntc(1 + r, 4)}^{${t}}\cdot ${nt(K0, 0)}\)`, T`\(K_t = e^{\frac{${rr}}{${t}}}\cdot ${nt(K0, 0)}\)`, T`\(K_t = \ln(1 + ${rr}\cdot ${t})\cdot ${nt(K0, 0)}\)`],
+    T`Stetige Verzinsung: \(ZF = e^{r\,t}\).`);
+});
+AZ('az_zf_k0', 'z-meth', 'formel', () => {
+  const r = R(15, 60) / 1000, Kt = R(10, 80) * 500, t = R(3, 10), rr = ntc(1 + r, 4);
+  return azMC(T`Wie viel muss man <b>heute</b> anlegen, um in ${t} Jahren \(${eur(Kt, 0)}\) zu haben (\(${ptc(r)}\), exponentiell)?`,
+    T`\(K_0 = \frac{${nt(Kt, 0)}}{${rr}^{${t}}}\)`, [T`\(K_0 = ${nt(Kt, 0)}\cdot ${rr}^{${t}}\)`, T`\(K_0 = \frac{${nt(Kt, 0)}}{${rr}\cdot ${t}}\)`, T`\(K_0 = ${nt(Kt, 0)} - ${ntc(r, 4)}\cdot ${t}\cdot ${nt(Kt, 0)}\)`],
+    T`Abzinsen: \(K_0 = DF\cdot K_t = \frac{K_t}{(1+r)^t}\).`);
+});
+AZ('az_unt_zuordnen', 'z-meth', 'zuordnen', () => {
+  const r = R(15, 60) / 1000, m = pick([2, 4, 12]), t = R(2, 10), K0 = R(2, 40) * 500;
+  const mw = { 2: 'halbjährlich', 4: 'vierteljährlich', 12: 'monatlich' }[m];
+  return azAssign(T`„Ein Sparkonto mit <b>${deN(r * 100, 2)} %</b> p.a. schreibt die Zinsen <b>${mw}</b> gut. Wie viel werden aus <b>${deN(K0)} €</b> in <b>${t} Jahren</b>?“`,
+    T`K_t = \left(1 + \frac{r}{m}\right)^{m\cdot t}\cdot K_0`,
+    [[T`\(K_0\)`, deN(K0) + ' €'], [T`\(r\)`, deN(r, 4)], [T`\(m\)`, String(m)], [T`\(t\)`, String(t)]],
+    [deN(r * 100, 2), String(m === 12 ? 4 : 12), deN(1 / m, 4), String(t * m)],
+    T`\(m\) = Anzahl Zinsgutschriften pro Jahr (${mw} → ${m}), \(r\) als Dezimalzahl.`);
+});
+AZ('az_laufzeit_ordnen', 'z-meth', 'ordnen', () => {
+  const v = pick(['exp', 'r']);
+  if (v === 'exp') return azOrder(T`Nach wie vielen Jahren wächst \(K_0\) bei exponentieller Verzinsung mit \(r\) auf \(K_t\)?`, [
+    T`Wachstumsfaktor bilden: \(\frac{K_t}{K_0}\)`, T`Ansatz: \((1 + r)^t = \frac{K_t}{K_0}\)`, T`Logarithmieren: \(t\cdot\ln(1 + r) = \ln\frac{K_t}{K_0}\)`, T`Durch \(\ln(1 + r)\) teilen: \(t = \frac{\ln(K_t/K_0)}{\ln(1+r)}\)`]);
+  return azOrder(T`Welcher Zinssatz \(r\) führt bei exponentieller Verzinsung in \(t\) Jahren von \(K_0\) zu \(K_t\)?`, [
+    T`Ansatz: \(K_t = (1 + r)^t\cdot K_0\)`, T`Durch \(K_0\) teilen: \((1 + r)^t = \frac{K_t}{K_0}\)`, T`t-te Wurzel ziehen: \(1 + r = \sqrt[t]{K_t/K_0}\)`, T`Minus 1: \(r = \sqrt[t]{K_t/K_0} - 1\)`]);
+});
+
+/* ==================================================== 2.1 Transformation */
+AZ('az_trans', 'z-trans', 'formel', () => {
+  const r = R(15, 70) / 1000, rr = ntc(r, 4), v = pick(['u2e', 's2e', 'e2s', 'e2u']), m = pick([2, 4, 12]);
+  if (v === 'u2e') return azMC(T`Tagesgeld: \(${ptc(r)}\) p.a., Zinsgutschrift ${m === 12 ? 'monatlich' : m === 4 ? 'vierteljährlich' : 'halbjährlich'}. Wie berechnest du den <b>Effektivzinssatz</b>?`,
+    T`\(r_{\text{exp}} = \left(1 + \frac{${rr}}{${m}}\right)^{${m}} - 1\)`, [T`\(r_{\text{exp}} = ${m}\cdot ${rr}\)`, T`\(r_{\text{exp}} = \left(1 + \frac{${rr}}{${m}}\right)^{${m}}\)`, T`\(r_{\text{exp}} = (1 + ${rr})^{${m}} - 1\)`],
+    T`Zinsfaktor eines Jahres \(\left(1 + \frac rm\right)^m\) gleich \(1 + r_{\text{exp}}\) setzen.`);
+  if (v === 's2e') return azMC(T`Ein stetiger Zinssatz \(r_{\text{stet}} = ${ptc(r)}\) soll in den Effektivzinssatz umgerechnet werden.`,
+    T`\(r_{\text{exp}} = e^{${rr}} - 1\)`, [T`\(r_{\text{exp}} = \ln(1 + ${rr})\)`, T`\(r_{\text{exp}} = e^{${rr}}\)`, T`\(r_{\text{exp}} = e^{1 + ${rr}}\)`],
+    T`\(e^{r_{\text{stet}}} = 1 + r_{\text{exp}}\).`);
+  if (v === 'e2s') return azMC(T`Welcher <b>stetige</b> Zinssatz entspricht \(r_{\text{exp}} = ${ptc(r)}\)?`,
+    T`\(r_{\text{stet}} = \ln(1 + ${rr})\)`, [T`\(r_{\text{stet}} = e^{${rr}} - 1\)`, T`\(r_{\text{stet}} = \ln(${rr})\)`, T`\(r_{\text{stet}} = \frac{${rr}}{e}\)`],
+    T`\(e^{r_{\text{stet}}} = 1 + r_{\text{exp}}\Rightarrow r_{\text{stet}} = \ln(1 + r_{\text{exp}})\).`);
+  return azMC(T`Welcher Zinssatz mit \(m = ${m}\) Zinsperioden bringt denselben Ertrag wie \(r_{\text{exp}} = ${ptc(r)}\)?`,
+    T`\(r_{\text{unt exp}} = ${m}\cdot(1 + ${rr})^{\frac1{${m}}} - ${m}\)`, [T`\(r_{\text{unt exp}} = \frac{${rr}}{${m}}\)`, T`\(r_{\text{unt exp}} = (1 + ${rr})^{${m}} - 1\)`, T`\(r_{\text{unt exp}} = ${m}\cdot(1 + ${rr})^{${m}} - ${m}\)`],
+    T`\(\left(1 + \frac{r_{\text{unt exp}}}{m}\right)^m = 1 + r_{\text{exp}}\) nach \(r_{\text{unt exp}}\) auflösen.`);
+});
+AZ('az_trans_ordnen', 'z-trans', 'ordnen', () => azOrder(T`Bank A bietet \(3{,}9\,\%\) mit monatlicher Gutschrift, Bank B \(3{,}95\,\%\) mit jährlicher Gutschrift. Wie vergleichst du die Angebote?`, [
+  'Zinssatz und Anzahl Zinsperioden m je Angebot herauslesen', T`Zinsfaktor für ein Jahr aufstellen: \(\left(1 + \frac rm\right)^m\)`, T`Effektivzinssatz berechnen: \(r_{\text{exp}} = ZF - 1\)`, 'Effektivzinssätze vergleichen – bei einer Anlage gewinnt der höhere']));
+AZ('az_trans_zuordnen', 'z-trans', 'zuordnen', () => {
+  const r = R(20, 60) / 1000, m = pick([2, 4, 12]);
+  return azAssign(T`„Ein Konto verzinst mit <b>${deN(r * 100, 2)} %</b> p.a. bei <b>${m === 12 ? 'monatlicher' : m === 4 ? 'vierteljährlicher' : 'halbjährlicher'}</b> Gutschrift. Wie hoch ist der Effektivzins?“`,
+    T`r_{\text{exp}} = \left(1 + \frac{r_{\text{unt exp}}}{m}\right)^m - 1`,
+    [[T`\(r_{\text{unt exp}}\)`, deN(r, 4)], [T`\(m\)`, String(m)]], [deN(r * 100, 2), String(m === 12 ? 4 : 12), '1', deN(r / m, 6)],
+    T`\(r\) als Dezimalzahl, \(m\) = Gutschriften pro Jahr.`);
+});
+
+/* ==================================================== 2.2 Barwert */
+AZ('az_bw', 'z-bw', 'formel', () => {
+  const r = R(20, 80) / 1000, Z = [R(3, 9) * 10, R(3, 9) * 10, R(3, 9) * 10], q = ntc(1 + r, 4);
+  return azMC(T`Ein Projekt bringt in den Jahren 1–3 die Rückflüsse \(${Z.join(',\\ ')}\) TEUR. Kalkulationszins \(${ptc(r)}\). Ansatz für den Barwert?`,
+    T`\(B = \frac{${Z[0]}}{${q}} + \frac{${Z[1]}}{${q}^2} + \frac{${Z[2]}}{${q}^3}\)`, [T`\(B = ${Z[0]}\cdot ${q} + ${Z[1]}\cdot ${q}^2 + ${Z[2]}\cdot ${q}^3\)`, T`\(B = \frac{${Z[0]} + ${Z[1]} + ${Z[2]}}{${q}}\)`, T`\(B = \frac{${Z[0]}}{${q}^3} + \frac{${Z[1]}}{${q}^2} + \frac{${Z[2]}}{${q}}\)`],
+    T`Jede Zahlung wird mit ihrem Zeitpunkt abgezinst: Jahr \(i\) → \(\frac{Z_i}{(1+r)^i}\).`);
+});
+AZ('az_bw_ordnen', 'z-bw', 'ordnen', () => azOrder(T`Lohnt sich eine Investition mit Anschaffungsauszahlung \(A\) und Rückflüssen \(Z_1, \dots, Z_n\)?`, [
+  T`Jeden Rückfluss abzinsen: \(\frac{Z_i}{(1 + r)^i}\)`, T`Barwerte addieren: \(B = \sum \frac{Z_i}{(1+r)^i}\)`, T`Anschaffung abziehen: \(B_{\text{net}} = B - A\)`, T`Entscheiden: \(B_{\text{net}} > 0\) → durchführen`]));
+AZ('az_bond_zuordnen', 'z-bw', 'zuordnen', () => {
+  const c = R(2, 8), n = R(3, 8), r = R(15, 70) / 1000;
+  return azAssign(T`„Eine Anleihe zahlt jährlich <b>${c} % Kupon</b> und wird in <b>${n} Jahren</b> zu 100 zurückgezahlt. Marktzins <b>${deN(r * 100, 2)} %</b>.“`,
+    T`B = c\cdot\frac{(1+r)^n - 1}{r(1+r)^n} + \frac{100}{(1+r)^n}`,
+    [[T`\(c\)`, String(c)], [T`\(r\)`, deN(r, 4)], [T`\(n\)`, String(n)]], [deN(c / 100, 2), String(100), deN(r * 100, 2), String(n + 1)],
+    T`Kupon in Prozentpunkten von 100 (\(c = ${c}\)), Zinssatz als Dezimalzahl.`);
+});
+
+/* ==================================================== 2.2 Renten */
+AZ('az_rente', 'z-rente', 'formel', () => {
+  const vor = Math.random() < 0.5, E = Math.random() < 0.5, n = R(5, 20), r = R(2, 6), Z = R(5, 30) * 100, q = ntc(1 + r / 100, 2), rr = ntc(r / 100, 2);
+  const opt = (vv, ee) => ee ? T`\(E = ${vv ? q + T`\cdot` : ''}\frac{${q}^{${n}} - 1}{${rr}}\cdot ${nt(Z, 0)}\)` : T`\(B = \frac{${q}^{${n}} - 1}{${rr}\cdot ${q}^{${n}${vv ? ' - 1' : ''}}}\cdot ${nt(Z, 0)}\)`;
+  const right = opt(vor, E), wrong = [opt(!vor, E), opt(vor, !E), opt(!vor, !E)];
+  return azMC(T`Jan zahlt ${n} Jahre lang jeweils <b>${vor ? 'zu Jahresbeginn' : 'am Jahresende'}</b> \(${eur(Z, 0)}\) ${E ? 'auf ein Sparkonto' : 'als Rate'} (\(${r}\,\%\) p.a.). ${E ? 'Wie viel hat er am Ende?' : 'Welchen Wert haben alle Zahlungen heute?'}`, right, wrong,
+    T`„${vor ? 'Zu Jahresbeginn' : 'Am Jahresende'}“ = ${vor ? 'vorschüssig' : 'nachschüssig'}. Gesucht ist der <b>${E ? 'Endwert → EWF' : 'Barwert → BWF'}</b>.`);
+});
+AZ('az_ewig', 'z-rente', 'formel', () => {
+  const g = Math.random() < 0.5, r = R(4, 9), gr = R(1, 3), Z = R(5, 50) * 1000, rr = ntc(r / 100, 2), gg = ntc(gr / 100, 2);
+  if (g) return azMC(T`Eine Stiftung zahlt im nächsten Jahr \(${eur(Z, 0)}\), danach steigen die Zahlungen jährlich um \(${gr}\,\%\) – für immer. Kalkulationszins \(${r}\,\%\). Barwert?`,
+    T`\(B = \frac{${nt(Z, 0)}}{${rr} - ${gg}}\)`, [T`\(B = \frac{${nt(Z, 0)}}{${rr}}\)`, T`\(B = \frac{${nt(Z, 0)}}{${rr} + ${gg}}\)`, T`\(B = ${nt(Z, 0)}\cdot\frac{${ntc(1 + r / 100, 2)}^{${gr}} - 1}{${rr}}\)`],
+    T`Ewige Rente mit Wachstum: \(B = \frac{Z}{r - g}\).`);
+  return azMC(T`Welches Kapital braucht man, um bei \(${r}\,\%\) <b>dauerhaft</b> jährlich nachschüssig \(${eur(Z, 0)}\) zu zahlen?`,
+    T`\(B = \frac{${nt(Z, 0)}}{${rr}}\)`, [T`\(B = ${nt(Z, 0)}\cdot ${rr}\)`, T`\(B = \frac{${nt(Z, 0)}}{${ntc(1 + r / 100, 2)}}\)`, T`\(E = \frac{${ntc(1 + r / 100, 2)}^{\infty} - 1}{${rr}}\cdot ${nt(Z, 0)}\)`],
+    T`Ewige Rente: \(B = \frac Zr\). Einen Endwert gibt es nicht.`);
+});
+AZ('az_annu_ordnen', 'z-rente', 'ordnen', () => azOrder(T`Ein Annuitätendarlehen über \(B\) wird in \(n\) Jahren getilgt. Wie bestimmst du Annuität und Tilgung im ersten Jahr?`, [
+  T`Barwertfaktor berechnen: \(BWF = \frac{(1+r)^n - 1}{r(1+r)^n}\)`, T`Annuität: \(Z = \frac{B}{BWF}\)`, T`Zinsen im 1. Jahr: \(B\cdot r\)`, T`Tilgung im 1. Jahr: \(Z - B\cdot r\)`]));
+AZ('az_annu_zuordnen', 'z-rente', 'zuordnen', () => {
+  const B = R(10, 60) * 5000, n = R(5, 25), r = R(20, 70) / 1000;
+  return azAssign(T`„Ein Darlehen über <b>${deN(B)} €</b> soll in <b>${n} Jahren</b> mit gleichen jährlichen Raten getilgt werden. Zinssatz <b>${deN(r * 100, 2)} %</b>.“`,
+    T`Z = \frac{B}{BWF},\quad BWF = \frac{(1+r)^n - 1}{r(1+r)^n}`,
+    [[T`\(B\)`, deN(B) + ' €'], [T`\(r\)`, deN(r, 4)], [T`\(n\)`, String(n)]], [deN(r * 100, 2), String(n * 12), deN(B / n, 2) + ' €'],
+    T`\(B\) ist der Kreditbetrag (Barwert der Raten).`);
+});
+
+/* ==================================================== 2.3 Rendite */
+AZ('az_y2', 'z-eff', 'formel', () => {
+  const c = R(2, 8), P = RS(95, 105, 0.5);
+  return azMC(T`Eine zweijährige Anleihe mit \(${c}\,\%\) Kupon kostet \(${ntc(P)}\). Welche Gleichung liefert die Rendite \(r\)?`,
+    T`\(${ntc(P)} = \frac{${c}}{1 + r} + \frac{${100 + c}}{(1 + r)^2}\)`, [T`\(${ntc(P)} = \frac{${c}}{1 + r} + \frac{${c}}{(1 + r)^2}\)`, T`\(${ntc(P)} = \frac{${100 + c}}{1 + r} + \frac{${c}}{(1 + r)^2}\)`, T`\(100 = \frac{${c}}{1 + r} + \frac{${ntc(P)}}{(1 + r)^2}\)`],
+    T`Preis = Barwert aller Zahlungen. Im 2. Jahr kommen Kupon <b>und</b> Rückzahlung: \(${c} + 100\).`);
+});
+AZ('az_y2_ordnen', 'z-eff', 'ordnen', () => azOrder(T`Wie berechnest du die Rendite einer zweijährigen Kuponanleihe mit Preis \(A\) und Kupon \(c\)?`, [
+  T`Gleichung: \(A = \frac{c}{1 + r} + \frac{100 + c}{(1 + r)^2}\)`, T`\(q = 1 + r\) setzen und mit \(q^2\) multiplizieren: \(A q^2 - c\,q - (100 + c) = 0\)`, T`a-b-c-Formel anwenden`, T`Positive Lösung wählen und \(r = q - 1\) berechnen`]));
+AZ('az_prak_zuordnen', 'z-eff', 'zuordnen', () => {
+  const c = R(2, 8), n = R(2, 9), P = RS(90, 110, 0.5);
+  return azAssign(T`„Eine Anleihe mit <b>${c} % Kupon</b> und <b>${n} Jahren Restlaufzeit</b> notiert bei <b>${deN(P, 2)}</b>. Rückzahlung zu 100.“`,
+    T`r \approx \frac{\text{Kupon} + \frac{\text{Rückzahlung} - \text{Preis}}{\text{Restlaufzeit}}}{\text{Preis}}`,
+    [['Kupon', String(c)], ['Rückzahlung', '100'], ['Preis', deN(P, 2)], ['Restlaufzeit', String(n)]], [deN(c / 100, 2), String(n + 1)],
+    'Alles in Prozent vom Nennwert, die Laufzeit in Jahren.');
+});
+
+/* ==================================================== 2.4 Zinsstruktur */
+AZ('az_fwd', 'z-struk', 'formel', () => {
+  const [tp, t] = pick([[1, 2], [1, 3], [2, 3], [2, 5]]), a = ntc(1 + R(10, 40) / 1000, 3), b = ntc(1 + R(20, 50) / 1000, 3);
+  return azMC(T`\(1 + r_{0${tp}} = ${a}\), \(1 + r_{0${t}} = ${b}\). Ansatz für die Forward Rate \(r_{${tp}${t}}\)?`,
+    T`\(r_{${tp}${t}} = \left(\frac{${b}^{${t}}}{${a}^{${tp}}}\right)^{\frac{1}{${t - tp}}} - 1\)`, [T`\(r_{${tp}${t}} = \left(\frac{${a}^{${tp}}}{${b}^{${t}}}\right)^{\frac{1}{${t - tp}}} - 1\)`, T`\(r_{${tp}${t}} = \frac{${b}^{${t}}}{${a}^{${tp}}} - 1\)`, T`\(r_{${tp}${t}} = r_{0${t}} - r_{0${tp}}\)`],
+    T`Anlage bis \(t\) = Anlage bis \(t'\) und danach zur Forward Rate: \((1 + r_{0t})^t = (1 + r_{0t'})^{t'}(1 + r_{t't})^{t - t'}\).`);
+});
+AZ('az_boot_ordnen', 'z-struk', 'ordnen', () => azOrder(T`Aus den Par Rates \(k_1, k_2, k_3\) sollen die Zero Rates bestimmt werden (Bootstrapping).`, [
+  T`\(r_{01} = k_1\) übernehmen`, T`Für Jahr 2: \(1 = \frac{k_2}{1 + r_{01}} + \frac{1 + k_2}{(1 + r_{02})^2}\) nach \(r_{02}\) auflösen`, T`Abgezinste Kupons für Jahr 3 summieren: \(\frac{k_3}{1 + r_{01}} + \frac{k_3}{(1 + r_{02})^2}\)`, T`\(r_{03} = \sqrt[3]{\frac{1 + k_3}{1 - \text{Summe}}} - 1\)`]));
+AZ('az_fwd_zuordnen', 'z-struk', 'zuordnen', () => {
+  const [tp, t] = pick([[1, 3], [2, 4], [1, 2], [2, 5]]), a = R(10, 40) / 10, b = R(20, 50) / 10;
+  return azAssign(T`„Die ${tp}-jährige Spot Rate beträgt <b>${deN(a, 1)} %</b>, die ${t}-jährige <b>${deN(b, 1)} %</b>. Welcher Zinssatz lässt sich für die Zeit von Jahr ${tp} bis Jahr ${t} festschreiben?“`,
+    T`r_{t't} = \left[\frac{(1 + r_{0t})^t}{(1 + r_{0t'})^{t'}}\right]^{\frac{1}{t - t'}} - 1`,
+    [[T`\(r_{0t}\)`, deN(b / 100, 3)], [T`\(t\)`, String(t)], [T`\(r_{0t'}\)`, deN(a / 100, 3)], [T`\(t'\)`, String(tp)]], [String(t - tp), deN(b, 1)],
+    T`\(t\) ist das spätere, \(t'\) das frühere Datum.`);
+});
+
+/* ==================================================== 3.7 Normalverteilung */
+AZ('az_nv', 's-nv', 'formel', () => {
+  const mu = R(3, 10), s = R(8, 20), v = pick(['le', 'ge', 'sym', 'bw']);
+  const a = mu - R(1, 2) * 5, b = mu + R(1, 3) * 5;
+  const za = T`\frac{${a} - ${mu}}{${s}}`, zb = T`\frac{${b} - ${mu}}{${s}}`;
+  const opts = { le: T`\(F_{St}\left(${za}\right)\)`, ge: T`\(1 - F_{St}\left(${za}\right)\)`, bw: T`\(F_{St}\left(${zb}\right) - F_{St}\left(${za}\right)\)`, wrong: T`\(F_{St}\left(${za}\right) - F_{St}\left(${zb}\right)\)` };
+  if (v === 'sym') { const k = R(1, 2) * 5; return azMC(T`\(R \sim N(${mu}\,\%,\ (${s}\,\%)^2)\). Wie wahrscheinlich liegt \(R\) zwischen \(${mu - k}\,\%\) und \(${mu + k}\,\%\)?`,
+    T`\(2F_{St}\left(\frac{${k}}{${s}}\right) - 1\)`, [T`\(F_{St}\left(\frac{${k}}{${s}}\right)\)`, T`\(1 - 2F_{St}\left(\frac{${k}}{${s}}\right)\)`, T`\(2F_{St}\left(\frac{${mu + k}}{${s}}\right)\)`], T`Symmetrisch um \(\mu\): \(P = 2F_{St}(a) - 1\).`); }
+  const q = v === 'le' ? T`höchstens \(${a}\,\%\)` : v === 'ge' ? T`mindestens \(${a}\,\%\)` : T`zwischen \(${a}\,\%\) und \(${b}\,\%\)`;
+  const all = [opts.le, opts.ge, opts.bw, opts.wrong], right = opts[v];
+  return azMC(T`\(R \sim N(${mu}\,\%,\ (${s}\,\%)^2)\). Ansatz für die Wahrscheinlichkeit, dass \(R\) ${q} beträgt?`, right, all.filter(o => o !== right),
+    v === 'le' ? T`„Höchstens“ = \(P(R \le a) = F_{St}(z)\).` : v === 'ge' ? T`„Mindestens“ = Gegenwahrscheinlichkeit \(1 - F_{St}(z)\).` : T`Zwischen zwei Werten: obere minus untere Verteilungsfunktion.`);
+});
+AZ('az_var', 's-nv', 'formel', () => {
+  const lv = pick([[95, '-1{,}645'], [99, '-2{,}326'], [97.5, '-1{,}960'], [90, '-1{,}282']]), mu = R(-5, 5) * 100, s = R(10, 40) * 100;
+  const others = ['-1{,}645', '-2{,}326', '-1{,}960', '-1{,}282', '1{,}645'].filter(x => x !== lv[1]).slice(0, 3);
+  return azMC(T`\(\Delta V \sim N(${mu},\ ${nt(s, 0)}^2)\). Ansatz für den \(\text{VaR}_{${ntc(lv[0])}\%}\)?`,
+    T`\(\text{VaR} = -\left(${par(mu)} + (${lv[1]})\cdot ${nt(s, 0)}\right)\)`, others.map(o => T`\(\text{VaR} = -\left(${par(mu)} + (${o})\cdot ${nt(s, 0)}\right)\)`),
+    T`Gesucht ist das \(${ntc(100 - lv[0])}\,\%\)-Quantil: \(a = ${lv[1]}\), VaR \(= -(\mu + a\sigma)\).`);
+});
+AZ('az_nv_ordnen', 's-nv', 'ordnen', () => azOrder(T`Wie berechnest du \(P(X \ge a)\) für \(X \sim N(\mu, \sigma^2)\), wenn \(a < \mu\) ist?`, [
+  T`Standardisieren: \(z = \frac{a - \mu}{\sigma}\) (auf 2 Stellen runden)`, T`\(z\) ist negativ → \(F_{St}(|z|)\) in der Tabelle ablesen`, T`Symmetrie: \(F_{St}(z) = 1 - F_{St}(|z|)\)`, T`„Mindestens“: \(P = 1 - F_{St}(z)\)`]));
+AZ('az_z_zuordnen', 's-nv', 'zuordnen', () => {
+  const mu = R(3, 12), s = R(8, 25), x = mu - R(1, 4) * 5;
+  return azAssign(T`„Die Rendite ist normalverteilt mit Erwartungswert <b>${mu} %</b> und Volatilität <b>${s} %</b>. Wie wahrscheinlich ist eine Rendite von höchstens <b>${x} %</b>?“`,
+    T`z = \frac{x - \mu}{\sigma}`, [[T`\(x\)`, String(x)], [T`\(\mu\)`, String(mu)], [T`\(\sigma\)`, String(s)]], [String(s * s), String(-x), String(mu - x)],
+    T`\(\mu\) = Erwartungswert, \(\sigma\) = Volatilität (Standardabweichung), nicht die Varianz.`);
+});
+
+/* ==================================================== weitere Themen */
+AZ('az_ext_ordnen', 'f-ext', 'ordnen', () => {
+  const f = pick([T`f(x) = x^3 - 3x^2 + 4`, T`f(x) = -x^3 + 3x + 1`, T`f(x) = 2x^3 - 9x^2 + 12x`, T`f(x) = x^3 - 12x`]);
+  return azOrder(T`Bestimme die lokalen Extrema von \(${f}\).`, [
+    T`Erste Ableitung \(f'(x)\) bilden`, T`Notwendige Bedingung: \(f'(x) = 0\) lösen → stationäre Stellen`, T`Zweite Ableitung \(f''(x)\) bilden`, T`Hinreichende Bedingung: Vorzeichen von \(f''\) an den stationären Stellen prüfen`, T`Funktionswerte berechnen → Hoch- und Tiefpunkte angeben`]);
+});
+AZ('az_polydiv_ordnen', 'f-null', 'ordnen', () => azOrder(T`Bestimme alle Nullstellen eines Polynoms 3. Grades mit ganzzahligen Koeffizienten.`, [
+  T`Eine Nullstelle \(x_1\) raten (Teiler des absoluten Glieds \(a_0\))`, T`Polynomdivision durch \((x - x_1)\)`, 'p-q-Formel auf das quadratische Restpolynom anwenden', 'Alle Nullstellen angeben (ggf. Diskriminante < 0 → keine weiteren)']));
+AZ('az_var_ordnen', 's-desk', 'ordnen', () => azOrder(T`Berechne die empirische Standardabweichung einer Datenreihe \(x_1, \dots, x_n\).`, [
+  T`Mittelwert \(\bar x\) berechnen`, T`Abweichungen \(x_i - \bar x\) bilden`, 'Abweichungen quadrieren', T`Quadrate addieren und durch \(n\) teilen → \(\sigma_x^2\)`, T`Wurzel ziehen → \(\sigma_x\)`]));
+AZ('az_pf_zuordnen', 's-pf', 'zuordnen', () => {
+  const w = pick([20, 30, 40, 60, 70]), sx = R(15, 35), sy = R(10, 30), rho = R(-5, 8) / 10;
+  return azAssign(T`„Ein Portfolio besteht zu <b>${w} %</b> aus Aktie X (Volatilität <b>${sx} %</b>) und zu ${100 - w} % aus Aktie Y (Volatilität <b>${sy} %</b>). Die Korrelation beträgt <b>${deN(rho, 1)}</b>.“`,
+    T`\sigma_z^2 = w^2\sigma_x^2 + (1 - w)^2\sigma_y^2 + 2w(1-w)\rho_{xy}\sigma_x\sigma_y`,
+    [[T`\(w\)`, deN(w / 100, 2)], [T`\(\sigma_x\)`, String(sx)], [T`\(\sigma_y\)`, String(sy)], [T`\(\rho_{xy}\)`, deN(rho, 1)]], [deN(1 - w / 100, 2), String(sx * sx), deN(rho * rho, 2)],
+    T`\(w\) ist der Anteil in X, als Dezimalzahl.`);
+});
+
+"use strict";
+/* ============ Taschenrechner (offline, über jeder Aufgabe) ============ */
+const CALC = { expr: '', ans: null, hist: '', fresh: false, target: null, open: false };
+const calcPretty = e => e.replace(/sqrt\(/g, '√(').replace(/exp\(/g, 'e^(').replace(/\*/g, '×').replace(/\//g, '÷').replace(/-/g, '−').replace(/\./g, ',');
+const calcNumStr = v => { let s = String(Number(v.toPrecision(12))); if (/e/i.test(s)) s = v.toFixed(12).replace(/0+$/, '').replace(/\.$/, ''); return s; };
+function calcEval(e) {
+  if (!e.trim()) return NaN;
+  let open = (e.match(/\(/g) || []).length - (e.match(/\)/g) || []).length; if (open > 0) e += ')'.repeat(open);
+  try { const v = ExprParser.ev(ExprParser.parse(e, []), {}); return isFinite(v) ? v : NaN; } catch (_) { return NaN; }
+}
+const CALC_KEYS = [
+  ['ln', 'f', 'ln('], ['eˣ', 'f', 'exp('], ['xʸ', 'f', '^'], ['√', 'f', 'sqrt('], ['Ans', 'f', 'ANS'],
+  ['(', 'f', '('], [')', 'f', ')'], ['x²', 'f', '^2'], ['1/x', 'f', 'INV'], ['C', 'op', 'CLR'],
+  ['7', '', '7'], ['8', '', '8'], ['9', '', '9'], ['÷', 'op', '/'], ['⌫', 'op', 'DEL'],
+  ['4', '', '4'], ['5', '', '5'], ['6', '', '6'], ['×', 'op', '*'], ['±', 'op', 'NEG'],
+  ['1', '', '1'], ['2', '', '2'], ['3', '', '3'], ['−', 'op', '-'], ['=', 'eq', 'EQ'],
+  ['0', '', '0'], [',', '', '.'], ['%', 'f', '/100'], ['+', 'op', '+'], ['↓ Feld', 'eq', 'TAKE']
+];
+function calcHTML() {
+  const v = calcEval(CALC.expr);
+  return `<div class="dim" data-cclose></div><div class="calc" role="dialog" aria-label="Taschenrechner">
+  <div class="row" style="margin-bottom:8px"><b class="sp">🧮 Taschenrechner</b>${CALC.ans != null ? `<span class="badge">Ans = ${fmtc(CALC.ans, 6)}</span>` : ''}<button class="ibtn" data-cclose style="width:34px;height:34px;margin-left:8px">✕</button></div>
+  <div class="cdisp"><div class="chist">${esc(CALC.hist)}</div><div class="cexpr">${esc(calcPretty(CALC.expr)) || '&nbsp;'}</div><div class="cres">${isNaN(v) ? (CALC.expr ? '…' : '0') : fmtc(v, 8)}</div></div>
+  <div class="ckeys">${CALC_KEYS.map(([l, c, k]) => `<b class="${c}" data-ck="${k}">${l}</b>`).join('')}</div>
+  <div class="small muted" style="margin-top:8px;text-align:center">„↓ Feld“ übernimmt das Ergebnis ins ${CALC.target ? 'zuletzt angetippte' : 'nächste freie'} Antwortfeld</div></div>`;
+}
+function calcRender() { let el = document.getElementById('calcbox'); if (!el) { el = document.createElement('div'); el.id = 'calcbox'; document.body.appendChild(el); } el.innerHTML = CALC.open ? calcHTML() : ''; }
+function calcOpen() { CALC.open = true; if (document.activeElement && document.activeElement.blur) document.activeElement.blur(); calcRender(); }
+function calcClose() { CALC.open = false; calcRender(); }
+function calcTargetInput() {
+  const ok = el => el && document.body.contains(el) && !el.disabled && el.getAttribute('inputmode') === 'decimal';
+  if (ok(CALC.target)) return CALC.target;
+  const all = [...$app.querySelectorAll('input[inputmode="decimal"]')].filter(i => !i.disabled);
+  return all.find(i => !i.value.trim()) || all[all.length - 1] || null;
+}
+function calcKey(k) {
+  const v = calcEval(CALC.expr);
+  const startNew = /^[0-9.(]|^ln|^exp|^sqrt|^ANS/.test(k) && CALC.fresh;
+  if (startNew) CALC.expr = '';
+  if (k !== 'EQ' && k !== 'TAKE') CALC.fresh = false;
+  switch (k) {
+    case 'CLR': CALC.expr = ''; break;
+    case 'DEL': CALC.expr = CALC.expr.replace(/(sqrt\(|exp\(|ln\(|.)$/, ''); break;
+    case 'ANS': if (CALC.ans != null) CALC.expr += (CALC.ans < 0 ? '(' + calcNumStr(CALC.ans) + ')' : calcNumStr(CALC.ans)); break;
+    case 'INV': CALC.expr = CALC.expr ? '1/(' + CALC.expr + ')' : '1/('; break;
+    case 'NEG': if (/^-\(.*\)$/.test(CALC.expr)) CALC.expr = CALC.expr.slice(2, -1); else CALC.expr = CALC.expr ? '-(' + CALC.expr + ')' : '-'; break;
+    case 'EQ': if (!isNaN(v)) { CALC.hist = calcPretty(CALC.expr) + ' = ' + fmtc(v, 8); CALC.ans = v; CALC.expr = calcNumStr(v); CALC.fresh = true; } break;
+    case 'TAKE': {
+      const val = !isNaN(v) ? v : CALC.ans; if (val == null || isNaN(val)) break;
+      if (!isNaN(v) && CALC.expr) { CALC.hist = calcPretty(CALC.expr) + ' = ' + fmtc(v, 8); CALC.ans = v; }
+      const inp = calcTargetInput(); if (!inp) { calcClose(); return; }
+      const d = +inp.dataset.dec; inp.value = isNaN(d) ? fmtc(val, 6).replace(/\./g, '') : fmt(val, d, false);
+      inp.dispatchEvent(new Event('input', { bubbles: true })); CALC.target = inp; calcClose();
+      inp.classList.add('took'); setTimeout(() => inp.classList.remove('took'), 900); return;
+    }
+    default: CALC.expr += k;
+  }
+  calcRender();
+}
+document.addEventListener('focusin', e => { const t = e.target; if (t.tagName === 'INPUT' && t.getAttribute('inputmode') === 'decimal' && $app.contains(t)) CALC.target = t; });
+document.addEventListener('click', e => {
+  if (e.target.closest('[data-copen]')) { e.preventDefault(); calcOpen(); return; }
+  if (e.target.closest('[data-cclose]')) { e.preventDefault(); calcClose(); return; }
+  const k = e.target.closest('[data-ck]'); if (k) { e.preventDefault(); calcKey(k.dataset.ck); }
+});
+/* Rechner-Knopf nur bei Aufgaben anzeigen */
+function calcFab(show) {
+  let f = document.getElementById('calcfab');
+  if (!show) { if (f) f.remove(); calcClose(); return; }
+  if (!f) { f = document.createElement('button'); f.id = 'calcfab'; f.className = 'fab'; f.setAttribute('data-copen', '1'); f.setAttribute('aria-label', 'Taschenrechner'); f.textContent = '🧮'; document.body.appendChild(f); }
+}
+
+"use strict";
 /* ============ Oberfläche ============ */
 const $app = document.getElementById('app');
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -3212,7 +4013,7 @@ const topicOf = id => TOPICS.find(t => t.id === id);
 /* Fortschritt eines Themas: Anteil richtiger der letzten Versuche je Aufgabentyp */
 function topicProgress(tid) {
   if (tid === 'g-lex') return sum(LEX.map(e => Math.min(Store.d.lex[e.id] || 0, 4))) / (4 * LEX.length);
-  const gs = gensOf(tid); if (!gs.length) return 0;
+  const gs = gensOf(tid).filter(g => !g.az); if (!gs.length) return 0;
   return sum(gs.map(g => { const s = Store.d.g[g.id]; if (!s || !s.last.length) return 0; return sum(s.last) / 5; })) / gs.length;
 }
 const chapterProgress = cid => { const ts = TOPICS.filter(t => t.ch === cid); return sum(ts.map(t => topicProgress(t.id))) / ts.length; };
@@ -3242,6 +4043,10 @@ function viewHome() {
       <h3>${c.title}</h3><div class="sub">${c.sub}</div>
       <div class="bar"><i style="width:${Math.round(chapterProgress(c.id) * 100)}%"></i></div>
     </div>`).join('')}
+  </div>
+  <div class="glass kcard kt" style="margin-top:14px;--acc:#e879f9;--accb:#22d3ee" data-go="#/ansatz">
+    <div class="row"><div class="ico" style="font-size:22px">🧩</div><div class="sp" style="margin-left:12px"><h3 style="margin:0">Ansatz-Training <span class="neu">NEU</span></h3>
+    <div class="sub">Ohne Rechnen: Formel wählen · Schritte ordnen · Werte zuordnen</div></div>${ICONS.next.replace('<svg', '<svg style="width:22px;color:var(--muted)"')}</div>
   </div>
   <div class="glass kcard kt" style="margin-top:14px" data-go="#/test">
     <div class="row"><div class="ico">${ICONS.test}</div><div class="sp" style="margin-left:12px"><h3 style="margin:0">Test starten</h3>
@@ -3275,17 +4080,39 @@ function viewChapter(cid) {
 
 /* ------------------------------------------------ Unterthema */
 let cur = null;   // aktuelle Übungsaufgabe
+/* Übungskontext: Thema + Modus ('normal' | 'steps' | 'az') */
+const PR = { tid: null, mode: 'normal', chs: [] };
+const modeKey = tid => 'mode-' + tid;
+function practicePool() {
+  if (PR.mode === 'az') return PR.tid ? gensOf(PR.tid).filter(g => g.az) : GENS.filter(g => g.az && (!PR.chs.length || PR.chs.includes(topicOf(g.topic).ch)));
+  const base = gensOf(PR.tid).filter(g => !g.az);
+  return PR.mode === 'steps' ? base.filter(hasSteps) : base;
+}
 function viewTopic(tid, tab) {
   if (tid === 'g-lex' && tab !== 'ueben') return viewLex();
-  const t = topicOf(tid), c = chapterOf(t.ch);
-  const tabs = `<div class="glass tabs"><button class="${tab !== 'ueben' ? 'on' : ''}" data-go="#/t/${tid}">${tid === 'g-lex' ? 'Lexikon' : 'Lernzettel'}</button><button class="${tab === 'ueben' ? 'on' : ''}" data-go="#/t/${tid}/ueben">${tid === 'g-lex' ? 'Quiz' : 'Aufgaben'}</button></div>`;
+  const t = topicOf(tid), c = chapterOf(t.ch), lex = tid === 'g-lex';
+  const tb = (key, label) => `<button class="${(tab || '') === key ? 'on' : ''}" data-go="#/t/${tid}${key ? '/' + key : ''}">${label}</button>`;
+  const tabs = `<div class="glass tabs">${tb('', lex ? 'Lexikon' : 'Lernzettel')}${tb('ueben', lex ? 'Quiz' : 'Aufgaben')}${lex ? '' : tb('ansatz', 'Ansatz')}</div>`;
   let body;
-  if (tab !== 'ueben') body = `<div class="glass sheet">${t.sheet}</div><div class="actions"><button class="btn pri grow" data-go="#/t/${tid}/ueben">Jetzt üben ${ICONS.next}</button></div>`;
-  else {
-    const gs = gensOf(tid);
-    body = `<div class="row" style="margin-bottom:12px"><span class="muted small">Aufgabentyp</span><select class="sel" id="gsel"><option value="">Gemischt (Schwächen zuerst)</option>${gs.map(g => `<option value="${g.id}">${esc(g.title)}</option>`).join('')}</select></div><div id="taskbox"></div>`;
+  if (!tab) body = `<div class="glass sheet">${t.sheet}</div><div class="actions"><button class="btn pri grow" data-go="#/t/${tid}/ueben">Jetzt üben ${ICONS.next}</button></div>`;
+  else if (tab === 'ansatz') {
+    body = gensOf(tid).some(g => g.az) ? `<div class="small muted" style="margin-bottom:12px">Ohne Rechnen: Formel wählen · Schritte ordnen · Werte zuordnen – zufällig gemischt.</div><div id="taskbox"></div>`
+      : `<div class="glass sect empty">Für dieses Unterthema kommt das Ansatz-Training in der nächsten Ausbaustufe.<br><br><button class="btn" data-go="#/ansatz">Gemischtes Ansatz-Training öffnen</button></div>`;
+  } else {
+    const steps = !lex && (sessionStorage.getItem(modeKey(tid)) === 'steps');
+    const gs = gensOf(tid).filter(g => !g.az && (!steps || hasSteps(g)));
+    body = `<div class="row" style="margin-bottom:12px"><span class="muted small">Aufgabentyp</span><select class="sel" id="gsel"><option value="">Gemischt (Schwächen zuerst)</option>${gs.map(g => `<option value="${g.id}">${esc(g.title)}</option>`).join('')}</select></div>
+    ${lex ? '' : `<div class="seg"><button class="${steps ? '' : 'on'}" data-mode="normal">Normal</button><button class="${steps ? 'on' : ''}" data-mode="steps">Schritt für Schritt</button></div>`}<div id="taskbox"></div>`;
   }
   return `<div class="${c.cls}">` + header(t.title, t.ch === 0 ? '#/k/0' : '#/k/' + t.ch) + `<div style="margin-top:4px" class="muted small">${t.nr} · ${c.short}</div>` + tabs + body + `</div>`;
+}
+function viewAnsatzHome() {
+  const chs = (sessionStorage.getItem('az-chs') || '').split(',').filter(Boolean).map(Number);
+  const n = GENS.filter(g => g.az && (!chs.length || chs.includes(topicOf(g.topic).ch))).length;
+  return `<div class="kt" style="--acc:#e879f9;--accb:#22d3ee">` + header('Ansatz-Training', '#/') + `
+  <div class="hero"><h2>Ansatz-Training</h2><p>Ohne Rechnen: Formel wählen · Schritte ordnen · Werte zuordnen</p></div>
+  <div class="chips" style="margin-bottom:14px"><button class="tog ${chs.length ? '' : 'on'}" data-azch="">Alle</button>${CHAPTERS.filter(c => GENS.some(g => g.az && topicOf(g.topic).ch === c.id)).map(c => `<button class="tog ${chs.includes(c.id) ? 'on' : ''}" data-azch="${c.id}">${c.short}</button>`).join('')}</div>
+  <div class="small muted" style="margin-bottom:12px">${n} Aufgabentypen mit wechselnden Zahlen</div><div id="taskbox"></div></div>`;
 }
 /* gewichtete Auswahl: Aufgabentypen mit Fehlern / wenig Übung häufiger */
 const LASTG = [];
@@ -3299,30 +4126,45 @@ function newTask(gen) {
   for (let i = 0; i < 20; i++) { try { const t = gen.f(); t.gid = gen.id; return t; } catch (e) { console.error(gen.id, e); } }
 }
 
-/* ---------- Aufgabe rendern ---------- */
-function taskHTML(task, opts = {}) {
+/* ---------- Felder rendern ---------- */
+function fieldHTML(f, i, ans) {
+  const head = f.group ? `<div class="ghead">${f.group}</div>` : '';
+  if (f.type === 'mc') return head + `<div class="field" data-i="${i}">${f.label ? `<label>${f.label}</label>` : ''}<div class="mc">${f.opts.map((o, j) => `<button data-mc="${i}:${j}">${o}</button>`).join('')}</div><div class="fb"></div></div>`;
+  if (f.type === 'order') {
+    if (!f.perm) { do { f.perm = shuffle(f.items.map((_, k) => k)); } while (f.items.length > 1 && f.perm.every((v, k) => v === k)); }
+    const order = Array.isArray(ans) && ans.length === f.items.length ? ans : f.perm;
+    return head + `<div class="field" data-i="${i}"><div class="olist" data-order="${i}">${order.map((k, pos) => `<div class="ocard" data-k="${k}"><span class="ograb">⋮⋮</span><span class="onum">${pos + 1}</span><span class="sp">${f.items[k]}</span></div>`).join('')}</div><div class="fb"></div></div>`;
+  }
+  if (f.type === 'assign') {
+    const a = Array.isArray(ans) ? ans : [];
+    return head + `<div class="field" data-i="${i}"><div class="slots" data-assign="${i}">${f.slots.map((s, j) => `<div class="slot ${j === 0 && !a[0] ? 'active' : ''}" data-s="${j}" ${a[j] != null ? `data-val="${esc(a[j])}"` : ''}><span>${s.lab}</span><b>${a[j] != null ? esc(a[j]) : '?'}</b></div>`).join('')}</div>
+      <div class="chips" style="margin-top:12px">${f.pool.map(v => `<button class="tog" data-av="${esc(v)}">${esc(v)}</button>`).join('')}</div><div class="fb"></div></div>`;
+  }
+  const hint = f.type === 'expr' ? `<div class="hint">z. B. 3x^2 - 2x + 1 · e^(2x) · ln(x) · sqrt(x) · Variable: ${f.v}</div><div class="preview" id="pv${i}"></div>` : (f.unit === '%' ? '<div class="hint">in Prozent, z. B. 4,07</div>' : '');
+  return head + `<div class="field" data-i="${i}"><label>${f.label}${f.type === 'num' ? ` <span class="small">(${f.dec} Nachkommastellen)</span>` : ''}</label>
+    <div class="inrow"><input id="in${i}" ${f.type === 'num' ? `inputmode="decimal" data-dec="${f.dec}"` : 'autocapitalize="off" autocomplete="off" spellcheck="false"'} enterkeyhint="done"/>${f.type === 'num' ? `<button type="button" class="pm" data-pm="${i}" aria-label="Vorzeichen wechseln">±</button>` : ''}${f.unit ? `<span class="unit">${f.unit}</span>` : ''}</div>${hint}<div class="fb"></div></div>`;
+}
+function taskHead(task, opts = {}) {
   const g = GEN_BY_ID[task.gid], t = topicOf(g.topic);
-  const fields = task.fields.map((f, i) => {
-    if (f.type === 'mc') return `<div class="field" data-i="${i}">${f.label ? `<label>${f.label}</label>` : ''}<div class="mc">${f.opts.map((o, j) => `<button data-mc="${i}:${j}">${o}</button>`).join('')}</div><div class="fb"></div></div>`;
-    const hint = f.type === 'expr' ? `<div class="hint">z. B. 3x^2 - 2x + 1 · e^(2x) · ln(x) · sqrt(x) · Variable: ${f.v}</div><div class="preview" id="pv${i}"></div>` : (f.unit === '%' ? '<div class="hint">in Prozent, z. B. 4,07</div>' : '');
-    return `<div class="field" data-i="${i}"><label>${f.label}${f.type === 'num' ? ` <span class="small">(${f.dec} Nachkommastellen)</span>` : ''}</label>
-      <div class="inrow"><input id="in${i}" ${f.type === 'num' ? 'inputmode="decimal"' : 'autocapitalize="off" autocomplete="off" spellcheck="false"'} enterkeyhint="done"/>${f.type === 'num' ? `<button type="button" class="pm" data-pm="${i}" aria-label="Vorzeichen wechseln">±</button>` : ''}${f.unit ? `<span class="unit">${f.unit.replace('%²', '%²')}</span>` : ''}</div>${hint}<div class="fb"></div></div>`;
-  }).join('');
-  return `<div class="glass task">
-    <div class="meta"><span class="chip acc">${esc(g.title)}</span>${opts.showTopic ? `<span class="chip">${t.nr} ${esc(t.title)}</span>` : ''}${task.table ? `<button class="chip" data-modal="fst" style="cursor:pointer">${'Tabelle F_St'}</button>` : ''}</div>
-    <div class="q">${task.q}</div>${refHTML(task.gid)}<div class="fields">${fields}</div>
-    <div class="actions" id="tact">${opts.actions || ''}</div>
-    <div id="solbox"></div></div>`;
+  return `<div class="meta"><span class="chip acc">${esc(g.title)}</span>${opts.showTopic || g.az ? `<span class="chip">${t.nr} ${esc(t.title)}</span>` : ''}${opts.extraChip || ''}${task.table ? `<button class="chip" data-modal="fst" style="cursor:pointer">Tabelle F_St</button>` : ''}</div>
+    <div class="q">${task.q}</div>${refHTML(task.gid)}`;
 }
-function readAnswers(task, root) {
-  return task.fields.map((f, i) => {
-    if (f.type === 'mc') { const b = root.querySelector(`[data-mc^="${i}:"].sel`); return b ? +b.dataset.mc.split(':')[1] : null; }
-    return root.querySelector('#in' + i).value;
-  });
+function taskHTML(task, opts = {}) {
+  return `<div class="glass task">${taskHead(task, opts)}<div class="fields">${task.fields.map((f, i) => fieldHTML(f, i, opts.ans ? opts.ans[i] : undefined)).join('')}</div>
+    <div class="actions" id="tact">${opts.actions || ''}</div><div id="solbox"></div></div>`;
 }
+function readField(f, i, root) {
+  if (f.type === 'mc') { const b = root.querySelector(`[data-mc^="${i}:"].sel`); return b ? +b.dataset.mc.split(':')[1] : null; }
+  if (f.type === 'order') { const l = root.querySelector(`[data-order="${i}"]`); return l ? [...l.children].map(c => +c.dataset.k) : null; }
+  if (f.type === 'assign') { const l = root.querySelector(`[data-assign="${i}"]`); return l ? [...l.children].map(c => c.dataset.val != null ? c.dataset.val : null) : null; }
+  const el = root.querySelector('#in' + i); return el ? el.value : null;
+}
+function readAnswers(task, root) { return task.fields.map((f, i) => readField(f, i, root)); }
 /* Bewertung: 'ok' | 'near' (Rundungsabweichung) | 'bad' */
 function grade(f, a) {
   if (f.type === 'mc') return { st: a === f.ans ? 'ok' : 'bad' };
+  if (f.type === 'order') return { st: Array.isArray(a) && a.every((v, k) => v === k) ? 'ok' : 'bad' };
+  if (f.type === 'assign') return { st: Array.isArray(a) && f.slots.every((s, j) => a[j] === s.ans) ? 'ok' : 'bad', msg: Array.isArray(a) && a.some(v => v == null) ? 'nicht alle zugeordnet' : '' };
   if (f.type === 'expr') { if (!a || !a.trim()) return { st: 'bad', msg: 'keine Eingabe' }; const r = checkExpr(a, f.fn, f.v); return { st: r.ok ? 'ok' : 'bad', msg: r.err }; }
   const v = parseNum(a); if (isNaN(v)) return { st: 'bad', msg: a ? 'keine gültige Zahl' : 'keine Eingabe' };
   const diff = Math.abs(v - f.ans), tol = Math.pow(10, -f.dec) * 1.01;
@@ -3332,50 +4174,128 @@ function grade(f, a) {
 }
 function correctText(f) {
   if (f.type === 'mc') return f.opts[f.ans];
+  if (f.type === 'order') return '<ol class="olsol">' + f.items.map(x => `<li>${x}</li>`).join('') + '</ol>';
+  if (f.type === 'assign') return f.slots.map(s => `${s.lab} = <b>${esc(s.ans)}</b>`).join(' · ');
   if (f.type === 'expr') return tex(f.tex);
   return fmt(f.ans, f.dec) + (f.unit ? ' ' + f.unit : '');
 }
-function showGrading(task, root, res) {
+function answerText(f, a) {
+  if (a == null || a === '') return '–';
+  if (f.type === 'mc') return f.opts[a] || '–';
+  if (f.type === 'order') return a.map(k => k + 1).join(' → ');
+  if (f.type === 'assign') return f.slots.map((s, j) => `${s.lab} = ${a[j] != null ? esc(a[j]) : '?'}`).join(' · ');
+  return esc(a);
+}
+function lockField(f, el) {
+  if (f.type === 'mc') return;
+  el.querySelectorAll('input,.pm,[data-av],.ocard').forEach(x => { x.disabled = true; x.classList.add('locked'); });
+}
+function showGrading(task, root, res, offset = 0) {
   task.fields.forEach((f, i) => {
-    const el = root.querySelector(`.field[data-i="${i}"]`), fb = el.querySelector('.fb'), r = res[i];
+    const gi = i + offset, el = root.querySelector(`.field[data-i="${gi}"]`); if (!el) return;
+    const fb = el.querySelector('.fb'), r = res[i];
     el.classList.remove('ok', 'bad', 'near'); el.classList.add(r.st);
-    if (f.type === 'mc') { el.querySelectorAll('[data-mc]').forEach(b => { const j = +b.dataset.mc.split(':')[1]; if (j === f.ans) b.classList.add('right'); else if (b.classList.contains('sel')) b.classList.add('wrong'); b.disabled = true; }); }
-    else { el.querySelector('input').disabled = true; const pm = el.querySelector('.pm'); if (pm) pm.disabled = true; }
+    if (f.type === 'mc') el.querySelectorAll('[data-mc]').forEach(b => { const j = +b.dataset.mc.split(':')[1]; if (j === f.ans) b.classList.add('right'); else if (b.classList.contains('sel')) b.classList.add('wrong'); b.disabled = true; });
+    if (f.type === 'order') el.querySelectorAll('.ocard').forEach((c, pos) => c.classList.add(+c.dataset.k === pos ? 'right' : 'wrong'));
+    if (f.type === 'assign') el.querySelectorAll('.slot').forEach((s, j) => { s.classList.remove('active'); s.classList.add(s.dataset.val === f.slots[j].ans ? 'ok' : 'wrong'); });
+    lockField(f, el);
     fb.className = 'fb ' + r.st;
-    fb.innerHTML = r.st === 'ok' ? '✓ richtig' : r.st === 'near' ? '≈ fast – Rundungsabweichung, Lösung: ' + correctText(f) : '✗ ' + (r.msg ? r.msg + ' – ' : '') + (f.type === 'mc' ? 'siehe markierte Antwort' : 'Lösung: ' + correctText(f));
+    fb.innerHTML = md(r.st === 'ok' ? '✓ richtig' : r.st === 'near' ? '≈ fast – Rundungsabweichung, Lösung: ' + correctText(f)
+      : '✗ ' + (r.msg ? r.msg + ' – ' : '') + (f.type === 'mc' ? 'siehe markierte Antwort' : f.type === 'order' ? 'richtige Reihenfolge:' + correctText(f) : 'Lösung: ' + correctText(f)));
   });
 }
 function solHTML(task, open) {
   if (!task.sol) return '';
-  return `<details class="sol" ${open ? 'open' : ''}><summary>Lösungsweg anzeigen</summary><div class="body">${md(task.sol)}</div></details>`;
+  return `<details class="sol" ${open ? 'open' : ''}><summary>${GEN_BY_ID[task.gid] && GEN_BY_ID[task.gid].az ? 'Erklärung' : 'Lösungsweg anzeigen'}</summary><div class="body">${md(task.sol)}</div></details>`;
 }
 
 /* ---------- Übungsmodus ---------- */
-function mountPractice(tid) {
-  const sel = document.getElementById('gsel'); if (!sel) return;
-  const gid = sessionStorage.getItem('gsel-' + tid) || ''; sel.value = gid;
-  sel.onchange = () => { sessionStorage.setItem('gsel-' + tid, sel.value); nextPractice(tid); };
-  nextPractice(tid);
-}
-function nextPractice(tid) {
+function mountPractice(tid, mode) {
+  PR.tid = tid; PR.mode = mode || (sessionStorage.getItem(modeKey(tid)) === 'steps' ? 'steps' : 'normal');
+  $app.querySelectorAll('[data-mode]').forEach(b => b.onclick = () => { sessionStorage.setItem(modeKey(tid), b.dataset.mode); sessionStorage.removeItem('gsel-' + tid); render(); });
   const sel = document.getElementById('gsel');
-  const gen = sel.value ? GEN_BY_ID[sel.value] : chooseGen(gensOf(tid));
+  if (sel) {
+    const gid = sessionStorage.getItem('gsel-' + tid) || ''; sel.value = [...sel.options].some(o => o.value === gid) ? gid : '';
+    sel.onchange = () => { sessionStorage.setItem('gsel-' + tid, sel.value); nextPractice(); };
+  }
+  if (document.getElementById('taskbox')) nextPractice();
+}
+function mountAnsatzHome() {
+  PR.tid = null; PR.mode = 'az'; PR.chs = (sessionStorage.getItem('az-chs') || '').split(',').filter(Boolean).map(Number);
+  $app.querySelectorAll('[data-azch]').forEach(b => b.onclick = () => {
+    const v = b.dataset.azch; let chs = PR.chs;
+    chs = !v ? [] : chs.includes(+v) ? chs.filter(x => x !== +v) : chs.concat(+v);
+    sessionStorage.setItem('az-chs', chs.join(',')); render();
+  });
+  nextPractice();
+}
+function nextPractice() {
+  const sel = document.getElementById('gsel'), pool = practicePool();
+  const box = document.getElementById('taskbox'); if (!box) return;
+  if (!pool.length) { box.innerHTML = '<div class="glass sect empty">Für diese Auswahl gibt es noch keine Aufgaben.</div>'; return; }
+  let gen;
+  if (sel && sel.value && GEN_BY_ID[sel.value]) gen = GEN_BY_ID[sel.value];
+  else if (PR.mode === 'az') {   /* Ansatz-Arten abwechseln: nie zweimal dieselbe Art hintereinander */
+    const kinds = [...new Set(pool.map(g => g.kind))], cand = kinds.filter(k => k !== PR.lastKind);
+    const kind = pick(cand.length ? cand : kinds); PR.lastKind = kind; gen = chooseGen(pool.filter(g => g.kind === kind));
+  } else gen = chooseGen(pool);
   cur = newTask(gen); cur.done = false; LASTG.push(gen.id); if (LASTG.length > 10) LASTG.shift();
-  const box = document.getElementById('taskbox');
+  if (PR.mode === 'steps') { cur.st = { si: 0, vals: [], helped: [], tries: 0, tip: false, draft: null, res: null }; stepRender(box); }
+  else normalRender(box);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function normalRender(box) {
   box.innerHTML = md(taskHTML(cur, { actions: `<button class="btn pri grow" id="chk">${ICONS.check} Prüfen</button><button class="btn" id="skip">Neue Aufgabe</button>` }));
   wireTask(box, cur);
-  box.querySelector('#skip').onclick = () => nextPractice(tid);
+  box.querySelector('#skip').onclick = nextPractice;
   box.querySelector('#chk').onclick = () => {
-    if (cur.done) return nextPractice(tid);
+    if (cur.done) return nextPractice();
     const res = readAnswers(cur, box).map((a, i) => grade(cur.fields[i], a));
     showGrading(cur, box, res);
     const ok = res.every(r => r.st !== 'bad'); Store.rec(cur.gid, ok);
-    box.querySelector('#solbox').innerHTML = solHTML(cur, !ok);
+    box.querySelector('#solbox').innerHTML = solHTML(cur, !ok || GEN_BY_ID[cur.gid].az);
     cur.done = true;
     box.querySelector('#chk').innerHTML = 'Nächste Aufgabe ' + ICONS.next;
     box.querySelector('#skip').style.display = 'none';
   };
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+/* ---------- Schritt für Schritt ---------- */
+function stepRender(box) {
+  const st = cur.st, steps = stepsOf(cur), flat = steps.flatMap(s => s.f);
+  const off = steps.map((_, k) => sum(steps.slice(0, k).map(s => s.f.length)));
+  const fin = st.si >= steps.length;
+  const valText = (f, v) => f.type === 'mc' ? f.opts[v] : f.type === 'num' ? fmt(parseNum(v), f.dec) + (f.unit ? ' ' + f.unit : '') : esc(v);
+  const html = steps.map((s, k) => {
+    const state = k < st.si ? 'done' : k === st.si ? 'active' : 'locked';
+    const title = `<div class="gtitle">${s.t}</div>${s.h && state !== 'locked' ? `<div class="small muted">\\(${s.h}\\)</div>` : ''}`;
+    if (state === 'done') return `<div class="gstep done ${st.helped[k] ? 'helped' : ''}"><div class="gnum">${st.helped[k] ? '!' : '✓'}</div><div class="gbody">${title}${s.f.map((f, j) => `<div class="gres ${st.helped[k] ? 'help' : 'ok'}">${s.f.length > 1 || !/=\s*\\\)$/.test(f.label) ? f.label + ' ' : f.label + ' '}<b>${valText(f, st.vals[k][j])}</b> ${st.helped[k] ? '(Lösung angezeigt)' : '✓'}</div>`).join('')}</div></div>`;
+    if (state === 'locked') return `<div class="gstep locked"><div class="gnum">${k + 1}</div><div class="gbody">${title}</div></div>`;
+    return `<div class="gstep active"><div class="gnum">${k + 1}</div><div class="gbody">${title}<div class="fields" style="margin-top:8px">${s.f.map((f, j) => fieldHTML(f, off[k] + j)).join('')}</div>
+      ${st.tip && s.tip ? `<div class="ghint">💡 Tipp: ${s.tip}</div>` : ''}</div></div>`;
+  }).join('');
+  const s = steps[Math.min(st.si, steps.length - 1)];
+  const acts = fin ? `<button class="btn pri grow" id="chk">Nächste Aufgabe ${ICONS.next}</button>`
+    : `<button class="btn pri grow" id="chk" style="white-space:nowrap">${ICONS.check} Schritt prüfen</button>${s.tip && !st.tip ? '<button class="btn sm" id="tip">💡 Tipp</button>' : ''}${st.tries >= 2 ? '<button class="btn sm" id="reveal">Lösung zeigen</button>' : ''}<button class="btn sm" id="skip">Neue Aufgabe</button>`;
+  const doneMsg = fin ? `<div class="fb ${st.helped.some(Boolean) ? 'near' : 'ok'}" style="margin-top:6px">${st.helped.some(Boolean) ? 'Geschafft – mit Hilfe bei einzelnen Schritten. Probier den Typ gleich nochmal!' : '✓ Alle Schritte richtig gelöst!'}</div>` : '';
+  box.innerHTML = md(`<div class="glass task">${taskHead(cur, { extraChip: `<span class="chip">${fin ? 'fertig' : `Schritt ${st.si + 1} von ${steps.length}`}</span>` })}<div class="gsteps">${html}</div>${doneMsg}<div class="actions">${acts}</div><div id="solbox">${fin ? solHTML(cur, false) : ''}</div></div>`);
+  wireTask(box, { fields: flat });
+  /* Entwurf und Rückmeldung wiederherstellen */
+  if (!fin && st.draft) steps[st.si].f.forEach((f, j) => { const gi = off[st.si] + j, a = st.draft[j];
+    if (f.type === 'mc') { if (a != null) { const b = box.querySelector(`[data-mc="${gi}:${a}"]`); b && b.classList.add('sel'); } }
+    else { const el = box.querySelector('#in' + gi); if (el && a != null) el.value = a; }
+    if (st.res) { const el = box.querySelector(`.field[data-i="${gi}"]`), r = st.res[j]; el.classList.add(r.st); const fb = el.querySelector('.fb'); fb.className = 'fb ' + r.st; fb.textContent = r.st === 'bad' ? '✗ noch nicht richtig' + (r.msg ? ' – ' + r.msg : '') + (st.tries >= 2 ? ' · Tipp oder „Lösung zeigen“ hilft' : '') : r.st === 'near' ? '≈ fast – auf die Nachkommastellen achten' : '✓'; }
+  });
+  const q = id => box.querySelector('#' + id);
+  if (q('skip')) q('skip').onclick = nextPractice;
+  if (q('tip')) q('tip').onclick = () => { st.draft = steps[st.si].f.map((f, j) => readField(f, off[st.si] + j, box)); st.tip = true; stepRender(box); };
+  if (q('reveal')) q('reveal').onclick = () => { st.vals[st.si] = steps[st.si].f.map(f => f.type === 'num' ? fmt(f.ans, f.dec, false) : f.ans); st.helped[st.si] = true; advance(); };
+  const advance = () => { st.si++; st.tries = 0; st.tip = false; st.draft = null; st.res = null; if (st.si >= steps.length) Store.rec(cur.gid, !st.helped.some(Boolean)); stepRender(box); };
+  q('chk').onclick = () => {
+    if (fin) return nextPractice();
+    const k = st.si, ans = steps[k].f.map((f, j) => readField(f, off[k] + j, box)), res = steps[k].f.map((f, j) => grade(f, ans[j]));
+    if (res.every(r => r.st !== 'bad')) { st.vals[k] = ans; advance(); }
+    else { st.tries++; st.draft = ans; st.res = res; stepRender(box); }
+  };
 }
 function wireTask(root, task) {
   /* ±-Taste: Vorzeichen umschalten, Tastatur bleibt offen */
@@ -3395,10 +4315,53 @@ function wireTask(root, task) {
   });
   task.fields.forEach((f, i) => {
     if (f.type !== 'expr') return;
-    const inp = root.querySelector('#in' + i), pv = root.querySelector('#pv' + i);
+    const inp = root.querySelector('#in' + i), pv = root.querySelector('#pv' + i); if (!inp || !pv) return;
     inp.oninput = () => { if (!inp.value.trim()) { pv.innerHTML = ''; return; } try { pv.innerHTML = '= ' + tex(ExprParser.toTeX(ExprParser.parse(inp.value, [f.v]))); } catch (e) { pv.textContent = '…'; } };
   });
+  root.querySelectorAll('[data-order]').forEach(wireOrder);
+  root.querySelectorAll('[data-assign]').forEach(wireAssign);
   root.querySelectorAll('input').forEach((inp, k, all) => inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); if (all[k + 1]) all[k + 1].focus(); else { inp.blur(); const b = root.querySelector('#chk, #tnext'); b && b.click(); } } }));
+}
+/* Schritte ordnen: ziehen oder zwei Karten antippen */
+function wireOrder(list) {
+  const renum = () => [...list.children].forEach((c, pos) => c.querySelector('.onum').textContent = pos + 1);
+  let sel = null;
+  list.querySelectorAll('.ocard').forEach(card => {
+    card.addEventListener('pointerdown', e => {
+      if (card.classList.contains('locked') || e.button > 0) return;
+      e.preventDefault();
+      const y0 = e.clientY; let moved = false;
+      const move = ev => {
+        if (!moved && Math.abs(ev.clientY - y0) < 8) return;
+        if (!moved) { moved = true; card.classList.add('drag'); if (sel) { sel.classList.remove('pick'); sel = null; } }
+        const sibs = [...list.children].filter(c => c !== card);
+        const after = sibs.find(c => { const r = c.getBoundingClientRect(); return ev.clientY < r.top + r.height / 2; });
+        if (after) { if (card.nextSibling !== after) list.insertBefore(card, after); } else if (list.lastChild !== card) list.appendChild(card);
+        renum();
+      };
+      const up = () => {
+        window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up); window.removeEventListener('pointercancel', up);
+        card.classList.remove('drag');
+        if (moved) { list.dispatchEvent(new Event('input', { bubbles: true })); return; }
+        if (sel && sel !== card) { const a = sel, b = card, mark = document.createElement('i'); list.insertBefore(mark, a); list.insertBefore(a, b); list.insertBefore(b, mark); mark.remove(); a.classList.remove('pick'); sel = null; renum(); list.dispatchEvent(new Event('input', { bubbles: true })); }
+        else if (sel === card) { card.classList.remove('pick'); sel = null; }
+        else { sel = card; card.classList.add('pick'); }
+      };
+      window.addEventListener('pointermove', move); window.addEventListener('pointerup', up); window.addEventListener('pointercancel', up);
+    });
+  });
+}
+/* Werte zuordnen: Platz antippen, dann Wert wählen */
+function wireAssign(box) {
+  const field = box.closest('.field');
+  const slots = [...box.children];
+  slots.forEach(s => s.onclick = () => { if (s.classList.contains('locked')) return; slots.forEach(x => x.classList.remove('active')); s.classList.add('active'); });
+  field.querySelectorAll('[data-av]').forEach(b => b.onclick = () => {
+    const s = slots.find(x => x.classList.contains('active')) || slots.find(x => x.dataset.val == null); if (!s) return;
+    s.dataset.val = b.dataset.av; s.querySelector('b').textContent = b.dataset.av; s.classList.remove('active');
+    const nxt = slots.find(x => x.dataset.val == null); if (nxt) nxt.classList.add('active');
+    box.dispatchEvent(new Event('input', { bubbles: true }));
+  });
 }
 
 /* ------------------------------------------------ Test */
@@ -3430,13 +4393,16 @@ function restoreTest() {
 function discardTest() { delete Store.d.activeTest; Store.save(); TestState.items = []; }
 function viewTestSetup(q) {
   const pre = q.ch ? [+q.ch] : [1, 2, 3];
-  const cfg = TestState.cfg = TestState.cfg && !q.ch ? TestState.cfg : { ch: pre, topics: TOPICS.filter(t => pre.includes(t.ch)).map(t => t.id), n: 10, mc: true };
+  const cfg = TestState.cfg = TestState.cfg && !q.ch ? TestState.cfg : { ch: pre, topics: TOPICS.filter(t => pre.includes(t.ch)).map(t => t.id), n: 10, mc: true, calc: true, az: true, steps: false };
+  ['calc', 'az'].forEach(k => { if (cfg[k] === undefined) cfg[k] = true; }); if (cfg.steps === undefined) cfg.steps = false;
   return `<div class="kt">` + header('Test', '#/') + `
   <div class="hero"><h2>Test zusammenstellen</h2><p>Aufgaben aus mehreren Bereichen gemischt – Auswertung am Ende.</p></div>
   <div class="glass sect"><h4>Bereiche</h4><div class="chips">${CHAPTERS.map(c => `<button class="tog ${c.cls} ${cfg.ch.includes(c.id) ? 'on' : ''}" data-tch="${c.id}">${c.short}</button>`).join('')}</div></div>
   <div class="glass sect"><h4>Unterthemen</h4><div class="chips">${TOPICS.filter(t => cfg.ch.includes(t.ch)).map(t => `<button class="tog ${chapterOf(t.ch).cls} ${cfg.topics.includes(t.id) ? 'on' : ''}" data-ttop="${t.id}">${t.nr} ${esc(t.title)}</button>`).join('')}</div></div>
   <div class="glass sect"><h4>Anzahl Aufgaben</h4><div class="chips">${[5, 10, 15, 20].map(n => `<button class="tog ${cfg.n === n ? 'on' : ''}" data-tn="${n}">${n}</button>`).join('')}</div>
-  <h4 style="margin-top:14px">Aufgabenarten</h4><div class="chips"><button class="tog ${cfg.mc ? 'on' : ''}" data-tmc="1">inkl. Verständnisfragen (MC)</button></div></div>
+  <h4 style="margin-top:14px">Aufgabenarten</h4><div class="chips"><button class="tog ${cfg.calc ? 'on' : ''}" data-tkind="calc">Rechenaufgaben</button><button class="tog ${cfg.mc ? 'on' : ''}" data-tkind="mc">Verständnisfragen</button><button class="tog ${cfg.az ? 'on' : ''}" data-tkind="az">Ansatz-Aufgaben</button></div>
+  <h4 style="margin-top:14px">Rechenweg</h4><div class="seg" style="margin:0"><button class="${cfg.steps ? '' : 'on'}" data-tsteps="0">Nur Ergebnis</button><button class="${cfg.steps ? 'on' : ''}" data-tsteps="1">Schritt für Schritt</button></div>
+  ${cfg.steps ? '<div class="small muted" style="margin-top:8px">Bei Aufgaben mit Rechenweg werden alle Zwischenschritte abgefragt und am Ende bewertet.</div>' : ''}</div>
   ${Store.d.activeTest ? `<p class="small muted" style="margin-top:12px">Hinweis: Ein neuer Test ersetzt deinen angefangenen Test. <a href="#/test/run" style="color:var(--acc)">Angefangenen Test fortsetzen</a></p>` : ''}
   <div class="actions"><button class="btn pri grow" id="tstart" ${cfg.topics.length ? '' : 'disabled'}>${ICONS.test} Test starten</button></div></div>`;
 }
@@ -3450,12 +4416,20 @@ function mountTestSetup() {
   });
   $app.querySelectorAll('[data-ttop]').forEach(b => b.onclick = () => { const id = b.dataset.ttop; cfg.topics = cfg.topics.includes(id) ? cfg.topics.filter(x => x !== id) : cfg.topics.concat(id); render(); });
   $app.querySelectorAll('[data-tn]').forEach(b => b.onclick = () => { cfg.n = +b.dataset.tn; render(); });
-  $app.querySelectorAll('[data-tmc]').forEach(b => b.onclick = () => { cfg.mc = !cfg.mc; render(); });
+  $app.querySelectorAll('[data-tkind]').forEach(b => b.onclick = () => { const k = b.dataset.tkind; cfg[k] = !cfg[k]; if (!cfg.calc && !cfg.mc && !cfg.az) cfg[k] = true; render(); });
+  $app.querySelectorAll('[data-tsteps]').forEach(b => b.onclick = () => { cfg.steps = b.dataset.tsteps === '1'; render(); });
   const st = document.getElementById('tstart'); if (st) st.onclick = startTest;
+}
+/* Im Test mit Rechenweg: alle Zwischenschritte als Felder, am Ende bewertet */
+function testTask(g, cfg) {
+  const t = newTask(g);
+  if (cfg.steps && hasSteps(g)) { const st = stepsOf(t); t.fields = st.flatMap((s, k) => s.f.map((f, j) => Object.assign({}, f, j === 0 ? { group: `Schritt ${k + 1}: ${s.t}` + (s.h ? ` <span class="small muted">\\(${s.h}\\)</span>` : '') } : {}))); t.stepped = true; }
+  return t;
 }
 function startTest() {
   const cfg = TestState.cfg;
-  let pool = GENS.filter(g => cfg.topics.includes(g.topic) && (cfg.mc || !g.mcq));
+  const kindOk = g => g.az ? cfg.az : g.mcq ? cfg.mc : cfg.calc;
+  let pool = GENS.filter(g => cfg.topics.includes(g.topic) && kindOk(g));
   if (!pool.length) pool = GENS.filter(g => cfg.topics.includes(g.topic));
   /* möglichst gleichmäßig über Unterthemen verteilen */
   const byT = {}; pool.forEach(g => (byT[g.topic] = byT[g.topic] || []).push(g));
@@ -3463,7 +4437,7 @@ function startTest() {
   const used = new Set(); let k = 0;
   while (items.length < cfg.n) {
     const tid = tids[k % tids.length], fresh = byT[tid].filter(g => !used.has(g.id) || g.mcq);
-    const g = pick(fresh.length ? fresh : byT[tid]); used.add(g.id); items.push(newTask(g)); k++;
+    const g = pick(fresh.length ? fresh : byT[tid]); used.add(g.id); items.push(testTask(g, cfg)); k++;
   }
   TestState.items = shuffle(items).map(t => ({ task: t, ans: null, res: null }));
   TestState.idx = 0; TestState.elapsed = 0; TestState.resumeAt = Date.now();
@@ -3475,13 +4449,13 @@ function viewTestRun() {
   const i = TestState.idx, N = TestState.items.length, it = TestState.items[i];
   const last = i === N - 1;
   return `<div class="kt">` + header(`Test · ${i + 1}/${N}`, '#/test') + `<div class="prog"><i style="width:${(i) / N * 100}%"></i></div><div style="height:14px"></div>
-  <div class="${chapterOf(topicOf(GEN_BY_ID[it.task.gid].topic).ch).cls}" id="tbox">${taskHTML(it.task, { showTopic: true, actions: `${i > 0 ? `<button class="btn" id="tprev">${ICONS.back}</button>` : ''}<button class="btn pri grow" id="tnext">${last ? 'Abgeben & auswerten' : 'Weiter'} ${ICONS.next}</button>` })}</div></div>`;
+  <div class="${chapterOf(topicOf(GEN_BY_ID[it.task.gid].topic).ch).cls}" id="tbox">${taskHTML(it.task, { showTopic: true, ans: it.ans, actions: `${i > 0 ? `<button class="btn" id="tprev">${ICONS.back}</button>` : ''}<button class="btn pri grow" id="tnext">${last ? 'Abgeben & auswerten' : 'Weiter'} ${ICONS.next}</button>` })}</div></div>`;
 }
 function mountTestRun() {
   const box = document.getElementById('tbox'); if (!box) return;
   const it = TestState.items[TestState.idx];
   wireTask(box, it.task);
-  if (it.ans) it.task.fields.forEach((f, i) => { const a = it.ans[i]; if (f.type === 'mc') { if (a != null) box.querySelector(`[data-mc="${i}:${a}"]`).classList.add('sel'); } else box.querySelector('#in' + i).value = a || ''; });
+  if (it.ans) it.task.fields.forEach((f, i) => { const a = it.ans[i]; if (f.type === 'mc') { if (a != null) box.querySelector(`[data-mc="${i}:${a}"]`).classList.add('sel'); } else if (f.type === 'num' || f.type === 'expr') { const el = box.querySelector('#in' + i); if (el) el.value = a || ''; } });
   const save = () => { it.ans = readAnswers(it.task, box); saveTest(); };
   box.addEventListener('input', save); box.addEventListener('click', e => { if (e.target.closest('[data-mc]')) setTimeout(save, 0); });
   const p = document.getElementById('tprev'); if (p) p.onclick = () => { save(); TestState.idx--; saveTest(); render(); };
@@ -3517,7 +4491,7 @@ function viewTestResult() {
     const g = GEN_BY_ID[it.task.gid];
     return `<div class="glass res ${chapterOf(topicOf(g.topic).ch).cls}"><details><summary class="head" style="list-style:none"><span class="dot ${st}"></span><span class="sp"><b>${k + 1}. ${esc(g.title)}</b><br><span class="small muted">${topicOf(g.topic).nr} ${esc(topicOf(g.topic).title)}</span></span>${ICONS.next.replace('<svg', '<svg style="width:18px;color:var(--muted)"')}</summary>
       <div style="margin-top:10px" class="q">${it.task.q}</div>
-      <div style="margin-top:8px">${it.task.fields.map((f, i) => `<div class="small" style="margin:4px 0"><span class="fb ${it.res[i].st}">${it.res[i].st === 'ok' ? '✓' : it.res[i].st === 'near' ? '≈' : '✗'}</span> ${f.label || 'Antwort'} deine Eingabe: <b>${f.type === 'mc' ? (it.ans && it.ans[i] != null ? f.opts[it.ans[i]] : '–') : esc((it.ans && it.ans[i]) || '–')}</b> · richtig: ${correctText(f)}</div>`).join('')}</div>
+      <div style="margin-top:8px">${it.task.fields.map((f, i) => `<div class="small" style="margin:4px 0"><span class="fb ${it.res[i].st}">${it.res[i].st === 'ok' ? '✓' : it.res[i].st === 'near' ? '≈' : '✗'}</span> ${f.group ? '<div class="ghead" style="margin-top:8px">' + f.group + '</div>' : ''}${f.label || 'Antwort'} deine Eingabe: <b>${answerText(f, it.ans ? it.ans[i] : null)}</b> · richtig: ${correctText(f)}</div>`).join('')}</div>
       ${solHTML(it.task, false)}</details></div>`;
   }).join('')}</div>
   <div class="actions"><button class="btn pri grow" data-go="#/test">Neuer Test</button><button class="btn" data-go="#/">Start</button></div></div>`;
@@ -3646,7 +4620,8 @@ function render() {
   let html, mount = null;
   if (parts[0] === 'k' && chapterOf(+parts[1])) { html = viewChapter(+parts[1]); if (+parts[1] === 0) mount = mountLex; }
   else if (parts[0] === 'lex' && parts[1] === 'karten') { html = viewLexCards(); mount = mountLexCards; }
-  else if (parts[0] === 't' && topicOf(parts[1])) { html = viewTopic(parts[1], parts[2]); if (parts[2] === 'ueben') mount = () => mountPractice(parts[1]); else if (parts[1] === 'g-lex') mount = mountLex; }
+  else if (parts[0] === 't' && topicOf(parts[1])) { html = viewTopic(parts[1], parts[2]); if (parts[2] === 'ueben') mount = () => mountPractice(parts[1]); else if (parts[2] === 'ansatz') mount = () => mountPractice(parts[1], 'az'); else if (parts[1] === 'g-lex') mount = mountLex; }
+  else if (parts[0] === 'ansatz') { html = viewAnsatzHome(); mount = mountAnsatzHome; }
   else if (parts[0] === 'formeln') { html = viewFormeln(); mount = mountFormeln; }
   else if (parts[0] === 'test' && parts[1] === 'run') { html = viewTestRun(); mount = mountTestRun; }
   else if (parts[0] === 'test' && parts[1] === 'result') html = viewTestResult();
@@ -3654,6 +4629,7 @@ function render() {
   else html = viewHome();
   $app.innerHTML = md(html);
   if (mount) mount();
+  calcFab((parts[0] === 't' && parts[2] === 'ueben' && parts[1] !== 'g-lex') || (parts[0] === 'test' && parts[1] === 'run'));
 }
 document.addEventListener('click', e => {
   const dc = e.target.closest('[data-discard]'); if (dc) { e.preventDefault(); e.stopPropagation(); discardTest(); render(); return; }
